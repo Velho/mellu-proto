@@ -18,6 +18,12 @@ public:
     MapObject(sf::Vector2f sz) :
         shape{ sz }
     { }
+    MapObject(sf::Vector2f sz, sf::Vector2f pos) :
+        MapObject(sz)
+    {
+        setPosition(pos);
+    }
+
 
     MapObject(const MapObject &obj) :
         shape{ obj.shape }
