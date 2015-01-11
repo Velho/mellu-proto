@@ -14,10 +14,23 @@
  *
  */
 
+#include <iostream>
+
 using Proto::Game;
 
 int main(int argc, char *argv[])
 {
-    Game game; //(argc, argv);
+    bool editor{ false };
+
+    if(argc > 1) {
+        std::string arg{ argv[1] };
+
+        if(arg == "--edit")
+            editor = true;
+    }
+
+    editor == true ? std::cout << "Edit mode\n" : std::cout << "Game mode\n";
+
+    Game game(editor);
     return game.run(); // Run the game application.
 }

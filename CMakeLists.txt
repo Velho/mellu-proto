@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(kenney-proto)
+project(mellu-proto)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
@@ -24,5 +24,5 @@ set(SRC_LIST
     ${MFILESRC}
     ${MAPOBJSRC})
 
-add_executable(kenney-proto ${SRC_LIST})
-target_link_libraries(kenney-proto ${SFML_LIBRARIES})
+add_executable(mellu-proto ${SRC_LIST})
+target_link_libraries(mellu-proto ${SFML_LIBRARIES})

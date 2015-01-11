@@ -2,9 +2,13 @@
 #define PROTO_MAPFILE_H
 
 #include <string>
+#include <vector>
 #include <fstream>
 
 namespace Proto {
+
+class Map;
+class MapObject;
 
 /**
  * \brief The MapFile class
@@ -20,11 +24,14 @@ public:
         filename{ fn }
     { }
 
-
+    void save(Map*);
+    std::vector<MapObject> load();
 
 private:
     std::string filename;
     bool changed;
+
+
 };
 
 }

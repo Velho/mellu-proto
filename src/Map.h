@@ -3,8 +3,15 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+
+#include <SFML/Graphics/RenderTarget.hpp>
+
+#include "MapObject.h"
 
 namespace Proto {
+
+class MapFile;
 
 /**
  * \brief The Map class
@@ -14,13 +21,22 @@ namespace Proto {
  * Simple text files which are easily parsable.
  * /sa MapFile
  *
+ * Maps doesn't contain any information about entities and
+ * their positions. Only the structural data -> where each piece
+ * goes.
  */
 class Map {
 public:
+    Map() { }
 
+    void addObject(MapObject);
 
-
+    void update();
+    void draw(sf::RenderTarget&);
 private:
+    std::vector<MapObject> objects;
+    //std::unique_ptr<MapFile> mapfile;
+
 };
 
 }
