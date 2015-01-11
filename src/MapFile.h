@@ -3,12 +3,13 @@
 
 #include <string>
 #include <vector>
-#include <fstream>
 
 namespace Proto {
 
 class Map;
 class MapObject;
+
+struct MapFileStructure;
 
 /**
  * \brief The MapFile class
@@ -24,14 +25,16 @@ public:
         filename{ fn }
     { }
 
-    void save(Map*);
+    void save(Map&);
+    friend void save(Map&);
+
     std::vector<MapObject> load();
 
 private:
     std::string filename;
     bool changed;
 
-
+    std::vector<MapFileStructure> parse_lines();
 };
 
 }

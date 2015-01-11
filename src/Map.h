@@ -5,13 +5,10 @@
 #include <vector>
 #include <memory>
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 #include "MapObject.h"
+#include "MapFile.h"
 
 namespace Proto {
-
-class MapFile;
 
 /**
  * \brief The Map class
@@ -33,6 +30,8 @@ public:
 
     void update();
     void draw(sf::RenderTarget&);
+
+    friend void MapFile::save(Map&);
 private:
     std::vector<MapObject> objects;
     //std::unique_ptr<MapFile> mapfile;
