@@ -30,6 +30,8 @@ public:
 
     std::vector<MapObject> load();
 
+    std::string getFilename() const { return filename; }
+
 private:
     std::string filename;
     bool changed;

@@ -24,18 +24,27 @@ namespace Proto {
  */
 class Map {
 public:
-    Map() { }
+    Map();
 
     void addObject(MapObject);
 
     void update();
     void draw(sf::RenderTarget&);
 
+    void save_map();
+    void reload_map();
+
+    void set_reload(bool r) { reload = r; }
+
     friend void MapFile::save(Map&);
 private:
     std::vector<MapObject> objects;
-    //std::unique_ptr<MapFile> mapfile;
+    MapFile mapfile;
 
+    int objsaved;
+    bool reload;
+
+    void print_info();
 };
 
 }

@@ -47,17 +47,19 @@ std::vector<MapObject> MapFile::load()
     std::vector<MapObject> map_objects;
     auto file_data = parse_lines();
 
+    std::cout << "file_data : " <<  file_data.size() << std::endl;
+
     // Propaply caused by invalid map file. TODO Not handled properly.
-    if(file_data.size() == 0) {
+    /*if(file_data.size() == 0) {
         std::cout << "Error loading map.." << std::endl;
         std::abort();
-    }
+    }*/
 
     // Create drawable MapObjects from file data.
     for(auto obj : file_data)
         map_objects.emplace_back(MapObject(
-                                     sf::Vector2f(obj.x, obj.y),
-                                     sf::Vector2f(obj.width, obj.height)));
+                                     sf::Vector2f(obj.width, obj.height),
+                                     sf::Vector2f(obj.x, obj.y)));
     // Return drawable map.
     return map_objects;
 }
@@ -70,9 +72,14 @@ std::vector<MapFileStructure> MapFile::parse_lines()
     if(map_stream.is_open()) { // File is open, lets parseee.
         std::string line;
 
+        std::cout << "Stream is open" << std::endl;
+
         while(std::getline(map_stream, line)) {
             std::istringstream temp_line{ line }; // For data parsing.
             MapFileStructure temp_map;
+
+            std::cout << line << std::endl;
+
             // Let's parse the line;
             if(!(temp_line >> temp_map.x >> temp_map.y >> temp_map.width >> temp_map.height))
                 break; // Error. TODO Maybe handle this.. ABBORT ABBORT
@@ -82,6 +89,6 @@ std::vector<MapFileStructure> MapFile::parse_lines()
         }
     }
 
-    map_stream.close(); // Close the stream.
+    //map_stream.close(); // Close the stream.
     return results;
 }

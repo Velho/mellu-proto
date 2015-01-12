@@ -18,11 +18,12 @@ public:
     int run();
 
 private:
-    //std::string wintitle{ "Proto" + winversion };
-    //std::string winversion{ "v0.1" };
-
     sf::RenderWindow window;
     sf::Clock clock;
+    sf::View viewport;
+
+    const int WIN_WIDTH{ 800 };
+    const int WIN_HEIGHT{ 600 };
 
     Map map;
     ///! Used as temporary object for Map editing.
