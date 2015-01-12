@@ -39,7 +39,7 @@ void Game::editor_input(sf::Event event)
         } else {
             std::cout << "mouse sz : (" << edit_mouse.x << ", " << edit_mouse.y << ")" << std::endl;
             std::cout << "temp_obj sz : (" << temp_obj.getSize().x << ", " << temp_obj.getSize().y << ")" << std::endl;
-            map.addObject(Proto::MapObject(temp_obj));
+            map->addObject(Proto::MapObject(temp_obj));
             edit_draw = false;
         }
     }
@@ -49,10 +49,10 @@ void Game::editor_input(sf::Event event)
 
     // CTRL + S ???
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        map.save_map();
+        map->save_map();
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-        map.set_reload(true);
+        map->set_reload(true);
 }
 
 void Game::handle_input(sf::Event event)
@@ -75,7 +75,7 @@ void Game::update(sf::Time time)
     if(edit_draw == true)
         temp_obj.setSize(edit_mouse - temp_obj.getPosition());
 
-    map.update();
+    world.update();
 }
 
 ///! Draw the game.
@@ -86,6 +86,6 @@ void Game::draw()
     if(edit_draw == true)
         window.draw(temp_obj);
 
-    map.draw(window);
+    world.draw(window);
     window.display();
 }
