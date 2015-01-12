@@ -18,6 +18,7 @@ class GraphicsComponent;
  * Shared state can be directly referenced from here or
  * let components directly reference to each other.
  * This topic has been discussed here: http://gameprogrammingpatterns.com/component.html
+ * 
  */
 class GameObject {
 public:
