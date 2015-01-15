@@ -1,16 +1,16 @@
 #ifndef PROTO_GAMEOBJECT_H
 #define PROTO_GAMEOBJECT_H
 
-#include <SFML/Graphics.hpp>
-#include "World.h"
-
 #include <memory>
+#include <SFML/Graphics.hpp>
+
+#include "GraphicsComponent.h"
+#include "PhysicsComponent.h"
+#include "InputComponent.h"
 
 namespace Proto {
 
-class InputComponent;
-class PhysicsComponent;
-class GraphicsComponent;
+class World;
 
 /**
  * @brief The GameObject class
@@ -18,6 +18,7 @@ class GraphicsComponent;
  * Shared state can be directly referenced from here or
  * let components directly reference to each other.
  * This topic has been discussed here: http://gameprogrammingpatterns.com/component.html
+ *
  */
 class GameObject {
 public:
@@ -29,16 +30,15 @@ public:
     void update(World&);
     void draw(sf::RenderTarget&);
 
-    static std::unique_ptr<GameObject> create_gameobject(
-            InputComponent* i,
-            PhysicsComponent *p,
-            GraphicsComponent *g)
-    {
-        return std::unique_ptr<GameObject>{ new GameObject{ i, p ,g } };
-    }
+    sf::Vector2f getPosition() const { return position; }
+    sf::Vector2f getSize() const { return size; }
+
+    void setPosition(sf::Vector2f pos) { position = pos; }
+    void setSize(sf::Vector2f sz) { size = sz; }
 
 private:
-    sf::Vector2i position;
+    sf::Vector2f position;
+    sf::Vector2f size;
 
     std::unique_ptr<InputComponent> input;
     std::unique_ptr<PhysicsComponent> physics;

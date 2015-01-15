@@ -11,7 +11,7 @@ class InputComponent {
 public:
 
     virtual ~InputComponent() {}
-    virtual void update(GameObject&, sf::Event&);
+    virtual void update(GameObject&, sf::Event&) = 0;
 };
 
 }

@@ -1,9 +1,5 @@
 #include "GameObject.h"
 
-#include "GraphicsComponent.h"
-#include "PhysicsComponent.h"
-#include "InputComponent.h"
-
 using Proto::GameObject;
 using Proto::World;
 

@@ -10,7 +10,7 @@ class PhysicsComponent {
 public:
 
     virtual ~PhysicsComponent() { }
-    virtual void update(GameObject&, World&);
+    virtual void update(GameObject&, World&) = 0;
 };
 }
 

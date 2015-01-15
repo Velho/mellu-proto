@@ -64,8 +64,12 @@ void Game::handle_input(sf::Event event)
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         window.close();
 
-    if(editor == true)
+    if(editor == true) {
         editor_input(event);
+        return;
+    }
+
+    player.handle_input(event);
 }
 
 ///! Update the game logic.
@@ -74,6 +78,8 @@ void Game::update(sf::Time time)
     // Update editable_obj.shape size.
     if(edit_draw == true)
         temp_obj.setSize(edit_mouse - temp_obj.getPosition());
+
+    player.update(world);
 
     world.update();
 }
@@ -86,6 +92,8 @@ void Game::draw()
     if(edit_draw == true)
         window.draw(temp_obj);
 
+    player.draw(window);
     world.draw(window);
+
     window.display();
 }
