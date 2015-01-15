@@ -1,7 +1,6 @@
 #ifndef PROTO_WORLD
 #define PROTO_WORLD
 
-#include <memory>
 #include "Map.h"
 
 namespace Proto {
