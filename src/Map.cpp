@@ -17,7 +17,7 @@ Map::Map() : mapfile{ maps[0] }, objsaved{ 0 }
     objects = mapfile.load();
 }
 
-void Map::addObject(MapObject obj)
+void Map::add_object(MapObject obj)
 {
     objects.push_back(obj);
 }

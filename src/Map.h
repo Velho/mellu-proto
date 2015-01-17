@@ -26,10 +26,12 @@ class Map {
 public:
     Map();
 
-    void addObject(MapObject);
+    void add_object(MapObject);
 
     void update();
     void draw(sf::RenderTarget&);
+
+    std::vector<MapObject> get_objects() const { return objects; }
 
     void save_map();
     void reload_map();
