@@ -38,16 +38,23 @@ public:
         return std::unique_ptr<GameObject>{ new GameObject{ i, p ,g } };
     }
 
+    InputComponent *get_input() { return input.get(); }
+    PhysicsComponent *get_physics() { return physics.get(); }
+    GraphicsComponent *get_graphics() { return graphics.get(); }
+
 
     sf::Vector2f get_position() const { return position; }
     void set_position(sf::Vector2f pos) { position = pos; }
+
+    sf::Vector2f get_size() const { return size; }
+    void set_size(sf::Vector2f sz) { size = sz; }
 
     bool is_jumping() const { return jumping; }
     void set_jumping(bool jump) { jumping = jump; }
 
 private:
     sf::Vector2f position;
-
+    sf::Vector2f size;
     bool jumping;
 
     std::unique_ptr<InputComponent> input;

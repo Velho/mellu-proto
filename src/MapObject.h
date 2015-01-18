@@ -21,7 +21,7 @@ public:
     MapObject(sf::Vector2f sz, sf::Vector2f pos) :
         MapObject(sz)
     {
-        setPosition(pos);
+        set_position(pos);
     }
 
 
@@ -31,11 +31,13 @@ public:
 
     // Move ??
 
-    void setPosition(sf::Vector2f);
-    void setSize(sf::Vector2f);
+    void set_position(sf::Vector2f);
+    void set_size(sf::Vector2f);
 
-    sf::Vector2f getPosition() const;
-    sf::Vector2f getSize() const;
+    sf::Vector2f get_position() const;
+    sf::Vector2f get_size() const;
+
+    sf::FloatRect get_frect() const;
 
     virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 

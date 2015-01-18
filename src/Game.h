@@ -18,15 +18,15 @@ class Game {
 public:
     Game(bool edit) :
         window{ sf::VideoMode{ 800, 600 }, "Prototype" },
-        editor{ edit }, map{ world.getMap() },
+        editor{ edit }, map{ world.get_map() },
         player{ new PlayerInputComponent(),
                 new PlayerPhysicsComponent(clock),
                 new PlayerGraphicsComponent(viewport)}
     {
         window.setFramerateLimit(60);
 
-        player.setPosition(sf::Vector2f(200, 200));
-        player.setSize(sf::Vector2f(50, 75));
+        player.set_position(sf::Vector2f(200, 200));
+        player.set_size(sf::Vector2f(25, 50));
 
         viewport.setSize(sf::Vector2f(800, 600));
         window.setView(viewport); //! Does this need activation always when updated?

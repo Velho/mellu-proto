@@ -30,16 +30,16 @@ void Game::editor_input(sf::Event event)
         // Start
         if(edit_draw == false) {
             sf::Vector2f mouse = sf::Vector2f(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-            temp_obj.setPosition(mouse);
-            temp_obj.setSize(sf::Vector2f());
+            temp_obj.set_position(mouse);
+            temp_obj.set_size(sf::Vector2f());
 
             edit_draw = true;
             std::cout << "pos : (" << mouse.x << ", " << mouse.y << ")" <<  std::endl;
 
         } else {
             std::cout << "mouse sz : (" << edit_mouse.x << ", " << edit_mouse.y << ")" << std::endl;
-            std::cout << "temp_obj sz : (" << temp_obj.getSize().x << ", " << temp_obj.getSize().y << ")" << std::endl;
-            map->addObject(Proto::MapObject(temp_obj));
+            std::cout << "temp_obj sz : (" << temp_obj.get_size().x << ", " << temp_obj.get_size().y << ")" << std::endl;
+            map->add_object(Proto::MapObject(temp_obj));
             edit_draw = false;
         }
     }
@@ -77,7 +77,7 @@ void Game::update(sf::Time time)
 {
     // Update editable_obj.shape size.
     if(edit_draw == true)
-        temp_obj.setSize(edit_mouse - temp_obj.getPosition());
+        temp_obj.set_size(edit_mouse - temp_obj.get_position());
 
     player.update(world);
 

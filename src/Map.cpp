@@ -57,7 +57,7 @@ void Map::reload_map()
 void Map::print_info()
 {
     for(auto obj : objects) {
-        std::cout << "x y : " << obj.getPosition().x << " " << obj.getPosition().y;
-        std::cout << " w h : " << obj.getSize().x << " " << obj.getSize().y << std::endl;
+        std::cout << "x y : " << obj.get_position().x << " " << obj.get_position().y;
+        std::cout << " w h : " << obj.get_size().x << " " << obj.get_size().y << std::endl;
     }
 }

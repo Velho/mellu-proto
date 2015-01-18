@@ -13,7 +13,9 @@ public:
     void update();
     void draw(sf::RenderTarget&);
 
-    Map *getMap() { return map.get(); }
+    Map *get_map() { return map.get(); }
+
+    sf::FloatRect get_rect(std::size_t) const;
 
 private:
     std::unique_ptr<Map> map;

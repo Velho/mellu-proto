@@ -25,8 +25,8 @@ void MapFile::save(Map &map)
 
     if(map_file.is_open()) {
         for(auto obj : objects) {
-            map_file << obj.getPosition().x << " " << obj.getPosition().y << " "; // X, Y
-            map_file << obj.getSize().x << " " << obj.getSize().y << "\n";
+            map_file << obj.get_position().x << " " << obj.get_position().y << " "; // X, Y
+            map_file << obj.get_size().x << " " << obj.get_size().y << "\n";
         }
     }
 
