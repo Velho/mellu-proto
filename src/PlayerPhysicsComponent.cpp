@@ -27,16 +27,13 @@ void PlayerPhysicsComponent::update(GameObject &obj, World &world)
 
     //print_state(); // DEBUG
 
+    do_movement(obj);
+
     if(current_state == PlayerState::Jumping)
         do_jumping(obj);
 
     if(current_state == PlayerState::Falling)
         apply_gravity(obj, world);
-
-    if(current_state == PlayerState::RunningLeft || current_state == PlayerState::RunningRight) {
-//        obj.set_position(sf::Vector2f(obj.get_position().x, height));
-        do_movement(obj);
-    }
 }
 
 void PlayerPhysicsComponent::set_state()
