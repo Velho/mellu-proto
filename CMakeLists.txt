@@ -41,6 +41,17 @@ set(PLRPHYSICS src/PlayerPhysicsComponent.h src/PlayerPhysicsComponent.cpp)
 set(PLRGRAPHICS src/PlayerGraphicsComponent.h src/PlayerGraphicsComponent.cpp)
 set(PLAYERSRC ${PLRINPUT} ${PLRPHYSICS} ${PLRGRAPHICS})
 
+# Gameplay mechanic
+set(DROPGRAPHICS src/DropGraphicsComponent.h src/DropGraphicsComponent.cpp)
+set(DROPPHYSICS src/DropPhysicsComponent.h src/DropPhysicsComponent.cpp)
+set(DROPINPUT src/DropInputComponent.h src/DropInputComponent.cpp)
+# aka Manager class
+set(DROPPINSRC src/Droppin.h src/Droppin.cpp)
+set(DROPEVENT src/Event.h src/Event.cpp)
+set(DROPMECHANIC
+    ${DROPGRAPHICS} ${DROPPHYSICS} ${DROPINPUT}
+    ${DROPPINSRC} ${DROPEVENT})
+
 set(SRC_LIST
     ${MAINSRC}
     ${GAMESRC}
@@ -50,7 +61,8 @@ set(SRC_LIST
     ${WORLDSRC}
     ${COMPONENTS}
     ${GAMEOBJSRC}
-    ${PLAYERSRC})
+    ${PLAYERSRC}
+    ${DROPMECHANIC})
 
 add_executable(mellu-proto ${SRC_LIST})
 target_link_libraries(mellu-proto ${SFML_LIBRARIES})
