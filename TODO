@@ -23,5 +23,9 @@ LOW PRIO
       but for user experience setting up their own framerate is crucial.
       Every PlayerState is calculated against fixed values which work in current setup but releasing
       the framerate brakes the program. => CALCULATE AGAINST CLOCK.
+    - Move out Jumping, Falling, etc "general" code into i.e. World class where it can be
+      used for all other Components which are affected by these rules.
 DONE
     -> Map editing on runtime. (--edit flag is required)
+    -> Player
+        * Physics, Graphics component. (Input Component is included but doesn't currently provide anything)

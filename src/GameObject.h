@@ -49,13 +49,9 @@ public:
     sf::Vector2f get_size() const { return size; }
     void set_size(sf::Vector2f sz) { size = sz; }
 
-    bool is_jumping() const { return jumping; }
-    void set_jumping(bool jump) { jumping = jump; }
-
 private:
     sf::Vector2f position;
     sf::Vector2f size;
-    bool jumping;
 
     std::unique_ptr<InputComponent> input;
     std::unique_ptr<PhysicsComponent> physics;
