@@ -4,7 +4,9 @@
 namespace Proto {
 
 class Event {
+public:
 
+private:
 };
 
 }

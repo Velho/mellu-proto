@@ -11,12 +11,14 @@
 
 namespace Proto {
 
+class PlayerInputComponent;
+
 class PlayerPhysicsComponent : public PhysicsComponent {
 public:
-    PlayerPhysicsComponent(sf::Clock &cl) :
+    PlayerPhysicsComponent(PlayerInputComponent *in) :
+        input_cmp{ in },
         is_falling{ true },
         current_state{ PlayerState::Falling },
-        timer{ cl },
         fall_obj{ nullptr }
     {
     }
@@ -34,9 +36,10 @@ public:
     virtual void update(GameObject&, World&) override;
 
 private:
-    sf::Clock &timer;
     PlayerState current_state;
     MapObject *fall_obj;
+
+    PlayerInputComponent *input_cmp;
 
     enum class Keypress { Left, Right } last_keypress; ///< Used for calculating collision while jumping & falling.
 

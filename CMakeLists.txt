@@ -15,6 +15,7 @@ include_directories(${SFML_INCLUDE_DIR})
 # Important; Entry points 
 set(MAINSRC src/Main.cpp)
 set(GAMESRC src/Game.h src/Game.cpp)
+set(RESSRC src/Resources.h src/Resources.cpp)
 
 # Map specific
 set(MAPSRC src/Map.h src/Map.cpp)
@@ -45,16 +46,17 @@ set(PLAYERSRC ${PLRINPUT} ${PLRPHYSICS} ${PLRGRAPHICS})
 set(DROPGRAPHICS src/DropGraphicsComponent.h src/DropGraphicsComponent.cpp)
 set(DROPPHYSICS src/DropPhysicsComponent.h src/DropPhysicsComponent.cpp)
 set(DROPINPUT src/DropInputComponent.h src/DropInputComponent.cpp)
+#set(DROPOBJSRC src/DropObject.h src/DropObject.cpp)
 # aka Manager class
 set(DROPPINSRC src/Droppin.h src/Droppin.cpp)
 set(DROPEVENT src/Event.h src/Event.cpp)
-set(DROPMECHANIC
-    ${DROPGRAPHICS} ${DROPPHYSICS} ${DROPINPUT}
-    ${DROPPINSRC} ${DROPEVENT})
+set(DROPMECHANIC ${DROPPINSRC} ${DROPEVENT} #${DROPOBJSRC})
+    ${DROPGRAPHICS} ${DROPPHYSICS} ${DROPINPUT})
 
 set(SRC_LIST
     ${MAINSRC}
     ${GAMESRC}
+    ${RESSRC}
     ${MAPSRC}
     ${MFILESRC}
     ${MAPOBJSRC}

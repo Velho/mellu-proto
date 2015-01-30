@@ -152,11 +152,11 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
             sf::Vector2f pos{ obj.get_position() };
 
             // If player tries to walk into wall, take a step back(=> Makes a boing away from the wall).
-            if(current_state == PlayerState::RunningRight || last_keypress == Keypress::Right) {
+            if(current_state == PlayerState::RunningRight || input_cmp->last_keypress == input::KeyPress::Right) {
                 pos.x -= WALK_ACCELERATION;
                 obj.set_position(pos);
             }
-            if(current_state == PlayerState::RunningLeft || last_keypress == Keypress::Left) {
+            if(current_state == PlayerState::RunningLeft || input_cmp->last_keypress == input::KeyPress::Left) {
                 pos.x += WALK_ACCELERATION;
                 obj.set_position(pos);
             }

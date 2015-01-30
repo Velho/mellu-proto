@@ -7,7 +7,7 @@ namespace Proto {
 
 class PlayerInputComponent : public InputComponent {
 public:
-    PlayerInputComponent()
+    PlayerInputComponent() : last_keypress{ KeyPress::None }
     { }
     ~PlayerInputComponent() { }
 
@@ -19,6 +19,10 @@ public:
     static bool is_space() { return sf::Keyboard::isKeyPressed(sf::Keyboard::Space); }
 private:
     const float WALK_ACCELERATION = 250;
+
+    friend class PlayerPhysicsComponent;
+
+    enum class KeyPress { Left, Right, None } last_keypress;
 };
 }
 

@@ -69,7 +69,8 @@ void Game::handle_input(sf::Event event)
         return;
     }
 
-    player.handle_input(event);
+    player->handle_input(event);
+    drop_mech.handle_input(event);
 }
 
 ///! Update the game logic.
@@ -79,8 +80,8 @@ void Game::update(sf::Time time)
     if(edit_draw == true)
         temp_obj.set_size(edit_mouse - temp_obj.get_position());
 
-    player.update(world);
-
+    player->update(world);
+    drop_mech.update(world);
     world.update();
 }
 
@@ -92,8 +93,18 @@ void Game::draw()
     if(edit_draw == true)
         window.draw(temp_obj);
 
-    player.draw(window);
+    player->draw(window);
+    drop_mech.draw(window);
     world.draw(window);
 
     window.display();
+}
+
+std::unique_ptr<Proto::GameObject> Game::create_player()
+{
+    Proto::PlayerInputComponent *input{ new Proto::PlayerInputComponent };
+    Proto::PlayerPhysicsComponent *physics{ new Proto::PlayerPhysicsComponent{ input } };
+    Proto::PlayerGraphicsComponent *graphics{ new Proto::PlayerGraphicsComponent{ viewport } };
+
+    return std::unique_ptr<Proto::GameObject>{ new Proto::GameObject{ input, physics, graphics } };
 }

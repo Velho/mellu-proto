@@ -11,6 +11,8 @@
 #include "PlayerPhysicsComponent.h"
 #include "PlayerGraphicsComponent.h"
 
+#include "Droppin.h"
+
 
 namespace Proto {
 
@@ -19,14 +21,12 @@ public:
     Game(bool edit) :
         window{ sf::VideoMode{ 800, 600 }, "Prototype" },
         editor{ edit }, map{ world.get_map() },
-        player{ new PlayerInputComponent(),
-                new PlayerPhysicsComponent(clock),
-                new PlayerGraphicsComponent(viewport)}
+        player{ create_player() }
     {
         window.setFramerateLimit(60);
 
-        player.set_position(sf::Vector2f(200, 200));
-        player.set_size(sf::Vector2f(25, 50));
+        player->set_position(sf::Vector2f(200, 200));
+        player->set_size(sf::Vector2f(25, 50));
 
         viewport.setSize(sf::Vector2f(800, 600));
         window.setView(viewport); //! Does this need activation always when updated?
@@ -39,8 +39,11 @@ private:
     sf::Clock clock;
     sf::View viewport;
 
-    GameObject player;
+    std::unique_ptr<GameObject> player;
 
+    Droppin drop_mech;
+
+    ///< Window size.
     const int WIN_WIDTH{ 800 };
     const int WIN_HEIGHT{ 600 };
 
@@ -53,7 +56,10 @@ private:
 
     bool editor{ false };
 
-    void editor_input(sf::Event); ///! Editing maps.
+    ///< Creates a player GameObject.
+    std::unique_ptr<GameObject> create_player();
+
+    void editor_input(sf::Event); ///< Editing maps.
     void handle_input(sf::Event);
     void update(sf::Time);
     void draw();

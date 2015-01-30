@@ -2,19 +2,33 @@
 #define PROTO_DROPPIN_H
 
 #include "GameObject.h"
+#include <array>
 
 namespace Proto {
 
 class Droppin {
 public:
+    using GObj = GameObject;
+    using GObjPtr = std::unique_ptr<GObj>;
 
-    static std::unique_ptr<GameObject> create_drop()
-    {
-        return std::unique_ptr<GameObject>{ };
-    }
+    static GObjPtr create_drop();
+
+    void handle_input(sf::Event&);
+    void update(World&);
+    void draw(sf::RenderTarget&);
 
 private:
-    std::vector<std::unique_ptr<GameObject>> gobjs; ///< Lists of drop gameobjects.
+    struct d_offsets;
+
+    std::vector<GObjPtr> gobjs; ///< Lists of drop gameobjects.
+    std::array<d_offsets*, 6> offsets;
+
+    struct d_offsets {
+        float x;
+        bool allocated;
+    };
+
+    sf::RectangleShape spawn_box{ sf::Vector2f{ 25 * 6, 25 } };
 };
 
 }
