@@ -116,6 +116,7 @@ void PlayerPhysicsComponent::apply_gravity(GameObject &obj, World &world)
         current_state = PlayerState::Standing;
         obj.set_position(sf::Vector2f(pos.x, height));
         std::cout << "Player::Standing" << std::endl;
+        input_cmp->last_keypress = input::KeyPress::None;
         return;
     }
 
