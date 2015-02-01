@@ -11,9 +11,9 @@ using Proto::Map;
 using Proto::MapFile;
 using Proto::MapObject;
 
-using Proto::MapFileStructure;
+//using Proto::MapFileStructure;
 
-struct MapFileStructure {
+struct Proto::MapFileStructure {
     float x, y;
     float width, height;
 };
@@ -64,7 +64,7 @@ std::vector<MapObject> MapFile::load()
     return map_objects;
 }
 
-std::vector<MapFileStructure> MapFile::parse_lines()
+std::vector<Proto::MapFileStructure> MapFile::parse_lines()
 {
     std::ifstream map_stream(filename);
     std::vector<MapFileStructure> results;

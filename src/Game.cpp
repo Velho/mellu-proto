@@ -66,7 +66,7 @@ void Game::handle_input(sf::Event event)
 
     if(editor == true) {
         editor_input(event);
-        return;
+        //return;
     }
 
     player->handle_input(event);

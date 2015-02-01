@@ -49,12 +49,16 @@ void PlayerPhysicsComponent::set_state()
 {
     // State changing for movement should be moved into do_movement(..) method.
     if(input::is_left())
-        if(!is_falling_or_jumping())
-            current_state = PlayerState::RunningLeft; last_keypress = Keypress::Left;
+        if(!is_falling_or_jumping()) {
+            current_state = PlayerState::RunningLeft;
+            last_keypress = Keypress::Left;
+        }
 
     if(input::is_right())
-        if(!is_falling_or_jumping())
-            current_state = PlayerState::RunningRight; last_keypress = Keypress::Right;
+        if(!is_falling_or_jumping()) {
+            current_state = PlayerState::RunningRight;
+            last_keypress = Keypress::Right;
+        }
 
     if(input::is_space()) {
         PlayerState sel_state = PlayerState::Jumping;
@@ -78,7 +82,8 @@ bool PlayerPhysicsComponent::check_state(PlayerState new_state)
 
 bool PlayerPhysicsComponent::is_falling_or_jumping()
 {
-    if(current_state == PlayerState::Falling || current_state == PlayerState::Jumping)
+    if(current_state == PlayerState::Falling ||
+            current_state == PlayerState::Jumping)
         return true;
     return false;
 }
