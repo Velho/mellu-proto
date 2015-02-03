@@ -22,19 +22,22 @@ int Game::run()
     return 0;
 }
 
-void Game::editor_input(sf::Event event)
+void Game::editor_input(sf::Event &event)
 {
     // Assign the start position. If obj.draw is false, its the first button press.
     // Second button press will determine size of the rectangle.
     if((event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Button::Left )) {
         // Start
         if(edit_draw == false) {
-            sf::Vector2f mouse = sf::Vector2f(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-            temp_obj.set_position(mouse);
+            //sf::Vector2f mouse = sf::Vector2f(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
+            sf::Vector2i mouse_pos{ sf::Mouse::getPosition(window) };
+            sf::Vector2f world_pos = window.mapPixelToCoords(mouse_pos);
+
+            temp_obj.set_position(world_pos);
             temp_obj.set_size(sf::Vector2f());
 
             edit_draw = true;
-            std::cout << "pos : (" << mouse.x << ", " << mouse.y << ")" <<  std::endl;
+            std::cout << "world_pos : (" << world_pos.x << ", " << world_pos.y << ")" <<  std::endl;
 
         } else {
             std::cout << "mouse sz : (" << edit_mouse.x << ", " << edit_mouse.y << ")" << std::endl;
@@ -44,8 +47,13 @@ void Game::editor_input(sf::Event event)
         }
     }
 
-    if(event.type == sf::Event::MouseMoved)
-        edit_mouse = { static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y) };
+    if(event.type == sf::Event::MouseMoved) {
+        //edit_mouse { static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y) };
+        sf::Vector2i mouse_pos{ sf::Mouse::getPosition(window) };
+        sf::Vector2f world_pos{ window.mapPixelToCoords(mouse_pos) };
+
+        edit_mouse = world_pos;
+    }
 
     // CTRL + S ???
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -55,7 +63,7 @@ void Game::editor_input(sf::Event event)
         map->set_reload(true);
 }
 
-void Game::handle_input(sf::Event event)
+void Game::handle_input(sf::Event &event)
 {
     if(event.type == sf::Event::Closed)
         window.close();
@@ -70,7 +78,7 @@ void Game::handle_input(sf::Event event)
     }
 
     player->handle_input(event);
-    drop_mech.handle_input(event);
+    //drop_mech.handle_input(event);
 }
 
 ///! Update the game logic.
@@ -81,7 +89,7 @@ void Game::update(sf::Time time)
         temp_obj.set_size(edit_mouse - temp_obj.get_position());
 
     player->update(world);
-    drop_mech.update(world);
+    //drop_mech.update(world);
     world.update();
 }
 
@@ -94,7 +102,7 @@ void Game::draw()
         window.draw(temp_obj);
 
     player->draw(window);
-    drop_mech.draw(window);
+    //drop_mech.draw(window);
     world.draw(window);
 
     window.display();

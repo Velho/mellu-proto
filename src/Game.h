@@ -59,8 +59,8 @@ private:
     ///< Creates a player GameObject.
     std::unique_ptr<GameObject> create_player();
 
-    void editor_input(sf::Event); ///< Editing maps.
-    void handle_input(sf::Event);
+    void editor_input(sf::Event&); ///< Editing maps.
+    void handle_input(sf::Event&);
     void update(sf::Time);
     void draw();
 };
