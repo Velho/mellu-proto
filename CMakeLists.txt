@@ -8,6 +8,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 find_package(SFML 2 REQUIRED graphics window system)
+#find_package(Sqlite3 REQUIRED) # Find Sqlite3, used for custom fileformat.
 
 include_directories(${SFML_INCLUDE_DIR})
 
