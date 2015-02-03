@@ -22,7 +22,7 @@ struct MapFileStructure;
 class MapFile {
 public:
     MapFile(std::string fn) :
-        filename{ fn }
+        filename( fn )
     { }
 
     void save(Map&);

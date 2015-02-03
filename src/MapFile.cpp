@@ -20,7 +20,7 @@ struct Proto::MapFileStructure {
 
 void MapFile::save(Map &map)
 {
-    auto objects = map.objects; // Friend method; We get access to private stuff.
+    auto objects = map.objects; // Friend method; We get access to private stuff. Though VS complains its inaccessible
     std::ofstream map_file{ filename };
 
     if(map_file.is_open()) {
