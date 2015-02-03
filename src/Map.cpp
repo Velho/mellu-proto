@@ -11,7 +11,7 @@ std::vector<std::string> maps {
 
 #include <iostream>
 
-Map::Map() : mapfile{ maps[0] }, objsaved{ 0 }
+Map::Map() : mapfile{ maps[0] }, objsaved{ 0 }, reload{ false }
 {
     std::cout << "Loading map " << maps[0] << std::endl;
     objects = mapfile.load();

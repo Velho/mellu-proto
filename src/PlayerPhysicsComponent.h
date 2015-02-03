@@ -17,10 +17,11 @@ class PlayerPhysicsComponent : public PhysicsComponent {
 public:
     PlayerPhysicsComponent(PlayerInputComponent *in) :
         input_cmp{ in },
-        is_falling{ true },
+        is_falling{ false },
         current_state{ PlayerState::Falling },
         fall_obj{ nullptr }
     {
+		init_fall(); // Let's fall in to the game ehehehe
     }
     ~PlayerPhysicsComponent() {}
 
