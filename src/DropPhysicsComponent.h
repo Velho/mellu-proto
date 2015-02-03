@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 
+#include <random>
 #include <iostream>
 
 namespace Proto {

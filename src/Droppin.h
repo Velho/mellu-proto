@@ -27,8 +27,6 @@ private:
         float x;
         bool allocated;
     };
-
-    sf::RectangleShape spawn_box{ sf::Vector2f{ 25 * 6, 25 } };
 };
 
 }

@@ -1,6 +1,7 @@
 #include "DropInputComponent.h"
 
 using Proto::DropInputComponent;
+using Proto::GameObject;
 
 void DropInputComponent::update(GameObject &, sf::Event &event)
 {

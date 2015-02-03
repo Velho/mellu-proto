@@ -6,7 +6,7 @@
 
 using Proto::Droppin;
 using Proto::GameObject;
-
+using Proto::World;
 using Proto::DropInputComponent;
 using Proto::DropPhysicsComponent;
 using Proto::DropGraphicsComponent;
@@ -35,10 +35,6 @@ void Droppin::update(World &world)
 
 void Droppin::draw(sf::RenderTarget &target)
 {
-    spawn_box.setPosition(sf::Vector2f(400, 0));
-
-    target.draw(spawn_box);
-
     for(auto &g : gobjs)
         g->draw(target);
 }
