@@ -28,7 +28,7 @@ public:
     void save(Map&);
     friend void save(Map&);
 
-    std::vector<MapObject> load();
+    std::vector<MapObject*> load();
 
     std::string getFilename() const { return filename; }
 

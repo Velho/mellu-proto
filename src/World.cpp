@@ -14,5 +14,5 @@ void World::draw(sf::RenderTarget &target)
 
 sf::FloatRect World::get_rect(std::size_t idx) const
 {
-    return map->get_objects()[idx].get_frect();
+    return map->get_objects()[idx]->get_frect();
 }

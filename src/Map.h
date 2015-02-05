@@ -25,13 +25,14 @@ namespace Proto {
 class Map {
 public:
     Map();
+    ~Map();
 
     void add_object(MapObject);
 
     void update();
     void draw(sf::RenderTarget&);
 
-    std::vector<MapObject> get_objects() const { return objects; }
+    std::vector<MapObject*> get_objects() const { return objects; }
 
     void save_map();
     void reload_map();
@@ -40,7 +41,7 @@ public:
 
     friend void MapFile::save(Map&);
 private:
-    std::vector<MapObject> objects;
+    std::vector<MapObject*> objects;
     MapFile mapfile;
 
     int objsaved;
