@@ -5,6 +5,14 @@ namespace Proto {
 
 class Event {
 public:
+    Event();
+    ~Event();
+
+    enum class EventStatus {
+        Trigger,
+        Progress,
+        Complete
+    };
 
 private:
 };
