@@ -22,6 +22,7 @@ set(RESSRC src/Resources.h src/Resources.cpp)
 set(MAPSRC src/Map.h src/Map.cpp)
 set(MFILESRC src/MapFile.h src/MapFile.cpp)
 set(MAPOBJSRC src/MapObject.h src/MapObject.cpp)
+set(MOVEMAPOBJ src/MovablePlatform.h src/MovablePlatform.cpp)
 
 set(WORLDSRC src/World.h src/World.cpp)
 
@@ -65,7 +66,8 @@ set(SRC_LIST
     ${COMPONENTS}
     ${GAMEOBJSRC}
     ${PLAYERSRC}
-    ${DROPMECHANIC})
+    ${DROPMECHANIC}
+    ${MOVEMAPOBJ})
 
 add_executable(mellu-proto ${SRC_LIST})
 target_link_libraries(mellu-proto ${SFML_LIBRARIES})

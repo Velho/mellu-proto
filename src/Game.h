@@ -13,6 +13,7 @@
 
 #include "Droppin.h"
 
+#include "Event.h"
 
 namespace Proto {
 
@@ -42,6 +43,8 @@ private:
     std::unique_ptr<GameObject> player;
 
     Droppin drop_mech;
+
+    Event::EventType evt_type;
 
     ///< Window size.
     const int WIN_WIDTH{ 800 };

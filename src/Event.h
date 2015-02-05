@@ -5,6 +5,9 @@ namespace Proto {
 
 class Event {
 public:
+    enum class EventType {
+        Platform, Enemy
+    };
 
 private:
 };

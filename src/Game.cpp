@@ -24,6 +24,14 @@ int Game::run()
 
 void Game::editor_input(sf::Event &event)
 {
+    // Manage MapObject's (event)type; Depending on the Event what is created.
+    if(edit_draw) {
+        // Shift + P = MovablePlatform
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) &&
+                sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+            evt_type = Proto::Event::EventType::Platform;
+    }
+
     // Assign the start position. If obj.draw is false, its the first button press.
     // Second button press will determine size of the rectangle.
     if((event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Button::Left )) {
