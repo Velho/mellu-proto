@@ -132,20 +132,24 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
 {
     sf::FloatRect plr_rect{ obj.get_position(), obj.get_size() };
 
-    for(auto i = 0; i < world.get_map()->get_objects().size(); i++) {
+    int idx{ 0 };
+    //for(auto i = 0; i < world.get_map()->get_objects().size(); i++) {
+    for(auto mobj : world.get_map()->get_objects()) {
 
-        // Rect for map objects surface. Calculating collision on surface when falling is more relevant. Collision for movement comes next.
-        sf::FloatRect mobj_rekt{ world.get_rect(i).left, world.get_rect(i).top, world.get_rect(i).width, 5 };
+        // Rect for map objects surface. Calculating collision on surface when falling is more relevant. Surface is 5px high.
+        sf::FloatRect mobj_rekt{ mobj->get_frect().left, mobj->get_frect().top, mobj->get_frect().width, 5 };
 
         // Player collides with a map object.
         // if(plr_rect.intersects(world.get_rect(i)) && is_falling) {
         if(plr_rect.intersects(mobj_rekt) && is_falling) {
-            height = world.get_rect(i).top - obj.get_size().y; // Current height, optimization(loop only when needed).
+            height = mobj->get_frect().top - obj.get_size().y; // Current height, optimization(loop only when needed).
             is_falling = false;
-            fall_obj = &world.get_map()->get_objects()[i];
+            fall_obj = mobj;
 
-            std::cout << "height at idx(" << i << ") : " << height << std::endl;
+            std::cout << "height at idx(" << idx << ") : " << height << std::endl;
         }
+
+        idx++;
     }
 }
 
@@ -154,7 +158,7 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
     sf::FloatRect plr_rect{ obj.get_position(), sf::Vector2f(obj.get_size().x + 2, obj.get_size().y) };
 
     for(auto mobj : world.get_map()->get_objects()) {
-        if(plr_rect.intersects(mobj.get_frect())) {
+        if(plr_rect.intersects(mobj->get_frect())) {
             sf::Vector2f pos{ obj.get_position() };
 
             // If player tries to walk into wall, take a step back(=> Makes a boing away from the wall).

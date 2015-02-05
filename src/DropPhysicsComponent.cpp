@@ -1,8 +1,9 @@
 #include "DropPhysicsComponent.h"
 #include "DropInputComponent.h"
-#include <random>
 
+using Proto::GameObject;
 using Proto::DropPhysicsComponent;
+using Proto::World;
 
 void DropPhysicsComponent::update(GameObject &, World &)
 {

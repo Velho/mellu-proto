@@ -22,13 +22,13 @@ struct MapFileStructure;
 class MapFile {
 public:
     MapFile(std::string fn) :
-        filename{ fn }
+        filename( fn )
     { }
 
     void save(Map&);
     friend void save(Map&);
 
-    std::vector<MapObject> load();
+    std::vector<MapObject*> load();
 
     std::string getFilename() const { return filename; }
 

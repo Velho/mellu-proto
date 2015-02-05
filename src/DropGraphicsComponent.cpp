@@ -10,8 +10,8 @@ using Proto::GameObject;
 using Proto::Resources;
 using Proto::FontId;
 
-constexpr float font_x_offset = 6.f;
-constexpr unsigned int font_char_size = 22;
+const float font_x_offset = 6.f;
+const unsigned int font_char_size = 22;
 
 // Character 'I' would prolly need special treatment as it gets rendered too left.
 

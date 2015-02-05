@@ -11,15 +11,21 @@ std::vector<std::string> maps {
 
 #include <iostream>
 
-Map::Map() : mapfile{ maps[0] }, objsaved{ 0 }
+Map::Map() : mapfile{ maps[0] }, objsaved{ 0 }, reload{ false }
 {
     std::cout << "Loading map " << maps[0] << std::endl;
     objects = mapfile.load();
 }
 
+Map::~Map()
+{
+    for(auto obj : objects)
+        delete obj;
+}
+
 void Map::add_object(MapObject obj)
 {
-    objects.push_back(obj);
+    objects.push_back(new MapObject(obj));
 }
 
 void Map::update()
@@ -30,7 +36,7 @@ void Map::update()
 void Map::draw(sf::RenderTarget &target)
 {
     for(auto obj : objects)
-        target.draw(obj);
+        target.draw(*obj);
 }
 
 void Map::save_map()
@@ -57,7 +63,7 @@ void Map::reload_map()
 void Map::print_info()
 {
     for(auto obj : objects) {
-        std::cout << "x y : " << obj.get_position().x << " " << obj.get_position().y;
-        std::cout << " w h : " << obj.get_size().x << " " << obj.get_size().y << std::endl;
+        std::cout << "x y : " << obj->get_position().x << " " << obj->get_position().y;
+        std::cout << " w h : " << obj->get_size().x << " " << obj->get_size().y << std::endl;
     }
 }

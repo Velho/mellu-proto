@@ -14,6 +14,10 @@ public:
         Complete
     };
 
+    enum class EventType {
+        Platform, Enemy
+    };
+
 private:
 };
 

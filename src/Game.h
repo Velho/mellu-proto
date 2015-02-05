@@ -13,6 +13,7 @@
 
 #include "Droppin.h"
 
+#include "Event.h"
 
 namespace Proto {
 
@@ -43,6 +44,8 @@ private:
 
     Droppin drop_mech;
 
+    Event::EventType evt_type;
+
     ///< Window size.
     const int WIN_WIDTH{ 800 };
     const int WIN_HEIGHT{ 600 };
@@ -59,8 +62,8 @@ private:
     ///< Creates a player GameObject.
     std::unique_ptr<GameObject> create_player();
 
-    void editor_input(sf::Event); ///< Editing maps.
-    void handle_input(sf::Event);
+    void editor_input(sf::Event&); ///< Editing maps.
+    void handle_input(sf::Event&);
     void update(sf::Time);
     void draw();
 };
