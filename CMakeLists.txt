@@ -7,9 +7,12 @@ project(mellu-proto)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
+# TODO Add different components this project requires.
+find_package(Boost REQUIRED)
 find_package(SFML 2 REQUIRED graphics window system)
 #find_package(Sqlite3 REQUIRED) # Find Sqlite3, used for custom fileformat.
 
+include_directories(${Boost_INCLUDE_DIR})
 include_directories(${SFML_INCLUDE_DIR})
 
 # Sources
@@ -22,7 +25,6 @@ set(RESSRC src/Resources.h src/Resources.cpp)
 set(MAPSRC src/Map.h src/Map.cpp)
 set(MFILESRC src/MapFile.h src/MapFile.cpp)
 set(MAPOBJSRC src/MapObject.h src/MapObject.cpp)
-set(MOVEMAPOBJ src/MovablePlatform.h src/MovablePlatform.cpp)
 
 set(WORLDSRC src/World.h src/World.cpp)
 
@@ -51,8 +53,14 @@ set(DROPINPUT src/DropInputComponent.h src/DropInputComponent.cpp)
 #set(DROPOBJSRC src/DropObject.h src/DropObject.cpp)
 # aka Manager class
 set(DROPPINSRC src/Droppin.h src/Droppin.cpp)
-set(DROPEVENT src/Event.h src/Event.cpp)
-set(DROPMECHANIC ${DROPPINSRC} ${DROPEVENT} #${DROPOBJSRC})
+set(EVTFILESRC src/EventFile.h src/EventFile.cpp)
+set(EVENTSRC src/Events.h src/Events.cpp)
+set(EVENTOBJSRC src/EventObject.h src/EventObject.cpp)
+
+set(MOVEMAPOBJ src/MovablePlatform.h src/MovablePlatform.cpp)
+
+set(EVENTS ${EVTFILESRC} ${EVENTSRC} ${EVENTOBJSRC})
+set(DROPMECHANICCMP ${DROPPINSRC} #${EVENTSRC} ${DROPOBJSRC})
     ${DROPGRAPHICS} ${DROPPHYSICS} ${DROPINPUT})
 
 set(SRC_LIST
@@ -66,8 +74,9 @@ set(SRC_LIST
     ${COMPONENTS}
     ${GAMEOBJSRC}
     ${PLAYERSRC}
-    ${DROPMECHANIC}
-    ${MOVEMAPOBJ})
+    ${DROPMECHANICCMP}
+    ${MOVEMAPOBJ}
+    ${EVENTS})
 
 add_executable(mellu-proto ${SRC_LIST})
 target_link_libraries(mellu-proto ${SFML_LIBRARIES})

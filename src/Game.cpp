@@ -29,7 +29,7 @@ void Game::editor_input(sf::Event &event)
         // Shift + P = MovablePlatform
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) &&
                 sf::Keyboard::isKeyPressed(sf::Keyboard::P))
-            evt_type = Proto::Event::EventType::Platform;
+            evt_type = Proto::Events::EventType::Platform;
     }
 
     // Assign the start position. If obj.draw is false, its the first button press.
@@ -45,6 +45,8 @@ void Game::editor_input(sf::Event &event)
             temp_obj.set_size(sf::Vector2f());
 
             edit_draw = true;
+            evt_type = Proto::Events::EventType::None; // Reset the event type.
+
             std::cout << "world_pos : (" << world_pos.x << ", " << world_pos.y << ")" <<  std::endl;
 
         } else {
@@ -63,7 +65,7 @@ void Game::editor_input(sf::Event &event)
         edit_mouse = world_pos;
     }
 
-    // CTRL + S ???
+    // Save & Load map in runtime.
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         map->save_map();
 

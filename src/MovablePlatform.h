@@ -2,10 +2,11 @@
 #define PROTO_MOVABLEPLATFORM_H
 
 #include "MapObject.h"
+#include "EventObject.h"
 
 namespace Proto {
 
-class MovablePlatform : public MapObject {
+class MovablePlatform : public MapObject, public EventObject {
 public:
 
     // Default construction.
