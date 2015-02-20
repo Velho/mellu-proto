@@ -136,8 +136,8 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
     //for(auto i = 0; i < world.get_map()->get_objects().size(); i++) {
     for(auto mobj : world.get_map()->get_objects()) {
 
-        // Rect for map objects surface. Calculating collision on surface when falling is more relevant. Surface is 5px high.
-        sf::FloatRect mobj_rekt{ mobj->get_frect().left, mobj->get_frect().top, mobj->get_frect().width, 5 };
+        // Rect for map objects surface. Calculating collision on surface when falling is more relevant. Surface is 2px high.
+        sf::FloatRect mobj_rekt{ mobj->get_frect().left, mobj->get_frect().top, mobj->get_frect().width, 2 };
 
         // Player collides with a map object.
         // if(plr_rect.intersects(world.get_rect(i)) && is_falling) {
