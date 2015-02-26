@@ -4,16 +4,13 @@ using Proto::Map;
 using Proto::MapFile;
 using Proto::MapObject;
 
-std::string map_dir{ "data/maps/" };
-std::vector<std::string> maps {
-    map_dir + "proto.map"
-};
-
 #include <iostream>
 
-Map::Map() : mapfile{ maps[0] }, objsaved{ 0 }, reload{ false }
+const std::string map_data_dir("data/maps/");
+
+Map::Map(std::string file) : mapfile(map_data_dir + file), objsaved{ 0 }, reload{ false }
 {
-    std::cout << "Loading map " << maps[0] << std::endl;
+    std::cout << "Loading map " << file << std::endl;
     objects = mapfile.load();
 }
 
@@ -41,6 +38,7 @@ void Map::draw(sf::RenderTarget &target)
 
 void Map::save_map()
 {
+    // If there's new or removed objects => Save the map.
     if(objects.size() != objsaved) {
         std::cout << "Saving current map " << mapfile.getFilename() << std::endl;
         std::cout << "Objects : " << std::endl;
@@ -54,6 +52,7 @@ void Map::save_map()
 
 void Map::reload_map()
 {
+    // Let's keep this simple. Reload when reload is true.
     if(reload) {
         objects = mapfile.load();
         reload = false;

@@ -8,10 +8,12 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 # TODO Add different components this project requires.
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED program_options filesystem)
 find_package(SFML 2 REQUIRED graphics window system)
-#find_package(Sqlite3 REQUIRED) # Find Sqlite3, used for custom fileformat.
+find_package(Sqlite3 REQUIRED) # Find Sqlite3, used for custom fileformat.
 
+# Inlcude directories
+include_directories(${Sqlite3_INCLUDE_DIR})
 include_directories(${Boost_INCLUDE_DIR})
 include_directories(${SFML_INCLUDE_DIR})
 
@@ -20,6 +22,9 @@ include_directories(${SFML_INCLUDE_DIR})
 set(MAINSRC src/Main.cpp)
 set(GAMESRC src/Game.h src/Game.cpp)
 set(RESSRC src/Resources.h src/Resources.cpp)
+set(LVLSRC src/Level.h src/Level.cpp)
+# Lists all important modules.
+set(IMPORTANTSRC ${MAINSRC} ${GAMESRC} ${RESSRC} ${LVLSRC})
 
 # Map specific
 set(MAPSRC src/Map.h src/Map.cpp)
@@ -64,9 +69,7 @@ set(DROPMECHANICCMP ${DROPPINSRC} #${EVENTSRC} ${DROPOBJSRC})
     ${DROPGRAPHICS} ${DROPPHYSICS} ${DROPINPUT})
 
 set(SRC_LIST
-    ${MAINSRC}
-    ${GAMESRC}
-    ${RESSRC}
+    ${IMPORTANTSRC}
     ${MAPSRC}
     ${MFILESRC}
     ${MAPOBJSRC}
@@ -79,4 +82,4 @@ set(SRC_LIST
     ${EVENTS})
 
 add_executable(mellu-proto ${SRC_LIST})
-target_link_libraries(mellu-proto ${SFML_LIBRARIES})
+target_link_libraries(mellu-proto ${SFML_LIBRARIES} ${Sqlite3_LIBRARY} ${Boost_LIBRARIES})

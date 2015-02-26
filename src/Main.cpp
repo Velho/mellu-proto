@@ -15,22 +15,28 @@
  */
 
 #include <iostream>
+#include <string>
+#include <boost/program_options.hpp>
 
 using Proto::Game;
+using namespace boost::program_options;
 
 int main(int argc, char *argv[])
 {
-    bool editor{ false };
+    variables_map vars; // Stores the cmd variables here.
+    try {
+        // Parse the command line args with the use of Booost!
+        options_description desc("Options");
+        desc.add_options()
+                ("edit", value<bool>()->default_value(false), "Edit mode")
+                ("map", value<std::string>()->default_value("proto.map"), "Map select");
 
-    if(argc > 1) {
-        std::string arg{ argv[1] };
+        store(parse_command_line(argc, argv, desc), vars);
 
-        if(arg == "--edit")
-            editor = true;
+    } catch(const error &err) {
+        std::cout << err.what() << std::endl;
     }
 
-    editor == true ? std::cout << "Edit mode\n" : std::cout << "Game mode\n";
-
-    Game game(editor);
+    Game game(vars);
     return game.run(); // Run the game application.
 }

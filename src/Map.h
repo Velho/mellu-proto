@@ -21,10 +21,12 @@ namespace Proto {
  * Maps doesn't contain any information about entities and
  * their positions. Only the structural data -> where each piece
  * goes.
+ *
+ * TODO Implement Sqlite based Map fileformat.
  */
 class Map {
 public:
-    Map();
+    Map(std::string file);
     ~Map();
 
     void add_object(MapObject);

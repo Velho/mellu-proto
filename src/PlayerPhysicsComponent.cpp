@@ -6,6 +6,8 @@ using Proto::World;
 
 using input = Proto::PlayerInputComponent;
 
+///< TODO Implement move_ground() & move_air()
+
 /*
 void PlayerPhysicsComponent::print_state()
 {
@@ -134,7 +136,7 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
 
     int idx{ 0 };
     //for(auto i = 0; i < world.get_map()->get_objects().size(); i++) {
-    for(auto mobj : world.get_map()->get_objects()) {
+    for(auto mobj : world.get_map_objects()) {
 
         // Rect for map objects surface. Calculating collision on surface when falling is more relevant. Surface is 2px high.
         sf::FloatRect mobj_rekt{ mobj->get_frect().left, mobj->get_frect().top, mobj->get_frect().width, 2 };
@@ -155,18 +157,22 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
 
 void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
 {
-    sf::FloatRect plr_rect{ obj.get_position(), sf::Vector2f(obj.get_size().x + 2, obj.get_size().y) };
+    sf::FloatRect plr_rect{ obj.get_position(),
+        sf::Vector2f(obj.get_size().x + 2, obj.get_size().y) };
 
-    for(auto mobj : world.get_map()->get_objects()) {
+    for(auto mobj : world.get_map_objects()) {
         if(plr_rect.intersects(mobj->get_frect())) {
             sf::Vector2f pos{ obj.get_position() };
 
-            // If player tries to walk into wall, take a step back(=> Makes a boing away from the wall).
-            if(current_state == PlayerState::RunningRight || input_cmp->last_keypress == input::KeyPress::Right) {
+            // If player tries to walk into wall
+            // take a step back(=> Makes a boing away from the wall).
+            if(current_state == PlayerState::RunningRight ||
+                    input_cmp->last_keypress == input::KeyPress::Right) {
                 pos.x -= WALK_ACCELERATION;
                 obj.set_position(pos);
             }
-            if(current_state == PlayerState::RunningLeft || input_cmp->last_keypress == input::KeyPress::Left) {
+            if(current_state == PlayerState::RunningLeft ||
+                    input_cmp->last_keypress == input::KeyPress::Left) {
                 pos.x += WALK_ACCELERATION;
                 obj.set_position(pos);
             }
@@ -192,11 +198,13 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
 
 
     if(fall_obj != nullptr && current_state != PlayerState::Jumping) {
-        sf::Vector2f plr_coll_pos(obj.get_position().x + obj.get_size().x, obj.get_position().y + obj.get_size().y);
+        sf::Vector2f plr_coll_pos(obj.get_position().x + obj.get_size().x,
+                obj.get_position().y + obj.get_size().y);
         //sf::FloatRect plr_coll_rect(obj.get_position(), obj.get_size());
 
         // If collided map object doesnt contain gameobject position => We are falling.
-        if(!fall_obj->get_frect().contains(plr_coll_pos) && current_state != PlayerState::Falling) {
+        if(!fall_obj->get_frect().contains(plr_coll_pos) &&
+                current_state != PlayerState::Falling) {
             current_state = PlayerState::Falling;
             init_fall();
             std::cout << "fall_obj()" << std::endl;
@@ -247,7 +255,7 @@ void PlayerPhysicsComponent::do_movement(GameObject &obj)
     }
 
     if(is_falling_or_jumping()) {
-        sf::Vector2f pos{ obj.get_position() };
+        //sf::Vector2f pos{ obj.get_position() };
 
         if(input::is_left()) {
 

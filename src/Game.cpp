@@ -34,10 +34,10 @@ void Game::editor_input(sf::Event &event)
 
     // Assign the start position. If obj.draw is false, its the first button press.
     // Second button press will determine size of the rectangle.
-    if((event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Button::Left )) {
+    if((event.type == sf::Event::MouseButtonReleased &&
+            event.mouseButton.button == sf::Mouse::Button::Left )) {
         // Start
         if(edit_draw == false) {
-            //sf::Vector2f mouse = sf::Vector2f(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
             sf::Vector2i mouse_pos{ sf::Mouse::getPosition(window) };
             sf::Vector2f world_pos = window.mapPixelToCoords(mouse_pos);
 
@@ -47,12 +47,17 @@ void Game::editor_input(sf::Event &event)
             edit_draw = true;
             evt_type = Proto::Events::EventType::None; // Reset the event type.
 
-            std::cout << "world_pos : (" << world_pos.x << ", " << world_pos.y << ")" <<  std::endl;
+            std::cout << "world_pos : (" << world_pos.x << ", "
+                << world_pos.y << ")" <<  std::endl;
 
         } else {
-            std::cout << "mouse sz : (" << edit_mouse.x << ", " << edit_mouse.y << ")" << std::endl;
-            std::cout << "temp_obj sz : (" << temp_obj.get_size().x << ", " << temp_obj.get_size().y << ")" << std::endl;
-            map->add_object(Proto::MapObject(temp_obj));
+            // Some debug msg
+            std::cout << "mouse sz : (" << edit_mouse.x << ", "
+                << edit_mouse.y << ")" << std::endl;
+            std::cout << "temp_obj sz : (" << temp_obj.get_size().x << ", "
+                << temp_obj.get_size().y << ")" << std::endl;
+
+            world->add_map_object(Proto::MapObject(temp_obj));
             edit_draw = false;
         }
     }
@@ -66,11 +71,13 @@ void Game::editor_input(sf::Event &event)
     }
 
     // Save & Load map in runtime.
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        map->save_map();
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
+            sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        world->save_map();
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-        map->set_reload(true);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
+            sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+        world->reload_map();
 }
 
 void Game::handle_input(sf::Event &event)
@@ -98,9 +105,9 @@ void Game::update(sf::Time time)
     if(edit_draw == true)
         temp_obj.set_size(edit_mouse - temp_obj.get_position());
 
-    player->update(world);
+    player->update(*world);
     //drop_mech.update(world);
-    world.update();
+    world->update();
 }
 
 ///! Draw the game.
@@ -113,7 +120,7 @@ void Game::draw()
 
     player->draw(window);
     //drop_mech.draw(window);
-    world.draw(window);
+    world->draw(window);
 
     window.display();
 }
@@ -124,5 +131,27 @@ std::unique_ptr<Proto::GameObject> Game::create_player()
     Proto::PlayerPhysicsComponent *physics{ new Proto::PlayerPhysicsComponent{ input } };
     Proto::PlayerGraphicsComponent *graphics{ new Proto::PlayerGraphicsComponent{ viewport } };
 
-    return std::unique_ptr<Proto::GameObject>{ new Proto::GameObject{ input, physics, graphics } };
+    return std::unique_ptr<Proto::GameObject>{ 
+        new Proto::GameObject{ input, physics, graphics } };
+}
+
+void Game::parse_cmd(boost::program_options::variables_map &vars)
+{
+    // We'll get edit mode and maps out of command line, lets parse.
+
+    // Edit mode.
+    if(vars.count("edit"))
+        editor = vars["edit"].as<bool>();
+
+    // TODO Used only in development to jump through different levels..
+    // TODO Also now when there's no way interface to change the level.
+
+    // Select map. 
+    if(vars.count("map")) {
+        level_info.select_map(vars["map"].as<std::string>());
+        std::cout << vars["map"].as<std::string>() << std::endl;
+    }
+
+    //std::cout << "Map : " << level_info.get_current_map_str() << std::endl;
+    std::cout << "Edit : " << editor << std::endl;
 }
