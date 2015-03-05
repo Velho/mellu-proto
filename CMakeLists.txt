@@ -7,8 +7,10 @@ project(mellu-proto)
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
+set(Boost_USE_STATIC_LIBS ON)
+
 # TODO Add different components this project requires.
-find_package(Boost REQUIRED program_options filesystem)
+find_package(Boost REQUIRED system program_options filesystem)
 find_package(SFML 2 REQUIRED graphics window system)
 find_package(Sqlite3 REQUIRED) # Find Sqlite3, used for custom fileformat.
 
@@ -17,14 +19,22 @@ include_directories(${Sqlite3_INCLUDE_DIR})
 include_directories(${Boost_INCLUDE_DIR})
 include_directories(${SFML_INCLUDE_DIR})
 
+message("Boost LIB_DIR : ${Boost_LIBRARY_DIR}")
+message("Boost LIBRARIES : ${Boost_LIBRARIES}")
+
 # Sources
 # Important; Entry points 
 set(MAINSRC src/Main.cpp)
 set(GAMESRC src/Game.h src/Game.cpp)
 set(RESSRC src/Resources.h src/Resources.cpp)
 set(LVLSRC src/Level.h src/Level.cpp)
+set(DBSRC src/Database.h src/Database.cpp)
+
 # Lists all important modules.
-set(IMPORTANTSRC ${MAINSRC} ${GAMESRC} ${RESSRC} ${LVLSRC})
+set(IMPORTANTSRC 
+    ${MAINSRC} ${GAMESRC} 
+    ${RESSRC} ${LVLSRC}
+    ${DEVCONSRC} ${DBSRC})
 
 # Map specific
 set(MAPSRC src/Map.h src/Map.cpp)
@@ -82,4 +92,4 @@ set(SRC_LIST
     ${EVENTS})
 
 add_executable(mellu-proto ${SRC_LIST})
-target_link_libraries(mellu-proto ${SFML_LIBRARIES} ${Sqlite3_LIBRARY} ${Boost_LIBRARIES})
+target_link_libraries(mellu-proto ${Boost_LIBRARIES} ${SFML_LIBRARIES} ${Sqlite3_LIBRARY})
