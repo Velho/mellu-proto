@@ -1,9 +1,12 @@
 #include "Level.h"
+#include "World.h"
 
 using Proto::Level;
+using Proto::World;
 
 Level::Level() : current_map{ Maps::None }
 {
+    // Add maps to levels container.
     levels.emplace(std::make_pair(Maps::Proto, "proto.map"));
 }
 
@@ -24,4 +27,9 @@ Level::Maps Level::str_to_maps(std::string str)
             return lvl.first;
 
     return Maps::None; // aka Null value, no map selected.
+}
+
+std::unique_ptr<World> Level::get_world()
+{
+    return std::unique_ptr<World>{ new World(*this) };
 }

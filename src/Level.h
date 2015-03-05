@@ -3,8 +3,11 @@
 
 #include <map>
 #include <string>
+#include <memory>
 
 namespace Proto {
+
+class World;
 
 /*!
  *\brief
@@ -42,7 +45,14 @@ public:
     Maps get_current_map() const { return current_map; }
     std::string get_current_map_str() { return levels[current_map]; }
 
-
+    /*!
+     *\brief get_world
+     * Constructs new World unique_ptr for map & event usage.
+     * Assign from this when new Map is selected.
+     *\return
+     * unique_ptr<World> Smart pointer to heap allocated memory of class World.
+     */
+    std::unique_ptr<World> get_world();
 
 private:
     std::map<Maps, std::string> levels;

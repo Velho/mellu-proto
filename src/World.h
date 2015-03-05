@@ -1,10 +1,9 @@
 #ifndef PROTO_WORLD
 #define PROTO_WORLD
 
-#include "Level.h"
-
 #include "Map.h"
 #include "Events.h"
+#include "Level.h"
 
 namespace Proto {
 
@@ -15,10 +14,7 @@ namespace Proto {
  */
 class World {
 public:
-    World(Level &level)
-    {
-        current_map = std::unique_ptr<Map>{ new Map(level.get_current_map_str()) };
-    }
+    World(Level&);
 
     void update();
     void draw(sf::RenderTarget&);

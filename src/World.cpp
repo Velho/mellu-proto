@@ -1,6 +1,13 @@
 #include "World.h"
+#include "Level.h"
 
 using Proto::World;
+using Proto::Level;
+
+World::World(Level &level)
+{
+    current_map = std::unique_ptr<Map>{ new Map(level.get_current_map_str()) };
+}
 
 void World::update()
 {
