@@ -6,14 +6,21 @@ TODO
         -> Event handling.
         -> Droppin class implementation.
 
+    - Events & EventObjects (Droppin)
+        -> While Event is on-going, way to reset the event.
+
 LOW PRIO
-    - Move map drawing to World class so that only visible objects are drawn to screen.
-    - Framerate is limited to 60 frames which makes everything for me as developer easier
-      but for user experience setting up their own framerate is crucial.
-      Every PlayerState is calculated against fixed values which work in current setup but releasing
-      the framerate brakes the program. => CALCULATE AGAINST CLOCK.
-    - Move out Jumping, Falling, etc "general" code into i.e. World class where it can be
-      used for all other Components which are affected by these rules. 
+    - Move map drawing to World class so that only visible objects are 
+        drawn to screen.
+    - Framerate is limited to 60 frames which makes everything for me as
+        developer easier but for user experience setting up their own 
+        framerate is crucial.
+      Every PlayerState is calculated against fixed values which work in
+        current setup but releasing the framerate brakes the program.
+        => CALCULATE AGAINST CLOCK.
+    - Move out Jumping, Falling, etc "general" code into 
+        i.e. World class where it can be used for all other Components
+        which are affected by these rules. 
 DONE
     -> Map editing on runtime. (--edit flag is required)
     -> Player
@@ -24,7 +31,9 @@ DONE
             -> View object is controlled in PlayerGraphicsComponent.
                Y axis not implemented(fix). PlrGraphicsComponent doesnt
                draw anything but player, everything else that leaves out of the
-               window must be considered as unvisible and not drawn on screen(IMPORTANT => class World?).
+               window must be considered as unvisible and not drawn on
+               screen(IMPORTANT => class World?).
 DONE LOW
-    - Bug in Map Editing. Use sf::View methods to convert the coordinates from window to map, etc
+    - Bug in Map Editing. Use sf::View methods to convert the coordinates
+        from window to map, etc
 
