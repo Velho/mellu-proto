@@ -11,7 +11,11 @@
  * };
  */
 
+#include <vector>
+
 namespace Proto {
+
+class EventObject;
 
 class Events {
 public:
@@ -22,10 +26,10 @@ public:
         None, Platform, Enemy
     };
 
-    void add_event_obj();
+    void add_event_obj(const EventObject&);
 
 private:
-
+    std::vector<EventObject*> evt_objs;
 };
 
 }

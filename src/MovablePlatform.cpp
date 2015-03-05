@@ -2,7 +2,12 @@
 
 using Proto::MovablePlatform;
 
+MovablePlatform::~MovablePlatform()
+{
+
+}
+
 void MovablePlatform::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    Proto::MapObject::draw(target, states);
+
 }
