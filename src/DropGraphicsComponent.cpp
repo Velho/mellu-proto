@@ -8,7 +8,6 @@ using Proto::GameObject;
 
 ///< Resources
 using Proto::Resources;
-using Proto::FontId;
 
 const float font_x_offset = 6.f;
 const unsigned int font_char_size = 22;
@@ -30,7 +29,7 @@ void DropGraphicsComponent::update(GameObject &obj, sf::RenderTarget &target)
 
 void DropGraphicsComponent::init_text()
 {
-    letter.setFont(*Resources::getInstance().getFont(FontId::Arial));
+    letter.setFont(*Resources::getInstance().getFont(Resources::Fonts::Arial));
 
     std::string ph_char{ &physics->drop_character };
 
