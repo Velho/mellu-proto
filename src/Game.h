@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "GameObject.h"
-#include "World.h"
 
 // Player components.
 #include "PlayerInputComponent.h"
@@ -12,6 +11,7 @@
 #include "PlayerGraphicsComponent.h"
 
 #include "Droppin.h"
+#include "World.h"
 
 // Let's get some command line options.
 #include <boost/program_options.hpp>
@@ -34,8 +34,8 @@ public:
         viewport.setSize(sf::Vector2f(800, 600));
         window.setView(viewport); //! Does this need activation always when updated?
 
-        // Create world after the world has been created.
-        world = std::unique_ptr<World>(new World(level_info));
+        // Create world after the world has been created(hmm..?).
+        world = level_info.get_world();
     }
 
     int run();
