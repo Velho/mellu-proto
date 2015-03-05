@@ -3,11 +3,10 @@
 #include <iostream>
 
 using Proto::Resources;
-using Proto::FontId;
 
 std::string font_dir{ "data/font/" };
-std::map<std::string, FontId> available_fonts {
-    { font_dir + "arial.ttf", FontId::Arial }
+std::map<std::string, Resources::Fonts> available_fonts {
+    { font_dir + "arial.ttf", Resources::Fonts::Arial }
 };
 
 void Resources::load_fonts()
@@ -30,7 +29,7 @@ void Resources::load_textures()
 }
 
 
-sf::Font *Resources::getFont(FontId id)
+sf::Font *Resources::getFont(Resources::Fonts id)
 {
     return fonts[id].get();
 }

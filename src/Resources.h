@@ -10,10 +10,6 @@
 
 namespace Proto {
 
-enum class FontId {
-    Arial
-};
-
 /*!
  * \brief The Resources class
  * Manages the lifetime of all resources used
@@ -22,6 +18,10 @@ enum class FontId {
  */
 class Resources {
 public:
+
+    enum class Fonts {
+        Arial
+    };
 
     ///< Aliases for memory managed pointers.
     using FontPtr = std::unique_ptr<sf::Font>;
@@ -42,7 +42,7 @@ public:
     }
 
     ///< Returns pointer to Font.
-    sf::Font *getFont(FontId);
+    sf::Font *getFont(Fonts);
 
 private:
     ///< Constructor available only for internal usage.
@@ -51,7 +51,7 @@ private:
         load_fonts(); ///< Load fonts into memory.
     }
 
-    std::map<FontId, FontPtr> fonts;
+    std::map<Fonts, FontPtr> fonts;
     //std::map<TexturePtr> textures;
 
     void load_fonts();
