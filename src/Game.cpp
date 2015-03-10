@@ -4,6 +4,26 @@
 #include <iostream>
 
 using Proto::Game;
+using Proto::Level;
+
+Game::Game(boost::program_options::variables_map vars) :
+    window{ sf::VideoMode{ 800, 600 }, "Prototype" },
+    player{ create_player() } //, world{ level_info }
+{
+    parse_cmd(vars); // Parse command line options.
+
+    window.setFramerateLimit(60);
+
+    player->set_position(sf::Vector2f(200, 200));
+    player->set_size(sf::Vector2f(25, 50));
+
+    viewport.setSize(sf::Vector2f(800, 600));
+    window.setView(viewport); //! Does this need activation always when updated?
+
+    level_info.select_map(Level::Maps::Proto);
+    // Create world after the world has been created(hmm..?).
+    world = level_info.get_world();
+}
 
 int Game::run()
 {
@@ -26,10 +46,10 @@ void Game::editor_input(sf::Event &event)
 {
     // Manage MapObject's (event)type; Depending on the Event what is created.
     if(edit_draw) {
-        // Shift + P = MovablePlatform
+        // Shift + E = Event Object => Type and ID must be set manually.
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) &&
-                sf::Keyboard::isKeyPressed(sf::Keyboard::P))
-            evt_type = Proto::Events::EventType::Platform;
+                sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+            event_object = true;
     }
 
     // Assign the start position. If obj.draw is false, its the first button press.
@@ -45,7 +65,7 @@ void Game::editor_input(sf::Event &event)
             temp_obj.set_size(sf::Vector2f());
 
             edit_draw = true;
-            evt_type = Proto::Events::EventType::None; // Reset the event type.
+            //event_object = false;
 
             std::cout << "world_pos : (" << world_pos.x << ", "
                 << world_pos.y << ")" <<  std::endl;
@@ -57,8 +77,11 @@ void Game::editor_input(sf::Event &event)
             std::cout << "temp_obj sz : (" << temp_obj.get_size().x << ", "
                 << temp_obj.get_size().y << ")" << std::endl;
 
+            temp_obj.set_color(sf::Color::White);
             world->add_map_object(Proto::MapObject(temp_obj));
+
             edit_draw = false;
+            event_object = false;
         }
     }
 
@@ -102,8 +125,11 @@ void Game::handle_input(sf::Event &event)
 void Game::update(sf::Time time)
 {
     // Update editable_obj.shape size.
-    if(edit_draw == true)
+    if(edit_draw)
         temp_obj.set_size(edit_mouse - temp_obj.get_position());
+    // Update the color for eventobject.
+    if(event_object)
+        temp_obj.set_color(sf::Color::Red);
 
     player->update(*world);
     //drop_mech.update(world);
@@ -154,4 +180,11 @@ void Game::parse_cmd(boost::program_options::variables_map &vars)
 
     //std::cout << "Map : " << level_info.get_current_map_str() << std::endl;
     std::cout << "Edit : " << editor << std::endl;
+}
+
+void Game::editor_add_obj()
+{
+    if(event_object) {
+
+    }
 }

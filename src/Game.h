@@ -13,6 +13,7 @@
 #include "Droppin.h"
 #include "World.h"
 
+#include "MapObject.h"
 // Let's get some command line options.
 #include <boost/program_options.hpp>
 
@@ -20,23 +21,7 @@ namespace Proto {
 
 class Game {
 public:
-    Game(boost::program_options::variables_map vars) :
-        window{ sf::VideoMode{ 800, 600 }, "Prototype" },
-        player{ create_player() } //, world{ level_info }
-    {
-        parse_cmd(vars); // Parse command line options.
-
-        window.setFramerateLimit(60);
-
-        player->set_position(sf::Vector2f(200, 200));
-        player->set_size(sf::Vector2f(25, 50));
-
-        viewport.setSize(sf::Vector2f(800, 600));
-        window.setView(viewport); //! Does this need activation always when updated?
-
-        // Create world after the world has been created(hmm..?).
-        world = level_info.get_world();
-    }
+    Game(boost::program_options::variables_map);
 
     int run();
 
@@ -48,7 +33,6 @@ private:
     std::unique_ptr<GameObject> player;
 
     Droppin drop_mech;
-    Events::EventType evt_type;
 
     ///< Window size.
     const int WIN_WIDTH{ 800 };
@@ -59,8 +43,9 @@ private:
 
     ///! Used as temporary object for Map editing.
     MapObject temp_obj;
-    bool edit_draw{ false };
     sf::Vector2f edit_mouse;
+    bool edit_draw{ false };
+    bool event_object{ false };
 
     bool editor{ false };
 
@@ -72,7 +57,7 @@ private:
     void update(sf::Time);
     void draw();
 
-    void editor_add_map_obj(); ///< Adds map object into *map.
+    void editor_add_obj(); ///< Adds map object into *map.
     void editor_create_platform(); ///< Creates event object out of MapObject.
 
     void parse_cmd(boost::program_options::variables_map&);
