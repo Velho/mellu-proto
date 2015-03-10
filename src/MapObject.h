@@ -64,7 +64,6 @@ public:
 
     virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
-protected:
     void set_color(sf::Color c)
     {
         shape.setFillColor(c);

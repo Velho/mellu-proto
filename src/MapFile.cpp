@@ -1,23 +1,44 @@
 #include "MapFile.h"
 #include "Map.h"
 
-#include <sstream>
-#include <fstream>
+#include "Database.h"
 
-#include<iostream>
+#include <iostream>
 
-// Add namespaces for Map specific stuff.
-using Proto::Map;
-using Proto::MapFile;
-using Proto::MapObject;
+namespace Proto {
 
-//using Proto::MapFileStructure;
-
-struct Proto::MapFileStructure {
+struct MapObjectRow {
     float x, y;
     float width, height;
+
+    /*!
+     * \brief MapObjectRow
+     * Constructs MapobjectRow to represent one row of data.
+     * \param _x
+     * \param _y
+     * \param _width
+     * \param _height
+     */
+    MapObjectRow(float _x, float _y, float _width, float _height) :
+        x{ _x }, y{ _y }, width{ _width }, height{ _height }
+    { }
+
+    /*!
+     * \brief MapObjectRow
+     * Constructs RowObject out of database.
+     * \param r
+     */
+    MapObjectRow(Query::Row r) :
+        MapObjectRow(r.get_double(0), r.get_double(1), r.get_double(2), r.get_double(3))
+    { }
+
+    MapObject get_map_obj()
+    {
+        return MapObject(sf::Vector2f(x, y), sf::Vector2f(width, height));
+    }
 };
 
+/*
 void MapFile::save(Map &map)
 {
     auto objects = map.objects; // Friend method; We get access to private stuff. Though VS complains its inaccessible
@@ -31,7 +52,7 @@ void MapFile::save(Map &map)
     }
 
     map_file.close(); // Close the stream.
-}
+}*/
 
 /*!
  * \brief MapFile::load
@@ -42,7 +63,7 @@ void MapFile::save(Map &map)
  * Basically one line is the MapFileStructure
  * \return
  * Vector of pointers  to MapObject's.
- */
+ */ /*
 std::vector<MapObject*> MapFile::load()
 {
     std::vector<MapObject*> map_objects;
@@ -51,10 +72,10 @@ std::vector<MapObject*> MapFile::load()
     std::cout << "file_data : " <<  file_data.size() << std::endl;
 
     // Propaply caused by invalid map file. TODO Not handled properly.
-    /*if(file_data.size() == 0) {
+    //if(file_data.size() == 0) {
         std::cout << "Error loading map.." << std::endl;
         std::abort();
-    }*/
+    }//
 
     // Create drawable MapObjects from file data.
     for(auto obj : file_data)
@@ -63,10 +84,29 @@ std::vector<MapObject*> MapFile::load()
                                      sf::Vector2f(obj.x, obj.y)));
     // Return drawable map.
     return map_objects;
+} */
+
+std::vector<std::unique_ptr<MapObject>> MapFile::load()
+{
+    Database db(filename);
+    Query qry(db, "SELECT x, y, width, height FROM map;");
+
+    std::vector<std::unique_ptr<MapObject>> results;
+
+    auto l_row = [&results](Query::Row r) {
+
+    };
 }
 
+void MapFile::save(Map &map)
+{
+
+}
+
+/*
 std::vector<Proto::MapFileStructure> MapFile::parse_lines()
 {
+
     std::ifstream map_stream(filename);
     std::vector<MapFileStructure> results;
 
@@ -92,4 +132,6 @@ std::vector<Proto::MapFileStructure> MapFile::parse_lines()
 
     //map_stream.close(); // Close the stream.
     return results;
+}*/
+
 }

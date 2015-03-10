@@ -136,7 +136,7 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
 
     int idx{ 0 };
     //for(auto i = 0; i < world.get_map()->get_objects().size(); i++) {
-    for(auto mobj : world.get_map_objects()) {
+    for(auto &mobj : world.get_map_objects()) {
 
         // Rect for map objects surface. Calculating collision on surface when falling is more relevant. Surface is 2px high.
         sf::FloatRect mobj_rekt{ mobj->get_frect().left, mobj->get_frect().top, mobj->get_frect().width, 2 };
@@ -146,7 +146,7 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
         if(plr_rect.intersects(mobj_rekt) && is_falling) {
             height = mobj->get_frect().top - obj.get_size().y; // Current height, optimization(loop only when needed).
             is_falling = false;
-            fall_obj = mobj;
+            fall_obj = mobj.get();
 
             std::cout << "height at idx(" << idx << ") : " << height << std::endl;
         }
@@ -160,7 +160,7 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
     sf::FloatRect plr_rect{ obj.get_position(),
         sf::Vector2f(obj.get_size().x + 2, obj.get_size().y) };
 
-    for(auto mobj : world.get_map_objects()) {
+    for(auto &mobj : world.get_map_objects()) {
         if(plr_rect.intersects(mobj->get_frect())) {
             sf::Vector2f pos{ obj.get_position() };
 

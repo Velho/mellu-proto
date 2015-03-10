@@ -1,11 +1,15 @@
 #ifndef PROTO_WORLD
 #define PROTO_WORLD
 
-#include "Map.h"
-#include "Events.h"
 #include "Level.h"
 
+#include "MapObject.h"
+#include "EventObject.h"
+
 namespace Proto {
+
+class Map;
+class Events;
 
 /*!
  *\brief
@@ -15,6 +19,7 @@ namespace Proto {
 class World {
 public:
     World(Level&);
+    ~World();
 
     void update();
     void draw(sf::RenderTarget&);
@@ -23,13 +28,17 @@ public:
     void add_map_object(MapObject);
     void save_map();
     void reload_map();
-    std::vector<MapObject*> get_map_objects();
-    //Map *get_map() { return current_map.get(); }
+    std::vector<std::unique_ptr<MapObject>> &get_map_objects();
+
+    // Interface for events.
+    void add_evt_object(EventObject);
+    void save_evt();
 
     sf::FloatRect get_rect(std::size_t) const;
 
 private:
     std::unique_ptr<Map> current_map;
+    std::unique_ptr<Events> current_evts;
 };
 
 }

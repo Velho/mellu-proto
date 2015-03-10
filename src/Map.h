@@ -1,10 +1,6 @@
 #ifndef PROTO_MAP_H
 #define PROTO_MAP_H
 
-#include <string>
-#include <vector>
-#include <memory>
-
 #include "MapObject.h"
 #include "MapFile.h"
 
@@ -34,7 +30,7 @@ public:
     void update();
     void draw(sf::RenderTarget&);
 
-    std::vector<MapObject*> get_objects() const { return objects; }
+    std::vector<std::unique_ptr<MapObject>> &get_objects() { return objects; }
 
     void save_map();
     void reload_map();
@@ -43,7 +39,7 @@ public:
 
     friend void MapFile::save(Map&);
 private:
-    std::vector<MapObject*> objects;
+    std::vector<std::unique_ptr<MapObject>> objects;
     MapFile mapfile;
 
     int objsaved;

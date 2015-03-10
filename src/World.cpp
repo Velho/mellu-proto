@@ -1,12 +1,23 @@
 #include "World.h"
-#include "Level.h"
+
+#include "Map.h"
+#include "Events.h"
 
 using Proto::World;
+using Proto::Events;
 using Proto::Level;
+using Proto::Map;
+using Proto::MapObject;
 
 World::World(Level &level)
 {
     current_map = std::unique_ptr<Map>{ new Map(level.get_current_map_str()) };
+    current_evts = std::unique_ptr<Events>{ new Events(level.get_current_map_str()) };
+}
+
+World::~World()
+{
+
 }
 
 void World::update()
@@ -41,7 +52,7 @@ void World::reload_map()
     current_map->set_reload(true);
 }
 
-std::vector<Proto::MapObject*> World::get_map_objects()
+std::vector<std::unique_ptr<MapObject>> &World::get_map_objects()
 {
     return current_map->get_objects();
 }
