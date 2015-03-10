@@ -43,7 +43,7 @@ public:
     void select_map(std::string);
 
     Maps get_current_map() const { return current_map; }
-    std::string get_current_map_str() { return levels[current_map]; }
+    std::string get_current_map_str() { return data_dir + levels[current_map]; }
 
     /*!
      *\brief get_world
@@ -57,6 +57,7 @@ public:
 private:
     std::map<Maps, std::string> levels;
     Maps current_map;
+    const std::string data_dir{ "data/maps/" };
 
     std::string maps_to_str(Maps); ///< Returns string representation of the enum class.
     Maps str_to_maps(std::string); ///< Returns enum class Maps representation of std::string.
