@@ -6,9 +6,7 @@ using Proto::MapObject;
 
 #include <iostream>
 
-const std::string map_data_dir("data/maps/");
-
-Map::Map(std::string file) : mapfile(map_data_dir + file), objsaved{ 0 }, reload{ false }
+Map::Map(std::string file) : mapfile(file), objsaved{ 0 }, reload{ false }
 {
     std::cout << "Loading map " << file << std::endl;
     objects = std::move(mapfile.load());

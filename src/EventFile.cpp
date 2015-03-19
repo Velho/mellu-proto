@@ -72,12 +72,9 @@ std::vector<std::unique_ptr<EventObject>> EventFile::load()
     // Handle the row.
     auto row = [&e_objs, this](Query::Row r) {
         e_objs.emplace_back(new EventObject(EventObjectRow(r).get_event_object()));
-        this->evt_counter++;
     };
 
     qry.iterate(row); // Loop the data.
-
-    std::cout << "evt_counter : " << evt_counter << std::endl;
 
     return e_objs;
 }
@@ -85,13 +82,18 @@ std::vector<std::unique_ptr<EventObject>> EventFile::load()
 void EventFile::save(Events &evt)
 {
     Database db(filename);
-    std::stringstream sql_strm;
 
-    sql_strm << "INSERT INTO events(x, y, width, height, evt_type, evt_table_id) VALUES(";
+    db.exec("DELETE FROM events;"); // Drop the table.
 
-    // if i < counter => UPDATE, i > INSERT.
-    for(int i = 0; i < evt.evt_objs.size(); i++) {
+    for(auto &obj : evt.evt_objs) {
+        std::ostringstream ins_sql;
+        // Insert query.
+        ins_sql << "INSERT INTO events(x, y, width, height, evt_type, evt_table_id) VALUES(";
+        ins_sql << obj->get_position().x << ", " << obj->get_position().y << ", ";
+        ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", ";
+        ins_sql << static_cast<int>(obj->get_type()) << ", " << obj->get_id() << ");";
 
+        db.exec(ins_sql.str());
     }
 }
 

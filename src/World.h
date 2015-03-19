@@ -14,7 +14,7 @@ class Events;
 /*!
  *\brief
  * World shows us everything that gets drawn on the screen.
- * TODO Add way to switch between worlds.
+ * TODO Maybe too general way to manage game world.
  */
 class World {
 public:
@@ -31,8 +31,9 @@ public:
     std::vector<std::unique_ptr<MapObject>> &get_map_objects();
 
     // Interface for events.
-    void add_evt_object(EventObject);
-    void save_evt();
+    void add_event_object(EventObject);
+    void save_events();
+    std::vector<EventObject::EvtObjectPtr> &get_evt_objects();
 
     sf::FloatRect get_rect(std::size_t) const;
 

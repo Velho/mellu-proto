@@ -3,7 +3,7 @@
 
 #include "Database.h"
 
-#include <iostream>
+#include <sstream>
 
 namespace Proto {
 
@@ -34,7 +34,7 @@ struct MapObjectRow {
 
     MapObject get_map_obj()
     {
-        return MapObject(sf::Vector2f(x, y), sf::Vector2f(width, height));
+        return MapObject(sf::Vector2f(width, height), sf::Vector2f(x, y));
     }
 };
 
@@ -94,44 +94,27 @@ std::vector<std::unique_ptr<MapObject>> MapFile::load()
     std::vector<std::unique_ptr<MapObject>> results;
 
     auto l_row = [&results](Query::Row r) {
-
+        results.emplace_back(new MapObject(MapObjectRow(r).get_map_obj()));
     };
+    qry.iterate(l_row); // Iterate the results.
+
+    return results;
 }
 
 void MapFile::save(Map &map)
 {
+    Database db(filename);
 
-}
+    db.exec("DELETE FROM map;"); // Clear the map table(Maybe not the best way...).
 
-/*
-std::vector<Proto::MapFileStructure> MapFile::parse_lines()
-{
+    for(auto &obj : map.objects) {
+        std::ostringstream ins_sql;
+        // Construct sql statement.
+        ins_sql << "INSERT INTO map(x, y, width, height) VALUES(";
+        ins_sql << obj->get_position().x << ", " << obj->get_position().y << ", ";
+        ins_sql << obj->get_size().x << ", " << obj->get_size().y << ");";
 
-    std::ifstream map_stream(filename);
-    std::vector<MapFileStructure> results;
-
-    if(map_stream.is_open()) { // File is open, lets parseee.
-        std::string line;
-
-        std::cout << "Stream is open" << std::endl;
-
-        while(std::getline(map_stream, line)) {
-            std::istringstream temp_line{ line }; // For data parsing.
-            MapFileStructure temp_map;
-
-            std::cout << line << std::endl;
-
-            // Let's parse the line;
-            if(!(temp_line >> temp_map.x >> temp_map.y >> temp_map.width >> temp_map.height))
-                break; // Error. TODO Maybe handle this.. ABBORT ABBORT
-
-            // Push the results.
-            results.emplace_back(temp_map);
-        }
+        db.exec(ins_sql.str());
     }
-
-    //map_stream.close(); // Close the stream.
-    return results;
-}*/
-
 }
+} // Namespace Proto

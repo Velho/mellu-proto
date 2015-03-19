@@ -4,17 +4,19 @@
 namespace Proto {
 
 EventObject::EventObject(const MapObject &mobj) :
-    position{ mobj.get_position() }, size{ mobj.get_size() }
+    shape{ mobj.get_size() }
 {
+    set_position(mobj.get_position());
+    set_color(sf::Color::Red);
 }
 
 EventObject::~EventObject()
 {
 }
 
-void EventObject::draw(sf::RenderTarget &, sf::RenderStates) const
+void EventObject::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-
+    target.draw(shape, states);
 }
 
 }

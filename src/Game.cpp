@@ -3,8 +3,7 @@
 
 #include <iostream>
 
-using Proto::Game;
-using Proto::Level;
+namespace Proto {
 
 Game::Game(boost::program_options::variables_map vars) :
     window{ sf::VideoMode{ 800, 600 }, "Prototype" },
@@ -78,7 +77,7 @@ void Game::editor_input(sf::Event &event)
                 << temp_obj.get_size().y << ")" << std::endl;
 
             temp_obj.set_color(sf::Color::White);
-            world->add_map_object(Proto::MapObject(temp_obj));
+            editor_add_obj(); // Adds the object into containers.
 
             edit_draw = false;
             event_object = false;
@@ -95,8 +94,10 @@ void Game::editor_input(sf::Event &event)
 
     // Save & Load map in runtime.
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
-            sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         world->save_map();
+        world->save_events();
+    }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
             sf::Keyboard::isKeyPressed(sf::Keyboard::L))
@@ -184,7 +185,9 @@ void Game::parse_cmd(boost::program_options::variables_map &vars)
 
 void Game::editor_add_obj()
 {
-    if(event_object) {
-
-    }
+    if(event_object)
+        world->add_event_object(EventObject(temp_obj));
+    else
+        world->add_map_object(temp_obj);
+}
 }

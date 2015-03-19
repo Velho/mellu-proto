@@ -160,6 +160,12 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
     sf::FloatRect plr_rect{ obj.get_position(),
         sf::Vector2f(obj.get_size().x + 2, obj.get_size().y) };
 
+    /*
+     * TODO
+     * There's small bug in the collision calculation when player hits
+     * the ground, collision is detected and taken back to the opposite direction
+     * by amount WALK_ACCELERATION.
+     */
     for(auto &mobj : world.get_map_objects()) {
         if(plr_rect.intersects(mobj->get_frect())) {
             sf::Vector2f pos{ obj.get_position() };

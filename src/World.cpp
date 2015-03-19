@@ -3,11 +3,9 @@
 #include "Map.h"
 #include "Events.h"
 
-using Proto::World;
-using Proto::Events;
-using Proto::Level;
-using Proto::Map;
-using Proto::MapObject;
+using namespace Proto; // TODO REMOVE
+
+namespace Proto {
 
 World::World(Level &level)
 {
@@ -28,6 +26,7 @@ void World::update()
 void World::draw(sf::RenderTarget &target)
 {
     current_map->draw(target);
+    current_evts->draw(target);
 }
 
 sf::FloatRect World::get_rect(std::size_t idx) const
@@ -55,4 +54,21 @@ void World::reload_map()
 std::vector<std::unique_ptr<MapObject>> &World::get_map_objects()
 {
     return current_map->get_objects();
+}
+
+void World::add_event_object(EventObject obj)
+{
+    current_evts->add_event_obj(obj);
+}
+
+void World::save_events()
+{
+    current_evts->save_objs();
+}
+
+std::vector<EventObject::EvtObjectPtr> &World::get_evt_objects()
+{
+    return current_evts->get_evt_objects();
+}
+
 }

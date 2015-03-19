@@ -15,7 +15,12 @@ public:
 
     void add_event_obj(EventObject&);
 
+    void save_objs();
     friend void EventFile::save(Events&);
+
+    void draw(sf::RenderTarget&);
+
+    std::vector<EventObject::EvtObjectPtr> &get_evt_objects() { return evt_objs; }
 
 private:
     std::vector<EventObject::EvtObjectPtr> evt_objs;

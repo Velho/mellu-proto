@@ -8,9 +8,8 @@ namespace Proto {
 /**
  * \brief The MapObject class
  *  Specific object or shape on the Map.
- *  Currently only a placeholder.
- *
- *
+ * TODO Construction with size first is confusing
+ *      => Change the argument order.
  */
 class MapObject : public sf::Drawable {
 public:
@@ -44,6 +43,8 @@ public:
     MapObject &operator=(const MapObject &obj)
     {
         shape = obj.shape;
+
+        return *this;
     }
 
     /*!

@@ -30,7 +30,7 @@ public:
      * String to Database file.
      */
     EventFile(std::string file) :
-        filename(file), evt_counter{ 0 }
+        filename(file)
     { }
     ~EventFile() { }
 
@@ -38,17 +38,8 @@ public:
     void save(Events&);
     friend void save(Events&);
 
-    /*!
-     * \brief get_evtc
-     * Amount of event objects loaded from the file.
-     * \return
-     * evt_counter
-     */
-    int get_evtc() const { return evt_counter; }
-
 private:
     std::string filename;
-    int evt_counter;
 };
 }
 
