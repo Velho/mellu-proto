@@ -69,9 +69,9 @@ std::vector<std::unique_ptr<EventObject>> EventFile::load()
 
     std::vector<std::unique_ptr<EventObject>> e_objs; // For lambda capture list.
 
-    // Handle the row.
+    // Handle the row. TODO Bracket madness.
     auto row = [&e_objs, this](Query::Row r) {
-        e_objs.emplace_back(new EventObject(EventObjectRow(r).get_event_object()));
+        e_objs.emplace_back(std::unique_ptr<EventObject>(new EventObject(EventObjectRow(r).get_event_object())));
     };
 
     qry.iterate(row); // Loop the data.

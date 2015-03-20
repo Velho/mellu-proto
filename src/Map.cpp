@@ -17,7 +17,7 @@ Map::~Map()
 
 void Map::add_object(MapObject obj)
 {
-    objects.emplace_back(new MapObject(obj));
+    objects.emplace_back(std::unique_ptr<MapObject>(new MapObject(obj)));
 }
 
 void Map::update()

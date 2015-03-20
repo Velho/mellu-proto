@@ -38,54 +38,6 @@ struct MapObjectRow {
     }
 };
 
-/*
-void MapFile::save(Map &map)
-{
-    auto objects = map.objects; // Friend method; We get access to private stuff. Though VS complains its inaccessible
-    std::ofstream map_file{ filename };
-
-    if(map_file.is_open()) {
-        for(auto obj : objects) {
-            map_file << obj->get_position().x << " " << obj->get_position().y << " "; // X, Y
-            map_file << obj->get_size().x << " " << obj->get_size().y << "\n";
-        }
-    }
-
-    map_file.close(); // Close the stream.
-}*/
-
-/*!
- * \brief MapFile::load
- * Map file structure is following(numbers represent lines; W: width, H: height),
- * 1. [X] [Y] [W] [H]
- * 2. 50 50 70 70
- * 3. ... So on and so on.
- * Basically one line is the MapFileStructure
- * \return
- * Vector of pointers  to MapObject's.
- */ /*
-std::vector<MapObject*> MapFile::load()
-{
-    std::vector<MapObject*> map_objects;
-    auto file_data = parse_lines();
-
-    std::cout << "file_data : " <<  file_data.size() << std::endl;
-
-    // Propaply caused by invalid map file. TODO Not handled properly.
-    //if(file_data.size() == 0) {
-        std::cout << "Error loading map.." << std::endl;
-        std::abort();
-    }//
-
-    // Create drawable MapObjects from file data.
-    for(auto obj : file_data)
-        map_objects.emplace_back(new MapObject(
-                                     sf::Vector2f(obj.width, obj.height),
-                                     sf::Vector2f(obj.x, obj.y)));
-    // Return drawable map.
-    return map_objects;
-} */
-
 std::vector<std::unique_ptr<MapObject>> MapFile::load()
 {
     Database db(filename);
@@ -93,8 +45,9 @@ std::vector<std::unique_ptr<MapObject>> MapFile::load()
 
     std::vector<std::unique_ptr<MapObject>> results;
 
+    // TODO Bracket madness.
     auto l_row = [&results](Query::Row r) {
-        results.emplace_back(new MapObject(MapObjectRow(r).get_map_obj()));
+        results.emplace_back(std::unique_ptr<MapObject>(new MapObject(MapObjectRow(r).get_map_obj())));
     };
     qry.iterate(l_row); // Iterate the results.
 
