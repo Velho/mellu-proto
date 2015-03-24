@@ -60,14 +60,16 @@ void MapFile::save(Map &map)
 
     db.exec("DELETE FROM map;"); // Clear the map table(Maybe not the best way...).
 
+    int idx{ 1 };
     for(auto &obj : map.objects) {
         std::ostringstream ins_sql;
         // Construct sql statement.
-        ins_sql << "INSERT INTO map(x, y, width, height) VALUES(";
-        ins_sql << obj->get_position().x << ", " << obj->get_position().y << ", ";
+        ins_sql << "INSERT INTO map(id, x, y, width, height) VALUES(";
+        ins_sql << idx << ", " << obj->get_position().x << ", " << obj->get_position().y << ", ";
         ins_sql << obj->get_size().x << ", " << obj->get_size().y << ");";
 
         db.exec(ins_sql.str());
+        idx++;
     }
 }
 } // Namespace Proto

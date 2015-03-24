@@ -85,15 +85,17 @@ void EventFile::save(Events &evt)
 
     db.exec("DELETE FROM events;"); // Drop the table.
 
+    int idx{ 1 };
     for(auto &obj : evt.evt_objs) {
         std::ostringstream ins_sql;
         // Insert query.
-        ins_sql << "INSERT INTO events(x, y, width, height, evt_type, evt_table_id) VALUES(";
-        ins_sql << obj->get_position().x << ", " << obj->get_position().y << ", ";
+        ins_sql << "INSERT INTO events(evt_id, x, y, width, height, evt_type, evt_table_id) VALUES(";
+        ins_sql << idx << ", " << obj->get_position().x << ", " << obj->get_position().y << ", ";
         ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", ";
         ins_sql << static_cast<int>(obj->get_type()) << ", " << obj->get_id() << ");";
 
         db.exec(ins_sql.str());
+        idx++;
     }
 }
 
