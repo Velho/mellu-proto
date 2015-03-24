@@ -1,4 +1,5 @@
 #include "PlayerPhysicsComponent.h"
+#include "World.h"
 
 using Proto::PlayerPhysicsComponent;
 using Proto::GameObject;
@@ -45,6 +46,7 @@ void PlayerPhysicsComponent::update(GameObject &obj, World &world)
         apply_gravity(obj, world);
 
     apply_map_collision(obj, world);
+    evt_mgr.update(obj, world);
 }
 
 void PlayerPhysicsComponent::set_state()
@@ -65,7 +67,7 @@ void PlayerPhysicsComponent::set_state()
     if(input::is_space()) {
         PlayerState sel_state = PlayerState::Jumping;
         // Apply new states only, discard if same states.
-        if(!check_state(sel_state) && !is_falling) {
+        if(!check_state(sel_state) && current_state != PlayerState::Falling) {
             current_state = PlayerState::Jumping; // Set state.
             init_jump(); // Init variables for the new state.
         }
@@ -98,6 +100,7 @@ void PlayerPhysicsComponent::init_fall()
         is_falling = true;
         fall_speed = 0;
         fall_obj = nullptr;
+        evt_mgr.evt_obj = nullptr;
     }
 }
 
@@ -203,17 +206,29 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
         // Or that we are in the middle of jump.
 
 
-    if(fall_obj != nullptr && current_state != PlayerState::Jumping) {
-        sf::Vector2f plr_coll_pos(obj.get_position().x + obj.get_size().x,
-                obj.get_position().y + obj.get_size().y);
-        //sf::FloatRect plr_coll_rect(obj.get_position(), obj.get_size());
+    if(current_state != PlayerState::Jumping) {
+        // Calculate the collision from one pixel on the surface.
+        sf::FloatRect plr_rect{ obj.get_position(),
+                    sf::Vector2f(obj.get_size().x, obj.get_size().y + 1) };
 
-        // If collided map object doesnt contain gameobject position => We are falling.
-        if(!fall_obj->get_frect().contains(plr_coll_pos) &&
-                current_state != PlayerState::Falling) {
-            current_state = PlayerState::Falling;
-            init_fall();
-            std::cout << "fall_obj()" << std::endl;
+        if(fall_obj != nullptr) {
+            // If collided map object doesnt contain gameobject position => We are falling.
+            if(!fall_obj->get_frect().intersects(plr_rect) &&
+                    current_state != PlayerState::Falling) {
+                current_state = PlayerState::Falling;
+                init_fall();
+                std::cout << "fall_obj() => MapObject" << std::endl;
+            }
+        }
+
+        // Apply gravity for EventObject.
+        if(evt_mgr.evt_obj != nullptr) {
+            if(!evt_mgr.evt_obj->get_rect().intersects(plr_rect) &&
+                    current_state != PlayerState::Falling) {
+                current_state = PlayerState::Falling;
+                init_fall();
+                std::cout << "fall_obj() => EvtObject" << std::endl;
+            }
         }
     }
 }

@@ -1,9 +1,8 @@
 #ifndef PROTO_PLAYERPHYSICSCOMPONENT_H
 #define PROTO_PLAYERPHYSICSCOMPONENT_H
 
-#include "GameObject.h"
 #include "PlayerInputComponent.h"
-#include "World.h"
+#include "PlayerEventManager.h"
 
 #include <SFML/System/Clock.hpp>
 
@@ -12,14 +11,21 @@
 namespace Proto {
 
 class PlayerInputComponent;
+class MapObject;
 
+/*!
+ * \brief The PlayerPhysicsComponent class
+ * Calculated player specific physics, collisions,
+ * movement, jumping, etc.
+ */
 class PlayerPhysicsComponent : public PhysicsComponent {
 public:
     PlayerPhysicsComponent(PlayerInputComponent *in) :
         input_cmp{ in },
         is_falling{ false },
         current_state{ PlayerState::Falling },
-        fall_obj{ nullptr }
+        fall_obj{ nullptr },
+        evt_mgr{ *this }
     {
 		init_fall(); // Let's fall in to the game ehehehe
     }
@@ -37,10 +43,13 @@ public:
     virtual void update(GameObject&, World&) override;
 
 private:
+    friend class PlayerEventManager;
+
     PlayerState current_state;
     MapObject *fall_obj;
 
     PlayerInputComponent *input_cmp;
+    PlayerEventManager evt_mgr;
 
     enum class Keypress { Left, Right } last_keypress; ///< Used for calculating collision while jumping & falling.
 
@@ -66,6 +75,7 @@ private:
     //! Also inits falling when player moves out of the fall_obj.
     //! \sa MapObject *fall_obj
     void apply_map_collision(GameObject&, World&);
+    void apply_event_collision(GameObject&, World&);
 
     void init_fall(); ///< Initializes fall variables; fall_speed, is_falling. Cannot be called if is_falling == true.
     void init_jump(); ///< Initializes
