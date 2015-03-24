@@ -45,6 +45,8 @@ Query::Row::Row(const Query::Row &cp) :
 Query::Row &Query::Row::operator=(const Query::Row &cp)
 {
     stmt = cp.stmt;
+
+    return *this;
 }
 
 std::string Query::Row::get_text(int id)
