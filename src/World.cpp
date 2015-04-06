@@ -3,6 +3,8 @@
 #include "Map.h"
 #include "Events.h"
 
+#include "Droppin.h"
+
 using namespace Proto; // TODO REMOVE
 
 namespace Proto {
@@ -69,6 +71,11 @@ void World::save_events()
 std::vector<EventObject::EvtObjectPtr> &World::get_evt_objects()
 {
     return current_evts->get_evt_objects();
+}
+
+Droppin *World::get_droppin()
+{
+	return current_evts->get_droppin();
 }
 
 }

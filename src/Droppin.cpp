@@ -4,37 +4,37 @@
 #include "DropPhysicsComponent.h"
 #include "DropGraphicsComponent.h"
 
-using Proto::Droppin;
-using Proto::GameObject;
-using Proto::World;
-using Proto::DropInputComponent;
-using Proto::DropPhysicsComponent;
-using Proto::DropGraphicsComponent;
+#include "World.h"
+#include "Events.h"
 
-Droppin::GObjPtr Droppin::create_drop()
+namespace Proto {
+
+std::unique_ptr<GameObject> Droppin::create_drop()
 {
     // Drop GameObject's components.
     DropInputComponent *input{ new DropInputComponent };
     DropPhysicsComponent *physics{ new DropPhysicsComponent(input) };
     DropGraphicsComponent *graphics{ new DropGraphicsComponent(physics) };
 
-    return GObjPtr{ new GameObject(input, physics, graphics) };
+    return std::unique_ptr<GameObject>(new GameObject(input, physics, graphics));
 }
 
 void Droppin::handle_input(sf::Event &event)
 {
-    for(auto &g : gobjs)
+    for(auto &g : drop_objs)
         g->handle_input(event);
 }
 
 void Droppin::update(World &world)
 {
-    for(auto &g : gobjs)
+    for(auto &g : drop_objs)
         g->update(world);
 }
 
 void Droppin::draw(sf::RenderTarget &target)
 {
-    for(auto &g : gobjs)
+    for(auto &g : drop_objs)
         g->draw(target);
+}
+
 }

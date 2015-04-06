@@ -10,11 +10,13 @@ namespace Proto {
 
 class Map;
 class Events;
+class Droppin;
 
 /*!
  *\brief
  * World shows us everything that gets drawn on the screen.
  * TODO Maybe too general way to manage game world.
+ * World seems like way to handle everything or excuse..
  */
 class World {
 public:
@@ -36,6 +38,8 @@ public:
     std::vector<EventObject::EvtObjectPtr> &get_evt_objects();
 
     sf::FloatRect get_rect(std::size_t) const;
+
+    Droppin *get_droppin();
 
 private:
     std::unique_ptr<Map> current_map;

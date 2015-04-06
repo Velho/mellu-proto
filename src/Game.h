@@ -4,20 +4,15 @@
 #include <SFML/Graphics.hpp>
 
 #include "GameObject.h"
-
-// Player components.
-#include "PlayerInputComponent.h"
-#include "PlayerPhysicsComponent.h"
-#include "PlayerGraphicsComponent.h"
-
-#include "Droppin.h"
-#include "World.h"
-
 #include "MapObject.h"
+
+#include "World.h"
 // Let's get some command line options.
 #include <boost/program_options.hpp>
 
 namespace Proto {
+
+class Droppin;
 
 class Game {
 public:
@@ -32,14 +27,13 @@ private:
 
     std::unique_ptr<GameObject> player;
 
-    Droppin drop_mech;
-
     ///< Window size.
     const int WIN_WIDTH{ 800 };
     const int WIN_HEIGHT{ 600 };
 
     Level level_info; ///< Keeps current level.
     std::unique_ptr<World> world; ///< World object => Draws maps & events according to Level.
+    Droppin *droppin;
 
     ///! Used as temporary object for Map editing.
     MapObject temp_obj;

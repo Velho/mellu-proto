@@ -1,6 +1,13 @@
 #include "Game.h"
 #include "MapObject.h"
 
+// Player components.
+#include "PlayerInputComponent.h"
+#include "PlayerPhysicsComponent.h"
+#include "PlayerGraphicsComponent.h"
+
+#include "Droppin.h"
+
 #include <iostream>
 
 namespace Proto {
@@ -22,6 +29,7 @@ Game::Game(boost::program_options::variables_map vars) :
     level_info.select_map(Level::Maps::Proto);
     // Create world after the world has been created(hmm..?).
     world = level_info.get_world();
+    droppin = world->get_droppin();
 }
 
 int Game::run()
@@ -119,7 +127,7 @@ void Game::handle_input(sf::Event &event)
     }
 
     player->handle_input(event);
-    //drop_mech.handle_input(event);
+    droppin->handle_input(event);
 }
 
 ///! Update the game logic.
@@ -133,7 +141,8 @@ void Game::update(sf::Time time)
         temp_obj.set_color(sf::Color::Red);
 
     player->update(*world);
-    //drop_mech.update(world);
+    droppin->update(*world);
+
     world->update();
 }
 
@@ -146,7 +155,7 @@ void Game::draw()
         window.draw(temp_obj);
 
     player->draw(window);
-    //drop_mech.draw(window);
+    droppin->draw(window);
     world->draw(window);
 
     window.display();

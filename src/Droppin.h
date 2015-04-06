@@ -1,32 +1,41 @@
 #ifndef PROTO_DROPPIN_H
 #define PROTO_DROPPIN_H
 
+#include <vector>
+
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Window/Event.hpp>
+
 #include "GameObject.h"
-#include <array>
 
 namespace Proto {
 
+class Events;
+class World;
+
+/*!
+ *\brief Droppin class
+ * Manages Drops with events.
+ */
 class Droppin {
 public:
-    using GObj = GameObject;
-    using GObjPtr = std::unique_ptr<GObj>;
+	Droppin(Events &evts) : events(evts) { };
+	~Droppin() { }
 
-    static GObjPtr create_drop();
+    static std::unique_ptr<GameObject> create_drop();
 
+    /*!
+     *\brief
+     * Handle input re directs keyboard events to
+     * Drop Objects.
+     */
     void handle_input(sf::Event&);
     void update(World&);
     void draw(sf::RenderTarget&);
 
 private:
-    struct d_offsets;
-
-    std::vector<GObjPtr> gobjs; ///< Lists of drop gameobjects.
-    std::array<d_offsets*, 6> offsets;
-
-    struct d_offsets {
-        float x;
-        bool allocated;
-    };
+    Events &events;
+    std::vector<std::unique_ptr<GameObject>> drop_objs;
 };
 
 }
