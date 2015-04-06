@@ -49,6 +49,8 @@ public:
     sf::Vector2f get_size() const { return size; }
     void set_size(sf::Vector2f sz) { size = sz; }
 
+    sf::FloatRect get_rect() const { return sf::FloatRect(get_position(), get_size()); }
+
 private:
     sf::Vector2f position;
     sf::Vector2f size;
