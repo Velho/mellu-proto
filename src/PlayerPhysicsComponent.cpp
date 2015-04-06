@@ -100,7 +100,8 @@ void PlayerPhysicsComponent::init_fall()
         is_falling = true;
         fall_speed = 0;
         fall_obj = nullptr;
-        evt_mgr.evt_obj = nullptr;
+        //evt_mgr.evt_obj = nullptr;
+        evt_mgr.evt_coll = false;
     }
 }
 
@@ -152,6 +153,8 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
             fall_obj = mobj.get();
 
             std::cout << "height at idx(" << idx << ") : " << height << std::endl;
+
+            //if(evt_mgr.evt_obj == nullptr)
         }
 
         idx++;
@@ -221,8 +224,8 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
             }
         }
 
-        // Apply gravity for EventObject.
-        if(evt_mgr.evt_obj != nullptr) {
+        // Apply fall for EventObject.
+        if(evt_mgr.evt_obj != nullptr && evt_mgr.evt_coll != false) {
             if(!evt_mgr.evt_obj->get_rect().intersects(plr_rect) &&
                     current_state != PlayerState::Falling) {
                 current_state = PlayerState::Falling;

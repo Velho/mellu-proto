@@ -30,7 +30,12 @@ private:
     PlayerPhysicsComponent &plr_phy;
     EventObject *evt_obj;
 
+    bool evt_coll{ false };
+
     void apply_event_collision(GameObject&, World&);
+
+    void complete_event_platform();
+    void update_platform_behavior(GameObject&, World&);
 };
 
 }
