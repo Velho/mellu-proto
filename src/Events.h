@@ -1,12 +1,18 @@
 #ifndef PROTO_EVENTS_H
 #define PROTO_EVENTS_H
 
-#include <vector>
-
 #include "EventObject.h"
 #include "EventFile.h"
 
+#include "EventTable.h"
+
+#include <vector>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+
 namespace Proto {
+
+class Droppin;
 
 class Events {
 public:
@@ -18,13 +24,21 @@ public:
     void save_objs();
     friend void EventFile::save(Events&);
 
-    void draw(sf::RenderTarget&);
+    void draw(sf::RenderTarget&); ///< Draw the EventObjects.
+    void update(); ///< Update the event objects behavior.
 
     std::vector<EventObject::EvtObjectPtr> &get_evt_objects() { return evt_objs; }
+    Droppin *get_droppin(); ///< Returns ref to Droppin. Input is required.
 
 private:
+    friend class EventTable;
+    std::unique_ptr<EventTable> evt_table;
+    std::unique_ptr<Droppin> drop_mech;
     std::vector<EventObject::EvtObjectPtr> evt_objs;
     EventFile file;
+    std::string filename;
+
+    void init_evts();
 };
 
 }

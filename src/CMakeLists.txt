@@ -35,7 +35,8 @@ set(GAMEOBJSRC src/GameObject.h src/GameObject.cpp)
 set(PLRINPUT src/PlayerInputComponent.h src/PlayerInputComponent.cpp)
 set(PLRPHYSICS src/PlayerPhysicsComponent.h src/PlayerPhysicsComponent.cpp)
 set(PLRGRAPHICS src/PlayerGraphicsComponent.h src/PlayerGraphicsComponent.cpp)
-set(PLAYERSRC ${PLRINPUT} ${PLRPHYSICS} ${PLRGRAPHICS})
+set(PLREVENTMGR src/PlayerEventManager.h src/PlayerEventManager.cpp)
+set(PLAYERSRC ${PLRINPUT} ${PLRPHYSICS} ${PLRGRAPHICS} ${PLREVENTMGR})
 
 # Gameplay mechanic
 set(DROPGRAPHICS src/DropGraphicsComponent.h src/DropGraphicsComponent.cpp)
@@ -44,15 +45,18 @@ set(DROPINPUT src/DropInputComponent.h src/DropInputComponent.cpp)
 #set(DROPOBJSRC src/DropObject.h src/DropObject.cpp)
 # aka Manager class
 set(DROPPINSRC src/Droppin.h src/Droppin.cpp)
+set(EVTBASE src/Event.h)
 set(EVTFILESRC src/EventFile.h src/EventFile.cpp)
 set(EVENTSRC src/Events.h src/Events.cpp)
 set(EVENTOBJSRC src/EventObject.h src/EventObject.cpp)
+set(EVTTABLESRC src/EventTable.h src/EventTable.cpp)
 
-set(MOVEMAPOBJ src/MovablePlatform.h src/MovablePlatform.cpp)
-
-set(EVENTS ${EVTFILESRC} ${EVENTSRC} ${EVENTOBJSRC})
+set(EVENTS ${EVTBASE} ${EVTFILESRC} ${EVENTSRC} ${EVENTOBJSRC} ${EVTTABLESRC})
 set(DROPMECHANICCMP ${DROPPINSRC} #${EVENTSRC} ${DROPOBJSRC})
     ${DROPGRAPHICS} ${DROPPHYSICS} ${DROPINPUT})
+
+# Add events
+add_subdirectory(events)
 
 set(SRC_LIST
     ${IMPORTANTSRC}
@@ -66,5 +70,6 @@ set(SRC_LIST
     ${DROPMECHANICCMP}
     ${MOVEMAPOBJ}
     ${EVENTS}
+    ${SRC_EVENTS}
     PARENT_SCOPE)
 
