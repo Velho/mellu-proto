@@ -12,6 +12,7 @@ Events::Events(std::string level) :
 {
     evt_objs = std::move(file.load());
     evt_table = std::unique_ptr<EventTable>{ new EventTable(*this) };
+    drop_mech = std::unique_ptr<Droppin>{ new Droppin(*this) };
 
     init_evts();
 }
