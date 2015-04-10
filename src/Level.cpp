@@ -4,7 +4,7 @@
 using Proto::Level;
 using Proto::World;
 
-Level::Level() : current_map{ Maps::None }
+Level::Level() : current_map{ Maps::None }, data_dir("data/maps/")
 {
     // Add maps to levels container.
     levels.emplace(std::make_pair(Maps::Proto, "proto-evt.map"));

@@ -25,7 +25,7 @@ void Database::exec(std::string sql, Database::db_callback_t cb)
 }
 
 Query::Query(Database &db, std::string s) :
-    database{ db }, sql{ s }
+    database{ db }, sql(s)
 {
     result = sqlite3_prepare_v2(db.database, sql.c_str(), -1, &stmt, NULL);
 }

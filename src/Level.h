@@ -57,7 +57,7 @@ public:
 private:
     std::map<Maps, std::string> levels;
     Maps current_map;
-    const std::string data_dir{ "data/maps/" };
+    const std::string data_dir;
 
     std::string maps_to_str(Maps); ///< Returns string representation of the enum class.
     Maps str_to_maps(std::string); ///< Returns enum class Maps representation of std::string.
