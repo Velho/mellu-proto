@@ -30,10 +30,10 @@ private:
     ///< Window size.
     const int WIN_WIDTH{ 800 };
     const int WIN_HEIGHT{ 600 };
+    int framelimit;
 
     Level level_info; ///< Keeps current level.
     std::unique_ptr<World> world; ///< World object => Draws maps & events according to Level.
-    Droppin *droppin;
 
     ///! Used as temporary object for Map editing.
     MapObject temp_obj;

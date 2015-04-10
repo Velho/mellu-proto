@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
         options_description desc("Options");
         desc.add_options()
                 ("edit", value<bool>()->default_value(false), "Edit mode")
-                ("map", value<std::string>()->default_value("proto.map"), "Map select");
+                ("map", value<std::string>()->default_value("proto.map"), "Map select")
+                ("fps", value<int>()->default_value(60), "Framelimit(fps)");
 
         store(parse_command_line(argc, argv, desc), vars);
 

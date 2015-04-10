@@ -18,7 +18,7 @@ Game::Game(boost::program_options::variables_map vars) :
 {
     parse_cmd(vars); // Parse command line options.
 
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(framelimit);
 
     player->set_position(sf::Vector2f(200, 200));
     player->set_size(sf::Vector2f(25, 50));
@@ -29,7 +29,6 @@ Game::Game(boost::program_options::variables_map vars) :
     level_info.select_map(Level::Maps::Proto);
     // Create world after the world has been created(hmm..?).
     world = level_info.get_world();
-    droppin = world->get_droppin();
 }
 
 int Game::run()
@@ -127,7 +126,7 @@ void Game::handle_input(sf::Event &event)
     }
 
     player->handle_input(event);
-    droppin->handle_input(event);
+    world->get_droppin()->handle_input(event);
 }
 
 ///! Update the game logic.
@@ -141,7 +140,6 @@ void Game::update(sf::Time time)
         temp_obj.set_color(sf::Color::Red);
 
     player->update(*world);
-    droppin->update(*world);
 
     world->update();
 }
@@ -155,7 +153,6 @@ void Game::draw()
         window.draw(temp_obj);
 
     player->draw(window);
-    droppin->draw(window);
     world->draw(window);
 
     window.display();
@@ -179,6 +176,10 @@ void Game::parse_cmd(boost::program_options::variables_map &vars)
     if(vars.count("edit"))
         editor = vars["edit"].as<bool>();
 
+    // Framelimit.
+    if (vars.count("fps"))
+        framelimit = vars["fps"].as<int>();
+
     // TODO Used only in development to jump through different levels..
     // TODO Also now when there's no way interface to change the level.
 
@@ -190,6 +191,7 @@ void Game::parse_cmd(boost::program_options::variables_map &vars)
 
     //std::cout << "Map : " << level_info.get_current_map_str() << std::endl;
     std::cout << "Edit : " << editor << std::endl;
+    std::cout << "Fps : " << framelimit << std::endl;
 }
 
 void Game::editor_add_obj()
