@@ -23,6 +23,7 @@ World::~World()
 void World::update()
 {
     current_map->update();
+    current_evts->update(*this);
 }
 
 void World::draw(sf::RenderTarget &target)
