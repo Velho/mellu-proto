@@ -11,6 +11,9 @@ namespace Proto {
 class PROTO_Platform_1 : public Event {
 public:
 	PROTO_Platform_1();
+
+private:
+
 };
 
 /*!
