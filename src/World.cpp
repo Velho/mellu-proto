@@ -5,8 +5,6 @@
 
 #include "Droppin.h"
 
-using namespace Proto; // TODO REMOVE
-
 namespace Proto {
 
 World::World(Level &level)
