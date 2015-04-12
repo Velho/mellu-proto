@@ -11,14 +11,12 @@ namespace Proto {
  * Handles the Map specific things.
  *
  * For this prototype maps are created by hand.
- * Simple text files which are easily parsable.
+ * Simple database table which are easily parsable.
  * /sa MapFile
  *
  * Maps doesn't contain any information about entities and
  * their positions. Only the structural data -> where each piece
  * goes.
- *
- * TODO Implement Sqlite based Map fileformat.
  */
 class Map {
 public:
