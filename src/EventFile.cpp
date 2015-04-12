@@ -92,7 +92,7 @@ void EventFile::save(Events &evt)
         ins_sql << "INSERT INTO events(evt_id, x, y, width, height, evt_table_id) VALUES(";
         ins_sql << idx << ", " << obj->get_position().x << ", " << obj->get_position().y << ", ";
         ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", ";
-        ins_sql << "0" << ", " << obj->get_id() << ");";
+        ins_sql << obj->get_id() << ");";
 
         db.exec(ins_sql.str());
         idx++;
