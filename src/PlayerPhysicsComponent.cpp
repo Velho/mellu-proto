@@ -27,17 +27,31 @@ void PlayerPhysicsComponent::print_state()
 
 void PlayerPhysicsComponent::print_state()
 {
-    std::cout << "is_falling : " << is_falling << std::endl;
+    static PlayerState last_state = PlayerState::Standing;
+
+    if (!check_state(last_state)) {
+        if (current_state == PlayerState::Falling)
+            std::cout << "State : Falling" << std::endl;
+        if (current_state == PlayerState::Jumping)
+            std::cout << "State : Jumping" << std::endl;
+        if (current_state == PlayerState::RunningLeft)
+            std::cout << "State : RunningLeft" << std::endl;
+        if (current_state == PlayerState::RunningRight)
+            std::cout << "State : RunningRight" << std::endl;
+        if (current_state == PlayerState::Standing)
+            std::cout << "State : Standing" << std::endl;
+
+        std::cout << "Velocity : " << velocity.x << std::endl;
+    }
+    last_state = current_state;
 }
 
 void PlayerPhysicsComponent::update(GameObject &obj, World &world)
 {
     set_state();
+    add_velocity();
 
-    //print_state(); // DEBUG
-
-    // We can move in every PlayerState.
-    do_movement(obj);
+    print_state(); // DEBUG
 
     if(current_state == PlayerState::Jumping)
         do_jumping(obj);
@@ -47,21 +61,24 @@ void PlayerPhysicsComponent::update(GameObject &obj, World &world)
 
     apply_map_collision(obj, world);
     evt_mgr.update(obj, world);
+
+    // We can move in every PlayerState.
+    do_movement(obj);
 }
 
 void PlayerPhysicsComponent::set_state()
 {
     // State changing for movement should be moved into do_movement(..) method.
-    if(input::is_left())
+    if(input_cmp->current_keypress == input::KeyPress::Left)
         if(!is_falling_or_jumping()) {
             current_state = PlayerState::RunningLeft;
-            last_keypress = Keypress::Left;
+            //input_cmp->last_keypress = input::KeyPress::Left;
         }
 
-    if(input::is_right())
+    if (input_cmp->current_keypress == input::KeyPress::Right)
         if(!is_falling_or_jumping()) {
             current_state = PlayerState::RunningRight;
-            last_keypress = Keypress::Right;
+            //input_cmp->last_keypress = input::KeyPress::Right;
         }
 
     if(input::is_space()) {
@@ -72,6 +89,9 @@ void PlayerPhysicsComponent::set_state()
             init_jump(); // Init variables for the new state.
         }
     }
+
+    if (input_cmp->current_keypress == input::KeyPress::None && !is_falling_or_jumping())
+        current_state = PlayerState::Standing;
 }
 
 bool PlayerPhysicsComponent::check_state(PlayerState new_state)
@@ -153,8 +173,6 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
             fall_obj = mobj.get();
 
             std::cout << "height at idx(" << idx << ") : " << height << std::endl;
-
-            //if(evt_mgr.evt_obj == nullptr)
         }
 
         idx++;
@@ -163,31 +181,44 @@ void PlayerPhysicsComponent::apply_fall_collision(GameObject &obj, World &world)
 
 void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
 {
-    sf::FloatRect plr_rect{ obj.get_position(),
-        sf::Vector2f(obj.get_size().x + 2, obj.get_size().y) };
+    sf::FloatRect plr_rect{ sf::Vector2f(obj.get_position().x - WALK_ACCELERATION + 1, obj.get_position().y),
+        sf::Vector2f(obj.get_size().x + WALK_ACCELERATION + 1, obj.get_size().y) };
 
     /*
      * TODO
      * There's small bug in the collision calculation when player hits
      * the ground, collision is detected and taken back to the opposite direction
      * by amount WALK_ACCELERATION.
+     *
+     * Collision to right and left should be calculated from the most edge point
+     * from each side, not whole collision rectangle.
      */
-    for(auto &mobj : world.get_map_objects()) {
-        if(plr_rect.intersects(mobj->get_frect())) {
-            sf::Vector2f pos{ obj.get_position() };
+    if (current_state != PlayerState::Standing) {
+        for (auto &mobj : world.get_map_objects()) {
+            if (current_state == PlayerState::RunningRight) {
+                sf::Vector2f right{ obj.get_position().x + WALK_ACCELERATION, obj.get_position().y + obj.get_size().y - 1 };
+                if (mobj->get_frect().contains(right))
+                    velocity.x = 0;
+            }
 
-            // If player tries to walk into wall
-            // take a step back(=> Makes a boing away from the wall).
-            if(current_state == PlayerState::RunningRight ||
-                    input_cmp->last_keypress == input::KeyPress::Right) {
-                pos.x -= WALK_ACCELERATION;
-                obj.set_position(pos);
+            if (current_state == PlayerState::RunningLeft) {
+                //sf::FloatRect left{ sf::Vector2f(obj.get_position().x - WALK_ACCELERATION, obj.get_position().y), sf::Vector2f(1, 1) };
+                //if (obj.get_rect().intersects(left))
+                    //velocity.x = 0;
+                sf::Vector2f left{ obj.get_position().x - WALK_ACCELERATION, obj.get_position().y + obj.get_size().y - 1 };
+
+                if (mobj->get_frect().contains(left))
+                    velocity.x = 0;
             }
-            if(current_state == PlayerState::RunningLeft ||
-                    input_cmp->last_keypress == input::KeyPress::Left) {
-                pos.x += WALK_ACCELERATION;
-                obj.set_position(pos);
-            }
+        /*
+         ______  _
+        |      ||x|__   -> This is how its currently done, by calculating against whole collision box.
+        |______|_____|
+
+         ______
+        |      ||x|__   -> This is how it should be done, by calculating against points on x axis.
+        |______|_____|
+       */
         }
     }
 
@@ -264,29 +295,17 @@ void PlayerPhysicsComponent::do_jumping(GameObject &obj)
 
 void PlayerPhysicsComponent::do_movement(GameObject &obj)
 {
-    //sf::Clock &cl{ input->get_timer() };
-    if(input::is_right()) {
-        sf::Vector2f old{ obj.get_position() };
-        old.x += WALK_ACCELERATION;
-        obj.set_position(old);
+    obj.set_position(obj.get_position() + velocity);
+}
+
+void PlayerPhysicsComponent::add_velocity()
+{
+    if (input_cmp->current_keypress == input::KeyPress::Right) {
+        velocity.x = WALK_ACCELERATION;
     }
-
-    if(input::is_left()) {
-        sf::Vector2f old{ obj.get_position() };
-        old.x -= WALK_ACCELERATION;
-
-        obj.set_position(old);
+    else if (input_cmp->current_keypress == input::KeyPress::Left) {
+        velocity.x = -WALK_ACCELERATION;
     }
-
-    if(is_falling_or_jumping()) {
-        //sf::Vector2f pos{ obj.get_position() };
-
-        if(input::is_left()) {
-
-        }
-
-        if(input::is_right()) {
-
-        }
-    }
+    else if (input_cmp->current_keypress == input::KeyPress::None)
+        velocity.x = 0;
 }

@@ -25,7 +25,7 @@ public:
         is_falling{ false },
         current_state{ PlayerState::Falling },
         fall_obj{ nullptr },
-        evt_mgr{ *this }
+        evt_mgr{ *this }, deny_right{ false }, deny_left{ false }
     {
 		init_fall(); // Let's fall in to the game ehehehe
     }
@@ -51,9 +51,12 @@ private:
     PlayerInputComponent *input_cmp;
     PlayerEventManager evt_mgr;
 
-    enum class Keypress { Left, Right } last_keypress; ///< Used for calculating collision while jumping & falling.
+    //enum class Keypress { Left, Right } last_keypress; ///< Used for calculating collision while jumping & falling.
 
     bool is_falling;
+
+    bool deny_right;
+    bool deny_left;
 
     float multiplier_gravity;
     float jump_speed;
@@ -62,11 +65,14 @@ private:
     // Calculated height where we hit collision
     float height;
 
+    sf::Vector2f velocity; ///< Modify player's movement velocity.
+
     const float WALK_ACCELERATION = 5;
 
     void set_state();               ///< Sets current_state according to input.
     bool check_state(PlayerState);  ///< Checks if current_state is new_state, returns true if equals.
     bool is_falling_or_jumping();   ///< Returns true if current_state is PlayerState::Jumping or PlayerState::Falling.
+    void add_velocity(); ///< Adds velocity according to input.
 
     void apply_gravity(GameObject&, World&);        ///< Applies simulated gravity on state PlayerState::Falling.
     void apply_fall_collision(GameObject&, World&); ///< Calculate collision when PlayerState::Falling.
