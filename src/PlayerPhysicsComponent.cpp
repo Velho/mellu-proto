@@ -25,6 +25,11 @@ void PlayerPhysicsComponent::print_state()
 }
 */
 
+void PlayerPhysicsComponent::reset()
+{
+	init_fall();
+}
+
 void PlayerPhysicsComponent::print_state()
 {
     static PlayerState last_state = PlayerState::Standing;
@@ -72,13 +77,11 @@ void PlayerPhysicsComponent::set_state()
     if(input_cmp->current_keypress == input::KeyPress::Left)
         if(!is_falling_or_jumping()) {
             current_state = PlayerState::RunningLeft;
-            //input_cmp->last_keypress = input::KeyPress::Left;
         }
 
     if (input_cmp->current_keypress == input::KeyPress::Right)
         if(!is_falling_or_jumping()) {
             current_state = PlayerState::RunningRight;
-            //input_cmp->last_keypress = input::KeyPress::Right;
         }
 
     if(input::is_space()) {
@@ -90,8 +93,12 @@ void PlayerPhysicsComponent::set_state()
         }
     }
 
-    if (input_cmp->current_keypress == input::KeyPress::None && !is_falling_or_jumping())
+    /* TODO If new key is pressed while old key is pressed, after releasing the old
+     * key current_keypress get's set to None which resets the velocity. FIX */
+    if (input_cmp->current_keypress == input::KeyPress::None && !is_falling_or_jumping()) {
         current_state = PlayerState::Standing;
+        velocity.x = 0;
+    }
 }
 
 bool PlayerPhysicsComponent::check_state(PlayerState new_state)
@@ -130,6 +137,8 @@ void PlayerPhysicsComponent::init_jump()
     is_falling = false;
     multiplier_gravity = 8;
     jump_speed = -36;
+
+    velocity.x = 0;
 }
 
 void PlayerPhysicsComponent::apply_gravity(GameObject &obj, World &world)
@@ -185,8 +194,7 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
         sf::Vector2f(obj.get_size().x + WALK_ACCELERATION + 1, obj.get_size().y) };
 
     /*
-     * TODO
-     * There's small bug in the collision calculation when player hits
+     * TODO There's small bug in the collision calculation when player hits
      * the ground, collision is detected and taken back to the opposite direction
      * by amount WALK_ACCELERATION.
      *
@@ -303,9 +311,7 @@ void PlayerPhysicsComponent::add_velocity()
     if (input_cmp->current_keypress == input::KeyPress::Right) {
         velocity.x = WALK_ACCELERATION;
     }
-    else if (input_cmp->current_keypress == input::KeyPress::Left) {
+    if (input_cmp->current_keypress == input::KeyPress::Left) {
         velocity.x = -WALK_ACCELERATION;
     }
-    else if (input_cmp->current_keypress == input::KeyPress::None)
-        velocity.x = 0;
 }

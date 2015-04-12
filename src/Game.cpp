@@ -13,22 +13,18 @@
 namespace Proto {
 
 Game::Game(boost::program_options::variables_map vars) :
-    window{ sf::VideoMode{ 800, 600 }, "Prototype" },
-    player{ create_player() } //, world{ level_info }
+    window{ sf::VideoMode{ 800, 600 }, "Prototype" }
 {
     parse_cmd(vars); // Parse command line options.
 
     window.setFramerateLimit(framelimit);
 
-    player->set_position(sf::Vector2f(200, 200));
-    player->set_size(sf::Vector2f(25, 50));
-
     viewport.setSize(sf::Vector2f(800, 600));
     window.setView(viewport); //! Does this need activation always when updated?
 
     level_info.select_map(Level::Maps::Proto);
-    // Create world after the world has been created(hmm..?).
-    world = level_info.get_world();
+
+    reset_game(); // Reset the Player and World.
 }
 
 int Game::run()
@@ -125,6 +121,11 @@ void Game::handle_input(sf::Event &event)
         //return;
     }
 
+    // Reset the player position.
+    if(event.type == sf::Event::KeyReleased)
+        if(event.key.code == sf::Keyboard::F1)
+            reset_player();
+
     player->handle_input(event);
     world->get_droppin()->handle_input(event);
 }
@@ -192,6 +193,26 @@ void Game::parse_cmd(boost::program_options::variables_map &vars)
     //std::cout << "Map : " << level_info.get_current_map_str() << std::endl;
     std::cout << "Edit : " << editor << std::endl;
     std::cout << "Fps : " << framelimit << std::endl;
+}
+
+void Game::reset_game()
+{
+	player = create_player();
+
+	// Currently the initial position of the player.
+    player->set_position(sf::Vector2f(200, 200));
+    player->set_size(sf::Vector2f(25, 50));
+
+    // Create world.
+    world = level_info.get_world();
+}
+
+void Game::reset_player()
+{
+	// Reset the players position.
+    player->set_position(sf::Vector2f(200, 200));
+    // Annoying glitch when player is falling too fast, it falls straight through the map object...
+    static_cast<PlayerPhysicsComponent*>(player->get_physics())->reset();
 }
 
 void Game::editor_add_obj()

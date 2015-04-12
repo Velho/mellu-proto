@@ -25,7 +25,7 @@ public:
         is_falling{ false },
         current_state{ PlayerState::Falling },
         fall_obj{ nullptr },
-        evt_mgr{ *this }, deny_right{ false }, deny_left{ false }
+        evt_mgr{ *this }
     {
 		init_fall(); // Let's fall in to the game ehehehe
     }
@@ -42,6 +42,8 @@ public:
     //! Updates PlayerPhysicsComponents state every frame.
     virtual void update(GameObject&, World&) override;
 
+    void reset();
+
 private:
     friend class PlayerEventManager;
 
@@ -54,9 +56,6 @@ private:
     //enum class Keypress { Left, Right } last_keypress; ///< Used for calculating collision while jumping & falling.
 
     bool is_falling;
-
-    bool deny_right;
-    bool deny_left;
 
     float multiplier_gravity;
     float jump_speed;

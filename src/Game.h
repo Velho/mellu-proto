@@ -55,6 +55,8 @@ private:
     void editor_create_platform(); ///< Creates event object out of MapObject.
 
     void parse_cmd(boost::program_options::variables_map&);
+    void reset_game();
+    void reset_player();
 };
 
 }
