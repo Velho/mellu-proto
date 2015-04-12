@@ -4,7 +4,10 @@
 cmake_minimum_required(VERSION 2.8)
 project(mellu-proto)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+endif(UNIX)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 set(Boost_USE_STATIC_LIBS ON)
@@ -26,10 +29,8 @@ include_directories(${SFML_INCLUDE_DIR})
 add_subdirectory(src)
 
 add_executable(mellu-proto ${SRC_LIST})
-target_link_libraries(mellu-proto 
-    ${CMAKE_BUILD_TYPE} ${Boost_LIBRARIES} 
-    ${CMAKE_BUILD_TYPE} ${SFML_LIBRARIES}
-    ${Sqlite3_LIBRARY})
+target_link_libraries(mellu-proto
+    ${Boost_LIBRARIES} ${SFML_LIBRARIES} ${Sqlite3_LIBRARY})
 
 # Copy the data directory into build directory.
 file(COPY data DESTINATION ${CMAKE_BINARY_DIR})
