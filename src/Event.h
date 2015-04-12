@@ -31,9 +31,9 @@ public:
      * Default constructor for empty Event.
      */
     Event() :
-    	id{ 0 },
-    	state{ EventState::Idle },
-    	type{ EventType::None }
+        id{ 0 },
+        state{ EventState::Idle },
+        type{ EventType::None }
     { }
 
     /*!
@@ -41,9 +41,9 @@ public:
      * Constructs Event with appropriate Id.
      */
     Event(int i) :
-    	id{ i },
-    	type{ EventType::None },
-    	state{ EventState::Idle }
+        id{ i },
+        state{ EventState::Idle },
+        type{ EventType::None }
     { }
 
     /*!
