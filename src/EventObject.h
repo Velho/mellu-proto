@@ -30,7 +30,7 @@ public:
     EventObject(): event{ nullptr }, id{ 0 } {}
 
     EventObject(sf::Vector2f pos, sf::Vector2f sz, int i) :
-        shape{ sz }, id{ i }
+        shape{ sz }, id{ i }, event{ nullptr }
     {
         set_position(pos);
         set_color(sf::Color::Red);
@@ -112,8 +112,8 @@ public:
 
     sf::FloatRect get_rect() const { return sf::FloatRect(get_position(), get_size()); }
 
-    void set_event(Event *e) { event = e; }
-    Event *get_event() { return event; }
+    void set_event(Event*);
+    Event *get_event() const;
 
     int get_id() const { return id; }
 
