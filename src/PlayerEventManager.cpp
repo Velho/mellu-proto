@@ -2,6 +2,7 @@
 
 #include "World.h"
 #include "PlayerPhysicsComponent.h"
+#include "Event.h"
 
 #include <iostream>
 
@@ -29,23 +30,37 @@ void PlayerEventManager::apply_event_collision(GameObject &gobj, World &world)
 
             if(evt_obj != obj.get()) { // If same object dont assign.
                 evt_obj = obj.get();
-                //evt_obj->set_state(EventObject::EventState::Trigger);
-                std::cout << "Trigger event.." << std::endl;
+                evt_obj->get_event()->set_state(Event::EventState::Trigger);
             }
 
             evt_coll = true;
             std::cout << "evtobj(" << plr_phy.height << ")" << std::endl;
         }
     }
+
+    complete_event_platform();
 }
 
 void PlayerEventManager::complete_event_platform()
 {
-    /*
-    if(evt_obj->get_type() == EventObject::EventType::Platform) {
-        evt_obj->set_state(EventObject::EventState::Completed);
-    }
-    */
+	/*
+	 * Very messy if expression.
+	 * evt_coll != false, evt_coll manages the collision state between player and eventobject.
+	 * evt_obj == true, evt_obj is pointer to last collided evetobject.
+	 * plr_phy.fall_obj != nullptr, pointer to last collided mapobject.
+	 *
+	 * Basically this works checking if its not currently colliding with
+	 * EventObject(evt_coll) and collision happens with Mapobject(fall_obj).
+	 *
+	 * TODO Implement support for Double Platform.
+	 */
+    if(!evt_coll && evt_obj && plr_phy.fall_obj != nullptr) {
+		if(evt_obj->get_event()->get_type() == Event::EventType::Platform) {
+			std::cout << "Completed?" << std::endl;
+			evt_obj->get_event()->set_state(Event::EventState::Completed);
+			evt_obj = nullptr;
+		}
+	}
 }
 
 void PlayerEventManager::update_platform_behavior(GameObject &gobj, World &world)
