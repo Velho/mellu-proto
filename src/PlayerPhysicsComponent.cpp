@@ -27,7 +27,8 @@ void PlayerPhysicsComponent::print_state()
 
 void PlayerPhysicsComponent::reset()
 {
-	init_fall();
+    fall_speed = 0;
+	velocity.x = 0;
 }
 
 void PlayerPhysicsComponent::print_state()
@@ -53,8 +54,8 @@ void PlayerPhysicsComponent::print_state()
 
 void PlayerPhysicsComponent::update(GameObject &obj, World &world)
 {
-    set_state();
     add_velocity();
+    set_state();
 
     print_state(); // DEBUG
 
@@ -93,12 +94,9 @@ void PlayerPhysicsComponent::set_state()
         }
     }
 
-    /* TODO If new key is pressed while old key is pressed, after releasing the old
-     * key current_keypress get's set to None which resets the velocity. FIX */
-    if (input_cmp->current_keypress == input::KeyPress::None && !is_falling_or_jumping()) {
+    // If not jumping or falling and velocity 0, we are standing.
+    if(velocity.x == 0 && !is_falling_or_jumping())
         current_state = PlayerState::Standing;
-        velocity.x = 0;
-    }
 }
 
 bool PlayerPhysicsComponent::check_state(PlayerState new_state)
@@ -151,7 +149,7 @@ void PlayerPhysicsComponent::apply_gravity(GameObject &obj, World &world)
         current_state = PlayerState::Standing;
         obj.set_position(sf::Vector2f(pos.x, height));
         std::cout << "Player::Standing" << std::endl;
-        input_cmp->last_keypress = input::KeyPress::None;
+        //input_cmp->last_keypress = input::KeyPress::None;
         return;
     }
 
@@ -314,4 +312,8 @@ void PlayerPhysicsComponent::add_velocity()
     if (input_cmp->current_keypress == input::KeyPress::Left) {
         velocity.x = -WALK_ACCELERATION;
     }
+
+    // Do not modify velocity while falling or jumping or we get wrong state while doing so..
+    if(input_cmp->current_keypress == input::KeyPress::None && !is_falling_or_jumping())
+        velocity.x = 0;
 }

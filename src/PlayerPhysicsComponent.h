@@ -42,7 +42,7 @@ public:
     //! Updates PlayerPhysicsComponents state every frame.
     virtual void update(GameObject&, World&) override;
 
-    void reset();
+    void reset();   ///< Resets fall variables. Prevents glitch.
 
 private:
     friend class PlayerEventManager;
@@ -52,8 +52,6 @@ private:
 
     PlayerInputComponent *input_cmp;
     PlayerEventManager evt_mgr;
-
-    //enum class Keypress { Left, Right } last_keypress; ///< Used for calculating collision while jumping & falling.
 
     bool is_falling;
 
@@ -71,7 +69,7 @@ private:
     void set_state();               ///< Sets current_state according to input.
     bool check_state(PlayerState);  ///< Checks if current_state is new_state, returns true if equals.
     bool is_falling_or_jumping();   ///< Returns true if current_state is PlayerState::Jumping or PlayerState::Falling.
-    void add_velocity(); ///< Adds velocity according to input.
+    void add_velocity();            ///< Adds velocity according to input.
 
     void apply_gravity(GameObject&, World&);        ///< Applies simulated gravity on state PlayerState::Falling.
     void apply_fall_collision(GameObject&, World&); ///< Calculate collision when PlayerState::Falling.
