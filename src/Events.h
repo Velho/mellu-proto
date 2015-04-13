@@ -12,6 +12,7 @@
 
 namespace Proto {
 
+class World;
 class Droppin;
 
 class Events {
@@ -25,7 +26,7 @@ public:
     friend void EventFile::save(Events&);
 
     void draw(sf::RenderTarget&); ///< Draw the EventObjects.
-    void update(); ///< Update the event objects behavior.
+    void update(World&); ///< Update the event objects behavior.
 
     std::vector<EventObject::EvtObjectPtr> &get_evt_objects() { return evt_objs; }
     Droppin *get_droppin(); ///< Returns ref to Droppin. Input is required.
@@ -33,12 +34,13 @@ public:
 private:
     friend class EventTable;
     std::unique_ptr<EventTable> evt_table;
-    std::unique_ptr<Droppin> drop_mech;
+    std::unique_ptr<Droppin> droppin;
     std::vector<EventObject::EvtObjectPtr> evt_objs;
     EventFile file;
     std::string filename;
 
-    void init_evts();
+    void init_evts();	///< Initializes event's.
+    void update_evts();	///< Updates event's behavior(skip nullptr).
 };
 
 }

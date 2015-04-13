@@ -4,6 +4,10 @@
 #include "EventTable.h"
 #include "Droppin.h"
 
+#include "World.h"
+
+#include "Event.h"
+
 namespace Proto {
 
 Events::Events(std::string level) :
@@ -12,7 +16,7 @@ Events::Events(std::string level) :
 {
     evt_objs = std::move(file.load());
     evt_table = std::unique_ptr<EventTable>{ new EventTable(*this) };
-    drop_mech = std::unique_ptr<Droppin>{ new Droppin(*this) };
+    droppin = std::unique_ptr<Droppin>{ new Droppin(*this) };
 
     init_evts();
 }
@@ -34,27 +38,15 @@ void Events::draw(sf::RenderTarget &target)
 {
     for(auto &o : evt_objs)
         target.draw(*o);
+
+    droppin->draw(target);
 }
 
-void Events::update()
+void Events::update(World &world)
 {
-    /*
-    for(auto &obj : evt_objs) {
-        switch(obj->get_state()) {
-            case EventObject::EventState::Idle: break; // Do nothing on idle.
+	droppin->update(world);
 
-            case EventObject::EventState::Trigger:
-                obj->on_trigger(*obj);
-            break;
-            case EventObject::EventState::Progress:
-                obj->on_progress(*obj);
-            break;
-            case EventObject::EventState::Completed:
-                obj->on_completion(*obj);
-            break;
-        }
-    }
-    */
+	update_evts();
 }
 
 void Events::init_evts()
@@ -68,9 +60,30 @@ void Events::init_evts()
 	}
 }
 
+void Events::update_evts()
+{
+    for(auto &obj : evt_objs) {
+        if(obj->get_event() != nullptr) {
+			switch(obj->get_event()->get_state()) {
+				case Event::EventState::Idle: return; // Do nothing on idle.
+
+				case Event::EventState::Trigger:
+					obj->get_event()->on_trigger(*obj);
+				break;
+				case Event::EventState::Progress:
+					obj->get_event()->on_progress(*obj);
+				break;
+				case Event::EventState::Completed:
+					obj->get_event()->on_completion(*obj);
+				break;
+			}
+        }
+    }
+}
+
 Droppin *Events::get_droppin()
 {
-	return drop_mech.get();
+	return droppin.get();
 }
 
 }
