@@ -20,6 +20,7 @@ EventTable::EventTable(Events &e) : events{ e }, level(e.filename)
 
 void EventTable::retrieve_events()
 {
+	std::cout << "Loading events..." << std::endl;
 	load_evts();
 }
 
@@ -33,14 +34,14 @@ void EventTable::load_evts()
 void EventTable::load_evts_proto()
 {
 	event_table.emplace_back(std::unique_ptr<Event>(new PROTO_Platform_1));
-	event_table.emplace_back(std::unique_ptr<Event>(new PROTO_Platform_2));
+	//event_table.emplace_back(std::unique_ptr<Event>(new PROTO_Platform_2));
 }
 
 Event *EventTable::get_event(std::size_t idx)
 {
     for(auto &e : event_table) {
         if(e->get_id() == idx)
-            return e.get(); //e.release();
+            return e.release();
     }
 
     return nullptr;
@@ -48,7 +49,7 @@ Event *EventTable::get_event(std::size_t idx)
 
 Event *EventTable::operator [](std::size_t idx)
 {
-	return event_table[idx].get();
+	return get_event(idx);
 }
 
 }
