@@ -5,9 +5,14 @@
 
 namespace Proto {
 
+/*!
+ *\brief PlayerInputClass class
+ * Implements Player gameobject's InputComponent.
+ */
 class PlayerInputComponent : public InputComponent {
 public:
-    PlayerInputComponent() : last_keypress{ KeyPress::None }
+    PlayerInputComponent() :
+        current_keypress{ KeyPress::None }
     { }
     ~PlayerInputComponent() { }
 
@@ -18,11 +23,19 @@ public:
     static bool is_right() { return sf::Keyboard::isKeyPressed(sf::Keyboard::Right); }
     static bool is_space() { return sf::Keyboard::isKeyPressed(sf::Keyboard::Space); }
 private:
-    const float WALK_ACCELERATION = 250;
-
     friend class PlayerPhysicsComponent;
 
-    enum class KeyPress { Left, Right, None } last_keypress;
+    bool arrow_left{ false };
+    bool arrow_right{ false };
+
+    enum class KeyPress { Left, Right, None };
+
+    KeyPress current_keypress;
+
+    void set_left(sf::Event&);
+    void set_right(sf::Event&);
+    bool is_arrow_l() const { return arrow_left; }
+    bool is_arrow_r() const { return arrow_right; }
 };
 }
 
