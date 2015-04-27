@@ -23,6 +23,10 @@ public:
         Arial
     };
 
+    enum class Textures {
+        Testi
+    };
+
     ///< Aliases for memory managed pointers.
     using FontPtr = std::unique_ptr<sf::Font>;
     using TexturePtr = std::unique_ptr<sf::Texture>;
@@ -43,16 +47,18 @@ public:
 
     ///< Returns pointer to Font.
     sf::Font *getFont(Fonts);
+    sf::Texture *getTex(Textures);
 
 private:
     ///< Constructor available only for internal usage.
     Resources()
     {
         load_fonts(); ///< Load fonts into memory.
+        load_textures();    ///< Load textures into memory.
     }
 
     std::map<Fonts, FontPtr> fonts;
-    //std::map<TexturePtr> textures;
+    std::map<Textures, TexturePtr> svgs;
 
     void load_fonts();
     void load_textures();
