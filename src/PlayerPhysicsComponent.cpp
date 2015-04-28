@@ -1,9 +1,9 @@
 #include "PlayerPhysicsComponent.h"
 #include "World.h"
 
-using Proto::PlayerPhysicsComponent;
-using Proto::GameObject;
-using Proto::World;
+#include "BoundingBox.h"
+#include "PlayerGraphicsComponent.h"
+
 
 using input = Proto::PlayerInputComponent;
 
@@ -24,6 +24,7 @@ void PlayerPhysicsComponent::print_state()
         std::cout << "State : Standing" << std::endl;
 }
 */
+namespace Proto {
 
 void PlayerPhysicsComponent::reset()
 {
@@ -225,6 +226,8 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
         |      ||x|__   -> This is how it should be done, by calculating against points on x axis.
         |______|_____|
        */
+
+            //apply_slope_collision(obj, *mobj);
         }
     }
 
@@ -273,6 +276,42 @@ void PlayerPhysicsComponent::apply_map_collision(GameObject &obj, World &world)
     }
 }
 
+bool PlayerPhysicsComponent::is_slope(MapObject &m_obj)
+{
+    if(m_obj.get_rotation() != 0)
+        return true;
+
+    return false;
+}
+
+void PlayerPhysicsComponent::apply_slope_collision(GameObject &g_obj, MapObject &m_obj)
+{
+    if(!is_slope(m_obj)) // If MapObject is not slope, return.
+        return;
+
+    // Ugly as hell
+    BoundingBox box(static_cast<PlayerGraphicsComponent*>(g_obj.get_graphics())->get_shape());
+
+    sf::FloatRect plr_rect{ sf::Vector2f(g_obj.get_position().x - WALK_ACCELERATION + 1, g_obj.get_position().y),
+            sf::Vector2f(g_obj.get_size().x + WALK_ACCELERATION + 1, g_obj.get_size().y) };
+
+    if(box.bb_test(m_obj.get_shape())) {
+        if(current_state == PlayerState::RunningLeft) {
+
+        }
+
+        if(current_state == PlayerState::RunningRight) {
+
+        }
+    }
+}
+
+void PlayerPhysicsComponent::calculate_slope_velocity(GameObject &g_obj, BoundingBox &bb_box)
+{
+    sf::FloatRect plr_rect{ sf::Vector2f(g_obj.get_position().x - WALK_ACCELERATION + 1, g_obj.get_position().y),
+            sf::Vector2f(g_obj.get_size().x + WALK_ACCELERATION + 1, g_obj.get_size().y) };
+}
+
 void PlayerPhysicsComponent::do_jumping(GameObject &obj)
 {
     /**
@@ -316,4 +355,6 @@ void PlayerPhysicsComponent::add_velocity()
     // Do not modify velocity while falling or jumping or we get wrong state while doing so..
     if(input_cmp->current_keypress == input::KeyPress::None && !is_falling_or_jumping())
         velocity.x = 0;
+}
+
 }

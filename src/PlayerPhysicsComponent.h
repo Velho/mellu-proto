@@ -13,6 +13,8 @@ namespace Proto {
 class PlayerInputComponent;
 class MapObject;
 
+class BoundingBox;
+
 /*!
  * \brief The PlayerPhysicsComponent class
  * Calculated player specific physics, collisions,
@@ -71,6 +73,9 @@ private:
     bool is_falling_or_jumping();   ///< Returns true if current_state is PlayerState::Jumping or PlayerState::Falling.
     void add_velocity();            ///< Adds velocity according to input.
 
+    bool is_slope(MapObject&);      ///< Checks if the mapobject has rotation.
+    void calculate_slope_velocity(GameObject&, BoundingBox&);///< Calculate velocity in slopes.
+
     void apply_gravity(GameObject&, World&);        ///< Applies simulated gravity on state PlayerState::Falling.
     void apply_fall_collision(GameObject&, World&); ///< Calculate collision when PlayerState::Falling.
 
@@ -79,6 +84,8 @@ private:
     //! \sa MapObject *fall_obj
     void apply_map_collision(GameObject&, World&);
     void apply_event_collision(GameObject&, World&);
+
+    void apply_slope_collision(GameObject&, MapObject&);
 
     void init_fall(); ///< Initializes fall variables; fall_speed, is_falling. Cannot be called if is_falling == true.
     void init_jump(); ///< Initializes
