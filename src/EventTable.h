@@ -20,14 +20,27 @@ public:
 	using EvtPtr = std::unique_ptr<Event>;
     EventTable(Events&);
 
+    /*!
+     *\brief
+     * Initializes event_table with smart pointers
+     * to Event. Retrieve events before returning pointers
+     * to them.
+     */
     void retrieve_events();
 
     /*!
      * \brief get_event
-     * Returns event out of Event table
+     * Returns event out of Event table.
+     * Out as its ownership is released.
      * \return
+     * Pointer to Event by index.
      */
     Event *get_event(std::size_t);
+    /*!
+     *\brief operator[]
+     * Uses get_event(..) behind the scenes to return
+     * Event pointer correctly.
+     */
     Event *operator[](std::size_t);
 
 private:

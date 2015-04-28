@@ -110,16 +110,34 @@ public:
         shape.setPosition(sz);
     }
 
+    void move(sf::Vector2f velocity)
+    {
+        shape.move(velocity);
+    }
+
     sf::FloatRect get_rect() const { return sf::FloatRect(get_position(), get_size()); }
 
+    /*!
+     *\brief
+     */
     void set_event(Event*);
+    /*!
+     *\brief
+     * Returns pointer to EventObject's Event.
+     *\return Pointer to EventTable's Event, nullptr if id is set to 0.
+     */
     Event *get_event() const;
 
+    /*!
+     *\brief
+     * Returns Event's id.
+     *\sa EventTable class
+     */
     int get_id() const { return id; }
 
 private:
     sf::RectangleShape shape;
-    Event *event;
+    Event *event; ///< Event pointer is managed by the EventObject.
     int id;
 
     void set_color(sf::Color clr)
