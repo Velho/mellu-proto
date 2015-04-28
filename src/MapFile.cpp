@@ -10,6 +10,7 @@ namespace Proto {
 struct MapObjectRow {
     float x, y;
     float width, height;
+    float angle;
 
     /*!
      * \brief MapObjectRow
@@ -20,7 +21,11 @@ struct MapObjectRow {
      * \param _height
      */
     MapObjectRow(float _x, float _y, float _width, float _height) :
-        x{ _x }, y{ _y }, width{ _width }, height{ _height }
+        MapObjectRow(_x, _y, _width, _height, 0.0f)
+    { }
+
+    MapObjectRow(float _x, float _y, float _width, float _height, float _angle) :
+        x{ _x }, y{ _y }, width{ _width }, height{ _height }, angle{ _angle }
     { }
 
     /*!
@@ -29,19 +34,19 @@ struct MapObjectRow {
      * \param r
      */
     MapObjectRow(Query::Row r) :
-        MapObjectRow(r.get_double(0), r.get_double(1), r.get_double(2), r.get_double(3))
+        MapObjectRow(r.get_double(0), r.get_double(1), r.get_double(2), r.get_double(3), r.get_double(4))
     { }
 
     MapObject get_map_obj()
     {
-        return MapObject(sf::Vector2f(width, height), sf::Vector2f(x, y));
+        return MapObject(sf::Vector2f(width, height), sf::Vector2f(x, y), angle);
     }
 };
 
 std::vector<std::unique_ptr<MapObject>> MapFile::load()
 {
     Database db(filename);
-    Query qry(db, "SELECT x, y, width, height FROM map;");
+    Query qry(db, "SELECT x, y, width, height, angle FROM map;");
 
     std::vector<std::unique_ptr<MapObject>> results;
 
@@ -64,9 +69,9 @@ void MapFile::save(Map &map)
     for(auto &obj : map.objects) {
         std::ostringstream ins_sql;
         // Construct sql statement.
-        ins_sql << "INSERT INTO map(id, x, y, width, height) VALUES(";
+        ins_sql << "INSERT INTO map(id, x, y, width, height, angle) VALUES(";
         ins_sql << idx << ", " << obj->get_position().x << ", " << obj->get_position().y << ", ";
-        ins_sql << obj->get_size().x << ", " << obj->get_size().y << ");";
+        ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", " << obj->get_rotation() << ");";
 
         db.exec(ins_sql.str());
         idx++;

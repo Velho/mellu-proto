@@ -23,6 +23,12 @@ public:
         set_position(pos);
     }
 
+    MapObject(sf::Vector2f sz, sf::Vector2f pos, float angle) :
+        MapObject(sz, pos)
+    {
+        set_rotation(angle);
+    }
+
     ///
     /// \brief Copy Ctor MapObject
     /// Copy Constructor MapObject
@@ -62,6 +68,12 @@ public:
     sf::Vector2f get_size() const;
 
     sf::FloatRect get_frect() const;
+
+    void set_rotation(float);
+    float get_rotation() const;
+
+    sf::FloatRect get_global_bounds() const { return shape.getGlobalBounds(); }
+    sf::RectangleShape &get_shape() { return shape; }
 
     virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
