@@ -10,6 +10,8 @@
 // Let's get some command line options.
 #include <boost/program_options.hpp>
 
+#include "Deco.h"
+
 namespace Proto {
 
 class Droppin;
@@ -35,6 +37,8 @@ private:
     Level level_info; ///< Keeps current level.
     std::unique_ptr<World> world; ///< World object => Draws maps & events according to Level.
 
+    Deco deco;
+
     ///! Used as temporary object for Map editing.
     MapObject temp_obj;
     sf::Vector2f edit_mouse;
@@ -52,7 +56,9 @@ private:
     void draw();
 
     void editor_add_obj(); ///< Adds map object into *map.
+    void editor_rotate_obj(sf::Event&); ///< Rotate the map object.
     void editor_create_platform(); ///< Creates event object out of MapObject.
+    void editor_reset_temp();       ///< Resets the temporary object.
 
     void parse_cmd(boost::program_options::variables_map&);
     void reset_game();

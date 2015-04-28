@@ -12,9 +12,13 @@
 
 namespace Proto {
 
-Game::Game(boost::program_options::variables_map vars) :
-    window{ sf::VideoMode{ 800, 600 }, "Prototype" }
+Game::Game(boost::program_options::variables_map vars)
 {
+    sf::ContextSettings settings;
+    settings.antialiasingLevel  = 8;
+
+    window.create(sf::VideoMode(800, 600), "Prototype", sf::Style::Default, settings);
+
     parse_cmd(vars); // Parse command line options.
 
     window.setFramerateLimit(framelimit);
@@ -46,6 +50,8 @@ int Game::run()
 
 void Game::editor_input(sf::Event &event)
 {
+    editor_rotate_obj(event);
+
     // Manage MapObject's (event)type; Depending on the Event what is created.
     if(edit_draw) {
         // Shift + E = Event Object => Type and ID must be set manually.
@@ -67,7 +73,6 @@ void Game::editor_input(sf::Event &event)
             temp_obj.set_size(sf::Vector2f());
 
             edit_draw = true;
-            //event_object = false;
 
             std::cout << "world_pos : (" << world_pos.x << ", "
                 << world_pos.y << ")" <<  std::endl;
@@ -86,6 +91,9 @@ void Game::editor_input(sf::Event &event)
             event_object = false;
         }
     }
+
+    if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Right)
+        editor_reset_temp();
 
     if(event.type == sf::Event::MouseMoved) {
         //edit_mouse { static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y) };
@@ -153,7 +161,8 @@ void Game::draw()
     if(edit_draw == true)
         window.draw(temp_obj);
 
-    player->draw(window);
+    window.draw(deco);
+    window.draw(*player);
     world->draw(window);
 
     window.display();
@@ -210,7 +219,7 @@ void Game::reset_game()
 void Game::reset_player()
 {
 	// Reset the players position.
-    player->set_position(sf::Vector2f(200, 200));
+    player->set_position(sf::Vector2f(150, 225));
     // Annoying glitch when player is falling too fast, it falls straight through the map object...
     static_cast<PlayerPhysicsComponent*>(player->get_physics())->reset();
 }
@@ -222,4 +231,24 @@ void Game::editor_add_obj()
     else
         world->add_map_object(temp_obj);
 }
+
+void Game::editor_reset_temp()
+{
+    edit_draw = false;
+    event_object = false;
+
+
+}
+
+void Game::editor_rotate_obj(sf::Event &event)
+{
+    if(edit_draw) {
+        if(event.type == sf::Event::MouseWheelMoved) {
+            auto data = static_cast<float>(event.mouseWheel.delta);
+
+            temp_obj.set_rotation(temp_obj.get_rotation()  + data);
+        }
+    }
+}
+
 }
