@@ -7,6 +7,10 @@ namespace Proto {
 
 class GameObject;
 
+/*!
+ *\brief GraphicsComponent class
+ *
+ */
 class GraphicsComponent{
 public:
 

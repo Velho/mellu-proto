@@ -1,11 +1,15 @@
 #ifndef PROTO_DROPGRAPHICSCOMPONENT_H
 #define PROTO_DROPGRAPHICSCOMPONENT_H
 
-#include "GameObject.h"
+#include "GraphicsComponent.h"
+
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 namespace Proto {
 
 class DropPhysicsComponent;
+class GameObject;
 
 /**
  * \brief The DropGraphicsComponent class
@@ -24,7 +28,8 @@ public:
     }
     ~DropGraphicsComponent() { }
 
-    virtual void update(GameObject &, sf::RenderTarget &) override;
+    virtual void update(GameObject &) override;
+    virtual void draw(sf::RenderTarget&, sf::RenderStates) const override;
 private:
     sf::CircleShape drop_shape;
     sf::CircleShape target_shape;

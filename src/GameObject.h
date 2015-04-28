@@ -20,7 +20,7 @@ class World;
  * This topic has been discussed here: http://gameprogrammingpatterns.com/component.html
  * 
  */
-class GameObject {
+class GameObject : public sf::Drawable {
 public:
     GameObject(InputComponent *i, PhysicsComponent *p, GraphicsComponent *g) :
         input{ i }, physics{ p }, graphics{ g }
@@ -28,7 +28,7 @@ public:
 
     void handle_input(sf::Event&);
     void update(World&);
-    void draw(sf::RenderTarget&);
+    virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
     static std::unique_ptr<GameObject> create_gameobject(
             InputComponent* i,
