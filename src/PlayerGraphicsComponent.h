@@ -17,8 +17,11 @@ public:
 
     ~PlayerGraphicsComponent() { }
 
-    virtual void update(GameObject&, sf::RenderTarget&) override;
+    virtual void update(GameObject&);
+    virtual void draw(sf::RenderTarget&, sf::RenderStates) const override;
 
+    sf::FloatRect get_global_bounds() const { return shape.getGlobalBounds(); }
+    sf::RectangleShape &get_shape() { return shape; }
 private:
     sf::RectangleShape shape;
     sf::View &view;
