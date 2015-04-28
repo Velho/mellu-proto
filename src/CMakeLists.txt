@@ -12,10 +12,16 @@ set(IMPORTANTSRC
     ${RESSRC} ${LVLSRC}
     ${DEVCONSRC} ${DBSRC})
 
+# Rnd Gen
+set(RNDGEN_SRC src/RandomGen.h src/RandomGen.cpp)
+set(RNDR_SRC src/Renderer.h src/Renderer.cpp)
+
 # Map specific
 set(MAPSRC src/Map.h src/Map.cpp)
 set(MFILESRC src/MapFile.h src/MapFile.cpp)
 set(MAPOBJSRC src/MapObject.h src/MapObject.cpp)
+
+set(DECO_SRC src/Deco.h src/Deco.cpp)
 
 set(WORLDSRC src/World.h src/World.cpp)
 
@@ -55,14 +61,19 @@ set(EVENTS ${EVTBASE} ${EVTFILESRC} ${EVENTSRC} ${EVENTOBJSRC} ${EVTTABLESRC})
 set(DROPMECHANICCMP ${DROPPINSRC} #${EVENTSRC} ${DROPOBJSRC})
     ${DROPGRAPHICS} ${DROPPHYSICS} ${DROPINPUT})
 
+set(AABB_SRC src/BoundingBox.h src/BoundingBox.cpp)
+
 # Add events
 add_subdirectory(events)
 
 set(SRC_LIST
     ${IMPORTANTSRC}
+    ${RNDGEN_SRC}
+    ${RNDR_SRC}
     ${MAPSRC}
     ${MFILESRC}
     ${MAPOBJSRC}
+    ${DECO_SRC}
     ${WORLDSRC}
     ${COMPONENTS}
     ${GAMEOBJSRC}
@@ -71,5 +82,6 @@ set(SRC_LIST
     ${MOVEMAPOBJ}
     ${EVENTS}
     ${SRC_EVENTS}
+    ${AABB_SRC}
     PARENT_SCOPE)
 
