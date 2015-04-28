@@ -36,6 +36,8 @@ private:
 
     void complete_event_platform();
     void update_platform_behavior(GameObject&, World&);
+
+    void trigger_event(World&);
 };
 
 }

@@ -3,6 +3,7 @@
 #include "World.h"
 #include "PlayerPhysicsComponent.h"
 #include "Event.h"
+#include "Droppin.h"
 
 #include <iostream>
 
@@ -30,7 +31,8 @@ void PlayerEventManager::apply_event_collision(GameObject &gobj, World &world)
 
             if(evt_obj != obj.get()) { // If same object dont assign.
                 evt_obj = obj.get();
-                evt_obj->get_event()->set_state(Event::EventState::Trigger);
+
+                trigger_event(world);
             }
 
             evt_coll = true;
@@ -54,7 +56,7 @@ void PlayerEventManager::complete_event_platform()
 	 *
 	 * TODO Implement support for Double Platform.
 	 */
-    if(!evt_coll && evt_obj && plr_phy.fall_obj != nullptr) {
+    if(!evt_coll && evt_obj && plr_phy.fall_obj != nullptr && evt_obj->get_event() != nullptr) {
 		if(evt_obj->get_event()->get_type() == Event::EventType::Platform) {
 			std::cout << "Completed?" << std::endl;
 			evt_obj->get_event()->set_state(Event::EventState::Completed);
@@ -66,6 +68,11 @@ void PlayerEventManager::complete_event_platform()
 void PlayerEventManager::update_platform_behavior(GameObject &gobj, World &world)
 {
 
+}
+
+void PlayerEventManager::trigger_event(World &world)
+{
+    world.get_droppin()->activate_event(evt_obj->get_event());
 }
 
 }
