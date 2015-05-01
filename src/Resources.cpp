@@ -2,16 +2,16 @@
 
 #include <iostream>
 
-using Proto::Resources;
+namespace Proto {
 
 std::string font_dir{ "data/font/" };
-std::map<std::string, Resources::Fonts> available_fonts {
-    { font_dir + "arial.ttf", Resources::Fonts::Arial }
+std::map<std::string, Fonts> available_fonts {
+    { font_dir + "arial.ttf", Fonts::Arial }
 };
 
 std::string svg_dir{ "data/tex/" };
-std::map<std::string, Resources::Textures> available_svgs {
-    { svg_dir + "testi-png.png", Resources::Textures::Testi }
+std::map<std::string, Textures> available_svgs {
+    { svg_dir + "testi-png.png", Textures::Testi }
 };
 
 void Resources::load_fonts()
@@ -44,12 +44,14 @@ void Resources::load_textures()
 }
 
 
-sf::Font *Resources::getFont(Resources::Fonts id)
+sf::Font *Resources::getFont(Fonts id)
 {
     return fonts[id].get();
 }
 
-sf::Texture *Resources::getTex(Resources::Textures id)
+sf::Texture *Resources::getTex(Textures id)
 {
     return svgs[id].get();
+}
+
 }

@@ -11,6 +11,20 @@
 namespace Proto {
 
 /*!
+ *\brief Fonts enum class
+ */ 
+enum class Fonts {
+    Arial
+};
+/*!
+ *\brief Textures enum class
+ * 
+ */
+enum class Textures {
+    Testi
+};
+
+/*!
  * \brief The Resources class
  * Manages the lifetime of all resources used
  * by this prototype. Fonts, textures, etc.
@@ -18,14 +32,6 @@ namespace Proto {
  */
 class Resources {
 public:
-
-    enum class Fonts {
-        Arial
-    };
-
-    enum class Textures {
-        Testi
-    };
 
     ///< Aliases for memory managed pointers.
     using FontPtr = std::unique_ptr<sf::Font>;
