@@ -161,7 +161,6 @@ void Game::draw()
     if(edit_draw == true)
         window.draw(temp_obj);
 
-    window.draw(deco);
     window.draw(*player);
     world->draw(window);
 

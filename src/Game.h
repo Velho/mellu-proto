@@ -10,8 +10,6 @@
 // Let's get some command line options.
 #include <boost/program_options.hpp>
 
-#include "Deco.h"
-
 namespace Proto {
 
 class Droppin;
@@ -36,8 +34,6 @@ private:
 
     Level level_info; ///< Keeps current level.
     std::unique_ptr<World> world; ///< World object => Draws maps & events according to Level.
-
-    Deco deco;
 
     ///! Used as temporary object for Map editing.
     MapObject temp_obj;
