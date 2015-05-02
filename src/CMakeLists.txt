@@ -14,14 +14,19 @@ set(IMPORTANTSRC
 
 # Rnd Gen
 set(RNDGEN_SRC src/RandomGen.h src/RandomGen.cpp)
-set(RNDR_SRC src/Renderer.h src/Renderer.cpp)
+
+set(RENDER_SRC src/Renderer.h src/Renderer.cpp)
+set(RNDROBJ_SRC src/RenderObject.h src/RenderObject.cpp)
+set(RNDR_SRC ${RENDER_SRC} ${RNDROBJ_SRC})
 
 # Map specific
 set(MAPSRC src/Map.h src/Map.cpp)
 set(MFILESRC src/MapFile.h src/MapFile.cpp)
 set(MAPOBJSRC src/MapObject.h src/MapObject.cpp)
 
-set(DECO_SRC src/Deco.h src/Deco.cpp)
+set(DECOIMP_SRC src/Decoration.h src/Decoration.cpp)
+set(DECOFILE_SRC src/DecorationFile.h src/DecorationFile.cpp)
+set(DECO_SRC ${DECOIMP_SRC} ${DECOFILE_SRC})
 
 set(WORLDSRC src/World.h src/World.cpp)
 
