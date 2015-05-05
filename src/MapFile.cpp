@@ -59,11 +59,9 @@ std::vector<std::unique_ptr<MapObject>> MapFile::load()
 
     std::vector<std::unique_ptr<MapObject>> results;
 
-    // TODO Bracket madness.
-    auto l_row = [&results](Query::Row r) {
+    qry.iterate([&results](Query::Row r) {
         results.emplace_back(std::unique_ptr<MapObject>(new MapObject(MapObjectRow(r).get_map_obj())));
-    };
-    qry.iterate(l_row); // Iterate the results.
+    }); // Iterate the results.
 
     return results;
 }
