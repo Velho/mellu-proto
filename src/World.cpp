@@ -57,6 +57,11 @@ std::vector<std::unique_ptr<MapObject>> &World::get_map_objects()
     return current_map->get_objects();
 }
 
+std::vector<EventObject::EvtObjectPtr> &World::get_evt_objects()
+{
+    return current_evts->get_evt_objects();
+}
+
 void World::add_event_object(EventObject obj)
 {
     current_evts->add_event_obj(obj);
@@ -65,11 +70,6 @@ void World::add_event_object(EventObject obj)
 void World::save_events()
 {
     current_evts->save_objs();
-}
-
-std::vector<EventObject::EvtObjectPtr> &World::get_evt_objects()
-{
-    return current_evts->get_evt_objects();
 }
 
 Droppin *World::get_droppin()

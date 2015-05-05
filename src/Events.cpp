@@ -1,12 +1,11 @@
 #include "Events.h"
 #include "EventObject.h"
-
 #include "EventTable.h"
-#include "Droppin.h"
 
 #include "World.h"
-
 #include "Event.h"
+
+#include "Droppin.h"
 
 namespace Proto {
 
@@ -54,7 +53,7 @@ void Events::init_evts()
 	evt_table->retrieve_events();
 
 	for(auto &eobj : evt_objs) {
-		int id = eobj->get_id();
+		int id = eobj->get_evt_table_id();
 		eobj->set_event((*evt_table)[id]);
 		std::cout << "set event : " << id << std::endl;
 	}
@@ -65,7 +64,8 @@ void Events::update_evts()
     for(auto &obj : evt_objs) {
         if(obj->get_event() != nullptr) {
 			switch(obj->get_event()->get_state()) {
-				case Event::EventState::Idle: return; // Do nothing on idle.
+				case Event::EventState::Idle:
+				    return; // Do nothing on idle.
 
 				case Event::EventState::Trigger:
 					obj->get_event()->on_trigger(*obj);

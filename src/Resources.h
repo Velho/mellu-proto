@@ -18,7 +18,10 @@ enum class Fonts {
 };
 /*!
  *\brief Textures enum class
- * 
+ * Textures enum class is used to get
+ * correct sf::Texture for specified sprite.
+ * Also Textures enum class is used when refering
+ * in layout table as integer.
  */
 enum class Textures {
     Testi
