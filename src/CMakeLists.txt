@@ -19,6 +19,8 @@ set(RENDER_SRC src/Renderer.h src/Renderer.cpp)
 set(RNDROBJ_SRC src/RenderObject.h src/RenderObject.cpp)
 set(RNDR_SRC ${RENDER_SRC} ${RNDROBJ_SRC})
 
+set(LAYOUT_SRC src/LayoutFile.h src/LayoutFile.cpp)
+
 # Map specific
 set(MAPSRC src/Map.h src/Map.cpp)
 set(MFILESRC src/MapFile.h src/MapFile.cpp)
@@ -88,5 +90,6 @@ set(SRC_LIST
     ${EVENTS}
     ${SRC_EVENTS}
     ${AABB_SRC}
+    ${LAYOUT_SRC}
     PARENT_SCOPE)
 
