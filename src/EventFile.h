@@ -40,6 +40,8 @@ public:
 
 private:
     std::string filename;
+
+    int get_index(EventObject*, int);
 };
 }
 

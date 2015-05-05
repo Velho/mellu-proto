@@ -27,10 +27,10 @@ public:
 
     using EvtObjectPtr = std::unique_ptr<EventObject>;
 
-    EventObject(): event{ nullptr }, id{ 0 } {}
+    EventObject(): event{ nullptr }, evt_table_id{ 0 }, evt_id{ 0 } {}
 
-    EventObject(sf::Vector2f pos, sf::Vector2f sz, int i) :
-        shape{ sz }, id{ i }, event{ nullptr }
+    EventObject(sf::Vector2f pos, sf::Vector2f sz, int ei, int id) :
+        shape{ sz }, evt_table_id{ ei }, evt_id{ id }, event{ nullptr }
     {
         set_position(pos);
         set_color(sf::Color::Red);
@@ -65,7 +65,7 @@ public:
      * Reference to copy object.
      */
     EventObject(const EventObject &evt) :
-        shape{ evt.shape }, event{ evt.event }, id{ evt.id }
+        shape{ evt.shape }, event{ evt.event }, evt_table_id{ evt.evt_table_id }, evt_id{ evt.evt_id }
     { }
 
     /*!
@@ -133,12 +133,19 @@ public:
      * Returns Event's id.
      *\sa EventTable class
      */
-    int get_id() const { return id; }
+    int get_evt_table_id() const { return evt_table_id; }
+
+    /*!
+     *\brief
+     * Returns EventObject's index(Index as in table).
+     */
+    int get_evt_id() const { return evt_id; }
 
 private:
     sf::RectangleShape shape;
     Event *event; ///< Event pointer is managed by the EventObject.
-    int id;
+    int evt_table_id;
+    int evt_id;
 
     void set_color(sf::Color clr)
     {

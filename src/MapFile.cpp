@@ -8,6 +8,7 @@
 namespace Proto {
 
 struct MapObjectRow {
+    int id;
     float x, y;
     float width, height;
     float angle;
@@ -25,28 +26,36 @@ struct MapObjectRow {
     { }
 
     MapObjectRow(float _x, float _y, float _width, float _height, float _angle) :
-        x{ _x }, y{ _y }, width{ _width }, height{ _height }, angle{ _angle }
+        MapObjectRow(_x, _y, _width, _height, _angle, 0)
     { }
-
+    MapObjectRow(float _x, float _y, float _width, float _height,
+            float _angle, int _id) :
+        x{ _x }, y{ _y }, width{ _width }, height{ _height },
+        angle{ _angle }, id{ _id }
+    { } 
     /*!
      * \brief MapObjectRow
      * Constructs RowObject out of database.
      * \param r
      */
     MapObjectRow(Query::Row r) :
-        MapObjectRow(r.get_double(0), r.get_double(1), r.get_double(2), r.get_double(3), r.get_double(4))
+        MapObjectRow(r.get_double(0), r.get_double(1),
+                r.get_double(2), r.get_double(3),
+                r.get_double(4), r.get_int(5))
     { }
 
     MapObject get_map_obj()
     {
-        return MapObject(sf::Vector2f(width, height), sf::Vector2f(x, y), angle);
+        return MapObject(
+                sf::Vector2f(width, height), 
+                sf::Vector2f(x, y), angle, id);
     }
 };
 
 std::vector<std::unique_ptr<MapObject>> MapFile::load()
 {
     Database db(filename);
-    Query qry(db, "SELECT x, y, width, height, angle FROM map;");
+    Query qry(db, "SELECT x, y, width, height, angle, id FROM map;");
 
     std::vector<std::unique_ptr<MapObject>> results;
 

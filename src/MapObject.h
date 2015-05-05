@@ -10,23 +10,31 @@ namespace Proto {
  *  Specific object or shape on the Map.
  * TODO Construction with size first is confusing
  *      => Change the argument order.
+ * TODO Fix the dependancy of MapObject class, its HORRIBLE.
  */
 class MapObject : public sf::Drawable {
 public:
-    MapObject() { }
+    MapObject() :
+        MapObject(sf::Vector2f(), sf::Vector2f(), 0.f, 0)
+    { }
     MapObject(sf::Vector2f sz) :
-        shape{ sz }
+        MapObject(sz, sf::Vector2f(), 0.f, 0) 
     { }
     MapObject(sf::Vector2f sz, sf::Vector2f pos) :
-        MapObject(sz)
+        MapObject(sz, pos, .0f, 0) 
     {
-        set_position(pos);
     }
 
     MapObject(sf::Vector2f sz, sf::Vector2f pos, float angle) :
-        MapObject(sz, pos)
+        MapObject(sz, pos, angle, 0)
+    {
+    }
+
+    MapObject(sf::Vector2f sz, sf::Vector2f pos, float angle, int i) :
+        shape{ sz }, id{ i }
     {
         set_rotation(angle);
+        set_position(pos);
     }
 
     ///
@@ -69,6 +77,8 @@ public:
 
     sf::FloatRect get_frect() const;
 
+    int get_id() const { return id; }
+
     void set_rotation(float);
     float get_rotation() const;
 
@@ -84,6 +94,7 @@ public:
 
 private:
     sf::RectangleShape shape;
+    int id;
 };
 
 }

@@ -6,7 +6,7 @@
 namespace Proto {
 
 EventObject::EventObject(const MapObject &mobj) :
-    shape{ mobj.get_size() }, event{ nullptr }, id{ 0 }
+    shape{ mobj.get_size() }, event{ nullptr }, evt_id{ 0 }, evt_table_id{ 0 }
 {
     set_position(mobj.get_position());
     set_color(sf::Color::Red);
