@@ -3,7 +3,6 @@
 #include "EventFile.h"
 #include "Events.h"
 
-#include <sstream>
 #include <iostream>
 
 namespace Proto {
@@ -82,26 +81,46 @@ void EventFile::save(Events &evt)
 
     db.exec("DELETE FROM events;"); // Drop the table.
 
+    std::vector<EventObject*> new_objects; // New objects without index.
+    std::ostringstream ins_sql;
     int idx{ 1 };
-    for(auto &obj : evt.evt_objs) {
-        std::ostringstream ins_sql;
-        // Insert query.
-        ins_sql << "INSERT INTO events(evt_id, x, y, width, height, evt_table_id) VALUES(";
-        ins_sql << get_index(obj.get(), idx) << ", " << obj->get_position().x << ", " << obj->get_position().y << ", ";
-        ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", ";
-        ins_sql << obj->get_evt_table_id() << ");";
 
-        db.exec(ins_sql.str());
+    for(auto &obj : evt.evt_objs) {
+        if(has_index(obj.get())) {
+            // Insert query.
+            ins_sql << "INSERT INTO events(evt_id, x, y, width, height, evt_table_id) VALUES(";
+            ins_sql << obj->get_evt_id() << ", " << obj->get_position().x << ", " << obj->get_position().y << ", ";
+            ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", ";
+            ins_sql << obj->get_evt_table_id() << ");";
+        } else
+            new_objects.push_back(obj.get());
+
         idx++;
     }
+
+    // Prepare objects without index.
+    insert_new_objs(new_objects, ins_sql);
+
+    // Execute query.
+    db.exec(ins_sql.str());
 }
 
-int EventFile::get_index(EventObject *e_obj, int counter)
+bool EventFile::has_index(EventObject *e_obj)
 {
-	if(e_obj->get_evt_id() == 0)
-		return counter;
+    if(e_obj->get_evt_id() != 0)
+        return true;
 
-	return e_obj->get_evt_id();
+    return false;
+}
+
+void EventFile::insert_new_objs(std::vector<EventObject*> &evt_vec, std::ostringstream &ins_sql)
+{
+    for(auto obj : evt_vec) {
+        ins_sql << "INSERT INTO events(x, y, width, height, evt_table_id) VALUES(";
+        ins_sql << obj->get_position().x << ", " << obj->get_position().y << ", ";
+        ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", ";
+        ins_sql << obj->get_evt_table_id() << ");";
+    }
 }
 
 }

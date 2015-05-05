@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <sstream>
 
 namespace Proto {
 
@@ -41,7 +42,8 @@ public:
 private:
     std::string filename;
 
-    int get_index(EventObject*, int);
+    bool has_index(EventObject*);
+    void insert_new_objs(std::vector<EventObject*>&, std::ostringstream&);
 };
 }
 
