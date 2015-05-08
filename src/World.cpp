@@ -37,9 +37,9 @@ sf::FloatRect World::get_rect(std::size_t idx) const
 
 /** Interfacing Map class **/
 
-void World::add_map_object(Proto::MapObject obj)
+void World::add_map_object(MapObject obj)
 {
-    current_map->add_object(Proto::MapObject(obj));
+    current_map->add_object(obj);
 }
 
 void World::save_map()
