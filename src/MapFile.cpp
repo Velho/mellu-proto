@@ -67,45 +67,18 @@ std::vector<std::unique_ptr<MapObject>> MapFile::load()
 void MapFile::save(Map &map)
 {
     Database db(filename);
+    std::ostringstream ins_sql;
 
     db.exec("DELETE FROM map;"); // Clear the map table(Maybe not the best way...).
 
-    std::vector<MapObject*> new_objects;
-    std::ostringstream ins_sql;
-    int idx{ 1 };
-
     for(auto &obj : map.objects) {
-
-        if(has_index(obj.get())) {
-            // Construct sql statement.
-            ins_sql << "INSERT INTO map(id, x, y, width, height, angle) VALUES(";
-            ins_sql << idx << ", " << obj->get_position().x << ", " << obj->get_position().y << ", ";
-            ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", " << obj->get_rotation() << ");";
-        } else
-            new_objects.push_back(obj.get());
-
-        idx++;
-    }
-
-    insert_new_objects(new_objects, ins_sql);
-    db.exec(ins_sql.str());
-}
-
-bool MapFile::has_index(MapObject *m_obj)
-{
-    if(m_obj->get_id() != 0)
-        return true;
-
-    return false;
-}
-
-void MapFile::insert_new_objects(std::vector<MapObject*> &map_vec, std::ostringstream &ins_sql)
-{
-    for(auto obj : map_vec) {
-        ins_sql << "INSERT INTO map(x, y, width, height, angle) VALUES(";
-        ins_sql << obj->get_position().x << ", " << obj->get_position().y << ", ";
+        // Construct sql statement.
+        ins_sql << "INSERT INTO map(id, x, y, width, height, angle) VALUES(";
+        ins_sql << obj->get_id() << ", " << obj->get_position().x << ", " << obj->get_position().y << ", ";
         ins_sql << obj->get_size().x << ", " << obj->get_size().y << ", " << obj->get_rotation() << ");";
     }
-}
 
+    //insert_new_objects(new_objects, ins_sql);
+    db.exec(ins_sql.str());
+}
 } // Namespace Proto
