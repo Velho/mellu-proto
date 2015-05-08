@@ -119,8 +119,15 @@ public:
 
     /*!
      *\brief
+     * Sets the Event pointer.
      */
     void set_event(Event*);
+
+    /*!
+     *\brief
+     *
+     */
+    void set_evt_id(int id) { evt_id = id; }
     /*!
      *\brief
      * Returns pointer to EventObject's Event.
@@ -144,8 +151,8 @@ public:
 private:
     sf::RectangleShape shape;
     Event *event; ///< Event pointer is managed by the EventObject.
-    int evt_table_id;
-    int evt_id;
+    int evt_table_id; ///< Index to Event table containing the Event pointer.
+    int evt_id; ///< Event table index.
 
     void set_color(sf::Color clr)
     {

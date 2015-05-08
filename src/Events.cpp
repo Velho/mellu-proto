@@ -25,6 +25,10 @@ Events::~Events()
 
 void Events::add_event_obj(EventObject &obj)
 {
+    // New eventobject will get the index by the amount of objects in the container.
+    if(obj.get_evt_id() == 0)
+        obj.set_evt_id(evt_objs.size() + 1);
+
     evt_objs.emplace_back(std::unique_ptr<EventObject>(new EventObject(obj)));
 }
 
@@ -54,7 +58,8 @@ void Events::init_evts()
 
 	for(auto &eobj : evt_objs) {
 		int id = eobj->get_evt_table_id();
-		eobj->set_event((*evt_table)[id]);
+		auto event = (*evt_table)[id];
+		eobj->set_event(event);
 		std::cout << "set event : " << id << std::endl;
 	}
 }

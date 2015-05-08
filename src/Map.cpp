@@ -1,10 +1,8 @@
 #include "Map.h"
 
-using Proto::Map;
-using Proto::MapFile;
-using Proto::MapObject;
-
 #include <iostream>
+
+namespace Proto {
 
 Map::Map(std::string file) : mapfile(file), objsaved{ 0 }, reload{ false }
 {
@@ -17,6 +15,9 @@ Map::~Map()
 
 void Map::add_object(MapObject obj)
 {
+    if(obj.get_id() == 0)
+        obj.set_id(objects.size() + 1);
+
     objects.emplace_back(std::unique_ptr<MapObject>(new MapObject(obj)));
 }
 
@@ -38,7 +39,7 @@ void Map::save_map()
         std::cout << "Saving current map " << mapfile.getFilename() << std::endl;
         std::cout << "Objects : " << std::endl;
 
-        print_info();
+        //print_info();
 
         objsaved = objects.size();
         mapfile.save(*this);
@@ -60,4 +61,5 @@ void Map::print_info()
         std::cout << "x y : " << obj->get_position().x << " " << obj->get_position().y;
         std::cout << " w h : " << obj->get_size().x << " " << obj->get_size().y << std::endl;
     }
+}
 }

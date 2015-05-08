@@ -23,6 +23,12 @@ public:
     Map(std::string file);
     ~Map();
 
+    /*!
+     *\brief
+     * Adds new MapObject into objects container.
+     * This method is primarily used from the Editor
+     * so it also manages the index for table.
+     */
     void add_object(MapObject);
 
     void update();

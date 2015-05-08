@@ -44,7 +44,7 @@ public:
     /// Reference to object from the Copy is made.
     ///
     MapObject(const MapObject &obj) :
-        shape{ obj.shape }
+        shape{ obj.shape }, id{ obj.id }
     { }
     ///
     /// \brief operator =
@@ -57,6 +57,7 @@ public:
     MapObject &operator=(const MapObject &obj)
     {
         shape = obj.shape;
+        id = obj.id;
 
         return *this;
     }
@@ -72,11 +73,33 @@ public:
      */
     void set_size(sf::Vector2f);
 
+    /*!
+     *\brief
+     * Returns sf::Vector2f containing MapObject's position as constant.
+     */
     sf::Vector2f get_position() const;
+    /*!
+     *\brief
+     * Returns sf::Vector2f containing MapObject's size as constant.
+     */
     sf::Vector2f get_size() const;
-
+    /*!
+     *\brief
+     * Returns sf::FloatRect constructed from position and size.
+     * Note, Doesn't take transform into account.
+     */
     sf::FloatRect get_frect() const;
 
+    /*!
+     *\brief
+     * Sets the Event id.
+     * Id is index from table.
+     */
+    void set_id(int _id) { id = _id; }
+    /*!
+     *\brief
+     * Returns id as constant
+     */
     int get_id() const { return id; }
 
     void set_rotation(float);
@@ -93,8 +116,8 @@ public:
     }
 
 private:
-    sf::RectangleShape shape;
-    int id;
+    sf::RectangleShape shape; ///< Shape for physics calculations.
+    int id; ///< Table index.
 };
 
 }

@@ -20,6 +20,13 @@ public:
     Events(std::string);
     ~Events();
 
+    /*!
+     *\brief
+     * Adds new EventObject into evt_objs vector container.
+     * This method is used when new objects are created through
+     * editor feature.
+     *\sa EventObject class
+     */
     void add_event_obj(EventObject&);
 
     void save_objs();
