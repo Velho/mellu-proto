@@ -18,7 +18,7 @@ class EventObject;
  * CREATE TABLE events(
  *      evt_id INTEGER PRIMARY KEY AUTOINCREMENT,
  *      x float, y float, width float, height float,
- *      evt_type int, evt_table_id int);
+ *      evt_table_id int);
  *
  * Insert evt_table_id by hand because there's no ui currently that does it.
  */
@@ -41,9 +41,6 @@ public:
 
 private:
     std::string filename;
-
-    bool has_index(EventObject*);
-    void insert_new_objs(std::vector<EventObject*>&, std::ostringstream&);
 };
 }
 

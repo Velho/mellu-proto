@@ -50,10 +50,6 @@ public:
 
 private:
     std::string filename;
-    bool changed;
-
-    bool has_index(MapObject*);
-    void insert_new_objects(std::vector<MapObject*>&, std::ostringstream&);
 };
 
 }
