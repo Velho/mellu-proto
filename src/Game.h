@@ -6,18 +6,23 @@
 #include "GameObject.h"
 #include "MapObject.h"
 
-#include "World.h"
+#include "Level.h"
+
 // Let's get some command line options.
 #include <boost/program_options.hpp>
 
 namespace Proto {
 
 class Droppin;
+class World;
+class Renderer;
+
+class EditText;
 
 class Game {
 public:
     Game(boost::program_options::variables_map);
-
+    ~Game();
     int run();
 
 private:
@@ -33,7 +38,9 @@ private:
     int framelimit;
 
     Level level_info; ///< Keeps current level.
-    std::unique_ptr<World> world; ///< World object => Draws maps & events according to Level.
+
+    std::unique_ptr<World> world; ///< World object => Updates maps & events according to Level.
+    std::unique_ptr<Renderer> renderer; ///< Renderer object => Draws the graphical layout, textures.
 
     ///! Used as temporary object for Map editing.
     MapObject temp_obj;
@@ -43,6 +50,10 @@ private:
 
     bool editor{ false };
 
+    //std::unique_ptr<EditInput> input_edit;
+    std::vector<std::unique_ptr<EditText>> vec_texts;
+    bool show_edit_texts{ false };
+
     ///< Creates a player GameObject.
     std::unique_ptr<GameObject> create_player();
 
@@ -51,10 +62,17 @@ private:
     void update(sf::Time);
     void draw();
 
+    void editor_init(); ///< Initializes the Editor.
     void editor_add_obj(); ///< Adds map object into *map.
     void editor_rotate_obj(sf::Event&); ///< Rotate the map object.
     void editor_create_platform(); ///< Creates event object out of MapObject.
     void editor_reset_temp();       ///< Resets the temporary object.
+
+    void editor_renderer_init_obj_info();
+    void editor_renderer_add_layout();
+
+    void editor_renderer_update_text();
+    void editor_renderer_draw_text();
 
     void parse_cmd(boost::program_options::variables_map&);
     void reset_game();

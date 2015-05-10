@@ -8,6 +8,11 @@
 
 #include "Droppin.h"
 
+#include "World.h"
+#include "Renderer.h"
+
+#include "EditText.h"
+
 #include <iostream>
 
 namespace Proto {
@@ -29,6 +34,19 @@ Game::Game(boost::program_options::variables_map vars)
     level_info.select_map(Level::Maps::Proto);
 
     reset_game(); // Reset the Player and World.
+
+    /*
+    input_edit = std::unique_ptr<EditInput>(new EditInput);
+    input_edit->set_position(sf::Vector2f(20, 20));
+    input_edit->set_active(true);
+    */
+
+    if(editor)
+        editor_init();
+}
+
+Game::~Game()
+{
 }
 
 int Game::run()
@@ -113,6 +131,15 @@ void Game::editor_input(sf::Event &event)
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
             sf::Keyboard::isKeyPressed(sf::Keyboard::L))
         world->reload_map();
+
+    // get some input.
+    //input_edit->handle_input(event);
+
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F2))
+            show_edit_texts = true;
+        else
+            show_edit_texts = false;
 }
 
 void Game::handle_input(sf::Event &event)
@@ -151,6 +178,9 @@ void Game::update(sf::Time time)
     player->update(*world);
 
     world->update();
+
+    editor_renderer_update_text();
+    //input_edit->update();
 }
 
 ///! Draw the game.
@@ -163,6 +193,9 @@ void Game::draw()
 
     window.draw(*player);
     world->draw(window);
+
+    //input_edit->draw(window);
+    editor_renderer_draw_text();
 
     window.display();
 }
@@ -213,6 +246,9 @@ void Game::reset_game()
 
     // Create world.
     world = level_info.get_world();
+
+    // Initialize renderer.
+    renderer = std::unique_ptr<Renderer>(new Renderer(level_info, world.get()));
 }
 
 void Game::reset_player()
@@ -221,6 +257,11 @@ void Game::reset_player()
     player->set_position(sf::Vector2f(150, 225));
     // Annoying glitch when player is falling too fast, it falls straight through the map object...
     static_cast<PlayerPhysicsComponent*>(player->get_physics())->reset();
+}
+
+void Game::editor_init()
+{
+    editor_renderer_init_obj_info();
 }
 
 void Game::editor_add_obj()
@@ -235,8 +276,6 @@ void Game::editor_reset_temp()
 {
     edit_draw = false;
     event_object = false;
-
-
 }
 
 void Game::editor_rotate_obj(sf::Event &event)
@@ -248,6 +287,51 @@ void Game::editor_rotate_obj(sf::Event &event)
             temp_obj.set_rotation(temp_obj.get_rotation()  + data);
         }
     }
+}
+
+void Game::editor_renderer_add_layout()
+{
+}
+
+void Game::editor_renderer_init_obj_info()
+{
+    // Add MapObjects information.
+    for(auto &m_obj : world->get_map_objects()) {
+        std::string m_id_str("M : " + std::to_string(m_obj->get_id()));
+
+        // Print map id's.
+        vec_texts.emplace_back(std::unique_ptr<EditText>(
+            new EditText(m_obj->get_position(), m_id_str)));
+    }
+
+    // Add EventObjects information.
+    for(auto &e_obj : world->get_evt_objects()) {
+        std::string e_id_str("E : " + std::to_string(e_obj->get_evt_id()));
+
+        vec_texts.emplace_back(std::unique_ptr<EditText>(
+                new EditText(e_obj->get_position(), e_id_str)));
+    }
+}
+
+void Game::editor_renderer_update_text()
+{
+    for(auto &t : vec_texts) {
+        if(show_edit_texts)
+            t->set_show(true);
+        else
+            t->set_show(false);
+
+        t->update();
+    }
+}
+
+void Game::editor_renderer_draw_text()
+{
+    if(!show_edit_texts)
+        return;
+
+    for(auto &t : vec_texts)
+        t->draw(window);
 }
 
 }
