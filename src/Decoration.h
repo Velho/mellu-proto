@@ -69,6 +69,14 @@ public:
     }
     sf::Vector2f get_size() const;
 
+    /*!
+     *\brief
+     * Returns Decoration's table index.
+     */
+    int get_id() const { return id; }
+
+    void set_id(int i) { id = i; }
+
 private:
     sf::Sprite decoration;
     int id;
