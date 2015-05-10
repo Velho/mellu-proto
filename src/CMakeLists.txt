@@ -6,11 +6,15 @@ set(RESSRC src/Resources.h src/Resources.cpp)
 set(LVLSRC src/Level.h src/Level.cpp)
 set(DBSRC src/Database.h src/Database.cpp)
 
+set(EDITINPUT_SRC src/EditInput.h src/EditInput.cpp)
+set(EDITTEXT_SRC src/EditText.h src/EditText.cpp)
+
 # Lists all important modules.
 set(IMPORTANTSRC 
     ${MAINSRC} ${GAMESRC} 
     ${RESSRC} ${LVLSRC}
-    ${DEVCONSRC} ${DBSRC})
+    ${DEVCONSRC} ${DBSRC}
+    ${EDITINPUT_SRC} ${EDITTEXT_SRC})
 
 # Rnd Gen
 set(RNDGEN_SRC src/RandomGen.h src/RandomGen.cpp)
@@ -19,7 +23,9 @@ set(RENDER_SRC src/Renderer.h src/Renderer.cpp)
 set(RNDROBJ_SRC src/RenderObject.h src/RenderObject.cpp)
 set(RNDR_SRC ${RENDER_SRC} ${RNDROBJ_SRC})
 
-set(LAYOUT_SRC src/LayoutFile.h src/LayoutFile.cpp)
+set(LAYOUTFILE_SRC src/LayoutFile.h src/LayoutFile.cpp)
+set(LAYOBJ_SRC src/Layout.h src/Layout.cpp)
+set(LAYOUT_SRC ${LAYOUTFILE_SRC} ${LAYOBJ_SRC})
 
 # Map specific
 set(MAPSRC src/Map.h src/Map.cpp)
