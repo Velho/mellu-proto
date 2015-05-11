@@ -21,14 +21,18 @@ namespace Proto {
  */
 class EditInput {
 public:
+
+    using InputCallback = std::function<void(std::string)>;
+
     EditInput();
     EditInput(sf::Vector2f);
+    EditInput(sf::Vector2f, InputCallback);
 
     void handle_input(sf::Event&);
     void update();
     void draw(sf::RenderTarget&);
 
-    std::function<void(std::string)> result_callback;
+    InputCallback result_callback;
 
     void set_position(sf::Vector2f pos)
     {
@@ -36,7 +40,13 @@ public:
         text.setPosition(pos);
     }
 
-    void set_active(bool a) { active = a; }
+    void set_active(bool a)
+    {
+        active = a;
+
+        if(!is_active()) // Clear buffer if deactivating.
+            buffer.clear();
+    }
     bool is_active() const { return active; }
 
 private:

@@ -1,6 +1,23 @@
 #include "Layout.h"
+#include "Resources.h"
+#include "RenderObject.h"
 
 namespace Proto {
+
+Layout::Layout() : Layout(0, 0)
+{ }
+
+Layout::Layout(int _id, int _obj_id) :
+        Layout(_id, _obj_id, RenderType::None)
+{ }
+
+Layout::Layout(int _id, int _obj_id, RenderType type) :
+        Layout(_id, _obj_id, type, Textures::None)
+{ }
+
+Layout::Layout(int _id, int _obj_id, RenderType type, Textures tex) :
+        Layout(_id, _obj_id, type, tex, 0)
+{ }
 
 Layout::Layout(
         int _id, int _obj_id,

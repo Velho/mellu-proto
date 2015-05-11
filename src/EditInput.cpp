@@ -19,13 +19,19 @@ EditInput::EditInput(sf::Vector2f pos) : active{ false }
     textback.setFillColor(sf::Color::Black);
 }
 
+EditInput::EditInput(sf::Vector2f pos, InputCallback cb) :
+        EditInput(pos)
+{
+    result_callback = cb;
+}
+
 void EditInput::handle_input(sf::Event &event)
 {
     if(event.type == sf::Event::TextEntered) {
         if(event.text.unicode == 8 && buffer.size() != 0) {
             buffer.pop_back();
         } else if(event.text.unicode == 13) {
-            if(result_callback != nullptr)
+            if(result_callback != nullptr && active)
                 result_callback(buffer);
             active = false;
         } else if(event.text.unicode > 31 && event.text.unicode < 128)

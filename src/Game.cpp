@@ -11,6 +11,7 @@
 #include "World.h"
 #include "Renderer.h"
 
+#include "EditInput.h"
 #include "EditText.h"
 
 #include <iostream>
@@ -140,6 +141,16 @@ void Game::editor_input(sf::Event &event)
             show_edit_texts = true;
         else
             show_edit_texts = false;
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F3)) {
+        if(!fill_layout) {
+            fill_layout = true;
+            active_input = 0;
+        }
+    }
+
+    for(auto &t : vec_inputs)
+        t->handle_input(event);
 }
 
 void Game::handle_input(sf::Event &event)
@@ -180,7 +191,7 @@ void Game::update(sf::Time time)
     world->update();
 
     editor_renderer_update_text();
-    //input_edit->update();
+    editor_renderer_update_inputs();
 }
 
 ///! Draw the game.
@@ -262,6 +273,7 @@ void Game::reset_player()
 void Game::editor_init()
 {
     editor_renderer_init_obj_info();
+    editor_renderer_init_inputs();
 }
 
 void Game::editor_add_obj()
@@ -291,6 +303,7 @@ void Game::editor_rotate_obj(sf::Event &event)
 
 void Game::editor_renderer_add_layout()
 {
+
 }
 
 void Game::editor_renderer_init_obj_info()
@@ -313,6 +326,102 @@ void Game::editor_renderer_init_obj_info()
     }
 }
 
+void Game::editor_renderer_init_inputs()
+{
+    Layout &ref_temp = temp_lay;
+    int &current = active_input;
+
+    vec_inputs.emplace_back(std::unique_ptr<EditInput>(
+            new EditInput(sf::Vector2f(50, 50),
+                [&ref_temp, &current](std::string r) { // Id
+                    ref_temp = Layout(0, std::stoi(r));
+                    current++;
+                }
+    )));
+
+    vec_inputs.emplace_back(std::unique_ptr<EditInput>(
+            new EditInput(sf::Vector2f(50, 50),
+                [&ref_temp, &current](std::string r) { // Type
+                    ref_temp = Layout(0,
+                            ref_temp.get_obj_id(),
+                            static_cast<RenderType>(std::stoi(r)));
+                    current++;
+                }
+    )));
+
+
+    vec_inputs.emplace_back(std::unique_ptr<EditInput>(
+            new EditInput(sf::Vector2f(50, 50),
+                [&ref_temp, &current](std::string r) { // Texture
+                    ref_temp = Layout(0,
+                            ref_temp.get_obj_id(),
+                            ref_temp.get_render_type(),
+                            static_cast<Textures>(std::stoi(r)));
+                    current++;
+                }
+    )));
+
+    vec_inputs.emplace_back(std::unique_ptr<EditInput>(
+            new EditInput(sf::Vector2f(50, 50),
+                [&ref_temp, &current](std::string r) { // Priority
+                    ref_temp = Layout(0,
+                            ref_temp.get_obj_id(),
+                            ref_temp.get_render_type(),
+                            ref_temp.get_texture(),
+                            static_cast<int>(std::stoi(r)));
+                    current++;
+                }
+    )));
+}
+
+static int last_run = -1;
+
+void Game::editor_renderer_update_inputs()
+{
+    // Return, if fill_layout false.
+    if(!fill_layout)
+        return;
+
+    // Print on standard output what to input.
+    if(active_input != last_run) {
+        if(active_input == 0) // Id
+            std::cout << "Input : Object Id" << std::endl;
+        if(active_input == 1) // Type
+            std::cout << "Input : Object Type" << std::endl;
+        if(active_input == 2) // Texture
+            std::cout << "Input : Texture" << std::endl;
+        if(active_input == 3) // Priority
+            std::cout << "Input : Priority" << std::endl;
+    }
+
+    // It seems we are complete.
+    if(active_input == 4) {
+        fill_layout = false;
+        active_input = -1;
+
+        // Add complete Layout to renderer.
+        editor_renderer_add_layout();
+    }
+
+    // Update only the active input.
+    if(active_input != -1)
+        vec_inputs[active_input]->update();
+
+    // Activate correct input.
+    int idx{ 0 };
+    for(auto &i : vec_inputs) {
+        if(idx == active_input) {
+            i->set_active(true);
+        }
+        else
+            i->set_active(false);
+
+        idx++;
+    }
+
+    last_run = active_input;
+}
+
 void Game::editor_renderer_update_text()
 {
     for(auto &t : vec_texts) {
@@ -327,6 +436,11 @@ void Game::editor_renderer_update_text()
 
 void Game::editor_renderer_draw_text()
 {
+    if(fill_layout)
+        for(auto &t : vec_inputs)
+            if(t->is_active())
+                t->draw(window);
+
     if(!show_edit_texts)
         return;
 

@@ -5,6 +5,7 @@
 
 #include "GameObject.h"
 #include "MapObject.h"
+#include "Layout.h"
 
 #include "Level.h"
 
@@ -17,7 +18,11 @@ class Droppin;
 class World;
 class Renderer;
 
+class EditInput;
 class EditText;
+
+enum class RenderType;
+enum class Textures;
 
 class Game {
 public:
@@ -50,9 +55,13 @@ private:
 
     bool editor{ false };
 
-    //std::unique_ptr<EditInput> input_edit;
+    std::vector<std::unique_ptr<EditInput>> vec_inputs;;
     std::vector<std::unique_ptr<EditText>> vec_texts;
     bool show_edit_texts{ false };
+
+    Layout temp_lay;
+    int active_input{ -1 };
+    bool fill_layout{ false };
 
     ///< Creates a player GameObject.
     std::unique_ptr<GameObject> create_player();
@@ -68,9 +77,11 @@ private:
     void editor_create_platform(); ///< Creates event object out of MapObject.
     void editor_reset_temp();       ///< Resets the temporary object.
 
-    void editor_renderer_init_obj_info();
     void editor_renderer_add_layout();
 
+    void editor_renderer_init_obj_info();
+    void editor_renderer_init_inputs();
+    void editor_renderer_update_inputs();
     void editor_renderer_update_text();
     void editor_renderer_draw_text();
 
