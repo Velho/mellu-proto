@@ -14,6 +14,7 @@ namespace Proto {
  *\brief Fonts enum class
  */ 
 enum class Fonts {
+    None,
     Arial
 };
 /*!
@@ -24,6 +25,7 @@ enum class Fonts {
  * in layout table as integer.
  */
 enum class Textures {
+    None,
     Testi
 };
 
