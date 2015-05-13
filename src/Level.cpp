@@ -1,8 +1,7 @@
 #include "Level.h"
 #include "World.h"
 
-using Proto::Level;
-using Proto::World;
+namespace Proto {
 
 Level::Level() : current_map{ Maps::None }, data_dir("data/maps/")
 {
@@ -32,4 +31,5 @@ Level::Maps Level::str_to_maps(std::string str)
 std::unique_ptr<World> Level::get_world()
 {
     return std::unique_ptr<World>{ new World(*this) };
+}
 }
