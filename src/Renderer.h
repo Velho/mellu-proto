@@ -42,8 +42,12 @@ public:
      *\brief
      * Adds new Layout to renderer.
      */
-    void add_layout(Layout);
-    void add_decoration(Decoration);
+    void add_layout(const Layout&);
+    /*!
+     *\brief
+     * Adds new Decoration to renderer.
+     */
+    void add_decoration(const Decoration&);
 
 private:
     friend class DecorationFile;
@@ -62,6 +66,8 @@ private:
 
     void load_deco();
     void load_layout();
+
+    void apply_layouts(World*);
 
     void add_object(EventObject*);
     void add_object(GameObject*);
