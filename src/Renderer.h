@@ -41,6 +41,10 @@ public:
     /*!
      *\brief
      * Adds new Layout to renderer.
+     * Note: If passed Layout has 0 id,
+     * the layout will be const_casted and
+     * set id. The id set is index in table which
+     * is required by the SQL based database.
      */
     void add_layout(const Layout&);
     /*!

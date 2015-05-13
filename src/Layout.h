@@ -46,11 +46,37 @@ public:
         return *this;
     }
 
+    /*!
+     *\brief
+     * Set's the Layout index that is used by DB table.
+     */
+    void set_id(int i) { id = i; }
+
+    /*!
+     *\brief
+     * Returns table index.
+     */
     int get_id() const { return id; }
+    /*!
+     *\brief
+     * Returns object's id the texture belongs to.
+     */
     int get_obj_id() const { return obj_id; }
+    /*!
+     *\brief
+     * Returns priority on which order the Layouts are rendered.
+     */
     int get_priority() const { return priority; }
 
+    /*!
+     *\brief
+     * Returns render type aka which object obj_id is pointing to.
+     */
     RenderType get_render_type() const;
+    /*!
+     *\brief
+     * Returns enumeration of Texture selected.
+     */
     Textures get_texture() const;
 
 private:

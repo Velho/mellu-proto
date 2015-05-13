@@ -55,16 +55,58 @@ private:
 
     bool editor{ false };
 
-    std::vector<std::unique_ptr<EditInput>> vec_inputs;;
+    ///
+    // Used to print out information about objects.
+    ///
     std::vector<std::unique_ptr<EditText>> vec_texts;
     bool show_edit_texts{ false };
 
+    ///
+    // Layout management
+    // vec_inputs : Contains the controls to take the
+    // required input.
+    // temp_lay : Temporary layout object which
+    // which gets constructed at each step of new input.
+    // active_input : Keeps count of on which input we are
+    // currently working on also the index of active_input
+    // in vector vec_inputs gets updated.
+    // fill_layout : General boolean flag to control the input
+    // start and stop.
+    ///
+    std::vector<std::unique_ptr<EditInput>> vec_inputs;
     Layout temp_lay;
     int active_input{ -1 };
     bool fill_layout{ false };
 
+    ///
+    // Decoration management
+    ///
+    std::vector<std::unique_ptr<EditInput>> deco_inputs;
+    sf::Vector2f temp_deco_pos;
+    int deco_input{ -1 };
+    bool fill_deco{ false };
+
+
     ///< Creates a player GameObject.
     std::unique_ptr<GameObject> create_player();
+
+    /*!
+     *\brief
+     * Wraps std::stoi function to handle invalid_argument
+     * exception and returns boolean accordingly if the
+     * exception is thrown.
+     */
+    std::function<bool(const std::string&, int&)> p_stoi{
+        [](const std::string &str, int &result) -> bool {
+            try {
+                result = std::stoi(str);
+            } catch(std::invalid_argument &e) {
+                return false;
+            }
+
+            return true;
+        }
+    };
 
     void editor_input(sf::Event&); ///< Editing maps.
     void handle_input(sf::Event&);
@@ -78,10 +120,12 @@ private:
     void editor_reset_temp();       ///< Resets the temporary object.
 
     void editor_renderer_add_layout();
+    void editor_renderer_add_decoration();
 
     void editor_renderer_init_obj_info();
     void editor_renderer_init_inputs();
-    void editor_renderer_update_inputs();
+    void editor_renderer_update_lay_inputs();
+    void editor_renderer_update_deco_inputs();
     void editor_renderer_update_text();
     void editor_renderer_draw_text();
 

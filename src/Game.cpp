@@ -11,6 +11,8 @@
 #include "World.h"
 #include "Renderer.h"
 
+#include "Decoration.h"
+
 #include "EditInput.h"
 #include "EditText.h"
 
@@ -149,7 +151,16 @@ void Game::editor_input(sf::Event &event)
         }
     }
 
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F4)) {
+        if(!fill_deco) {
+            fill_deco = true;
+            deco_input = 0;
+        }
+    }
+
     for(auto &t : vec_inputs)
+        t->handle_input(event);
+    for(auto &t : deco_inputs)
         t->handle_input(event);
 }
 
@@ -191,7 +202,8 @@ void Game::update(sf::Time time)
     world->update();
 
     editor_renderer_update_text();
-    editor_renderer_update_inputs();
+    editor_renderer_update_lay_inputs();
+    editor_renderer_update_deco_inputs();
 }
 
 ///! Draw the game.
@@ -303,14 +315,23 @@ void Game::editor_rotate_obj(sf::Event &event)
 
 void Game::editor_renderer_add_layout()
 {
+    std::cout << "Input done, adding layout to renderer." << std::endl;
 
+    renderer->add_layout(temp_lay);
+}
+
+void Game::editor_renderer_add_decoration()
+{
+    std::cout << "Input done, adding decoration to renderer." << std::endl;
+
+    renderer->add_decoration(Decoration(0, temp_deco_pos));
 }
 
 void Game::editor_renderer_init_obj_info()
 {
     // Add MapObjects information.
     for(auto &m_obj : world->get_map_objects()) {
-        std::string m_id_str("M : " + std::to_string(m_obj->get_id()));
+        std::string m_id_str("M{" + std::to_string(static_cast<int>(RenderType::Map)) + "} : " + std::to_string(m_obj->get_id()));
 
         // Print map id's.
         vec_texts.emplace_back(std::unique_ptr<EditText>(
@@ -319,7 +340,7 @@ void Game::editor_renderer_init_obj_info()
 
     // Add EventObjects information.
     for(auto &e_obj : world->get_evt_objects()) {
-        std::string e_id_str("E : " + std::to_string(e_obj->get_evt_id()));
+        std::string e_id_str("E{" + std::to_string(static_cast<int>(RenderType::Event)) + "} : " + std::to_string(e_obj->get_evt_id()));
 
         vec_texts.emplace_back(std::unique_ptr<EditText>(
                 new EditText(e_obj->get_position(), e_id_str)));
@@ -328,62 +349,117 @@ void Game::editor_renderer_init_obj_info()
 
 void Game::editor_renderer_init_inputs()
 {
+    // References to required variables..
+    // Lambda's fakap scope shit crap
+    auto &stoi = p_stoi;
+    // Layout specific
     Layout &ref_temp = temp_lay;
     int &current = active_input;
+    // Decoration specific
+    sf::Vector2f &ref_deco = temp_deco_pos;
+    int &deco_inp = deco_input;
 
+    // Layout inputs.
     vec_inputs.emplace_back(std::unique_ptr<EditInput>(
             new EditInput(sf::Vector2f(50, 50),
-                [&ref_temp, &current](std::string r) { // Id
-                    ref_temp = Layout(0, std::stoi(r));
-                    current++;
+                [&ref_temp, &current, &stoi](std::string r) { // Id
+                    int id{ 0 };
+
+                    if(stoi(r, id)) {
+                        ref_temp = Layout(0, id);
+                        current++; // If exception is caught, dont proceed.
+                    } else
+                        std::cout << "Invalid argument!" << std::endl;
                 }
     )));
 
     vec_inputs.emplace_back(std::unique_ptr<EditInput>(
             new EditInput(sf::Vector2f(50, 50),
-                [&ref_temp, &current](std::string r) { // Type
-                    ref_temp = Layout(0,
-                            ref_temp.get_obj_id(),
-                            static_cast<RenderType>(std::stoi(r)));
-                    current++;
+                [&ref_temp, &current, &stoi](std::string r) { // Type
+                    int type{ 0 };
+
+                    if(stoi(r, type)) {
+                        ref_temp = Layout(0,
+                                ref_temp.get_obj_id(),
+                                static_cast<RenderType>(std::stoi(r)));
+                        current++;
+                    } else
+                        std::cout << "Invalid argument!" << std::endl;
                 }
     )));
 
 
     vec_inputs.emplace_back(std::unique_ptr<EditInput>(
             new EditInput(sf::Vector2f(50, 50),
-                [&ref_temp, &current](std::string r) { // Texture
-                    ref_temp = Layout(0,
-                            ref_temp.get_obj_id(),
-                            ref_temp.get_render_type(),
-                            static_cast<Textures>(std::stoi(r)));
-                    current++;
+                [&ref_temp, &current, &stoi](std::string r) { // Texture
+                    int tex{ 0 };
+
+                    if(stoi(r, tex)) {
+                        ref_temp = Layout(0,
+                                ref_temp.get_obj_id(),
+                                ref_temp.get_render_type(),
+                                static_cast<Textures>(std::stoi(r)));
+                        current++;
+                    } else
+                        std::cout << "Invalid argument!" << std::endl;
                 }
     )));
 
     vec_inputs.emplace_back(std::unique_ptr<EditInput>(
             new EditInput(sf::Vector2f(50, 50),
-                [&ref_temp, &current](std::string r) { // Priority
-                    ref_temp = Layout(0,
-                            ref_temp.get_obj_id(),
-                            ref_temp.get_render_type(),
-                            ref_temp.get_texture(),
-                            static_cast<int>(std::stoi(r)));
-                    current++;
+                [&ref_temp, &current, &stoi](std::string r) { // Priority
+                    int prio{ 0 };
+
+                    if(stoi(r, prio)) {
+                        ref_temp = Layout(0,
+                                ref_temp.get_obj_id(),
+                                ref_temp.get_render_type(),
+                                ref_temp.get_texture(),
+                                static_cast<int>(std::stoi(r)));
+                        current++;
+                    } else
+                        std::cout << "Invalid argument!" << std::endl;
                 }
     )));
+
+    deco_inputs.emplace_back(std::unique_ptr<EditInput>(
+            new EditInput(sf::Vector2f(50, 50),
+                    [&ref_deco, &deco_inp, &stoi](std::string r) { // Retrieve X
+                        int x{ 0 };
+
+                        if(stoi(r, x)) {
+                            ref_deco.x = x;
+                            deco_inp++;
+                        } else
+                            std::cout << "Invalid argument!" << std::endl;
+                    }
+    )));
+
+    deco_inputs.emplace_back(std::unique_ptr<EditInput>(
+            new EditInput(sf::Vector2f(50, 50),
+                    [&ref_deco, &deco_inp, &stoi](std::string r) { // Retrieve Y.
+                        int y{ 0 };
+
+                        if(stoi(r, y)) {
+                            ref_deco.y = y;
+                            deco_inp++;
+                        } else
+                            std::cout << "Invalid argument!" << std::endl;
+                    }
+    )));
+
 }
 
-static int last_run = -1;
+static int lay_last_run = -1;
 
-void Game::editor_renderer_update_inputs()
+void Game::editor_renderer_update_lay_inputs()
 {
     // Return, if fill_layout false.
     if(!fill_layout)
         return;
 
     // Print on standard output what to input.
-    if(active_input != last_run) {
+    if(active_input != lay_last_run) {
         if(active_input == 0) // Id
             std::cout << "Input : Object Id" << std::endl;
         if(active_input == 1) // Type
@@ -419,7 +495,49 @@ void Game::editor_renderer_update_inputs()
         idx++;
     }
 
-    last_run = active_input;
+    lay_last_run = active_input;
+}
+
+static int deco_last_run = -1;
+
+void Game::editor_renderer_update_deco_inputs()
+{
+    // Misleading stuff..
+    // deco_input is the counter for active input.
+    // deco_inputs is the container for inputs.
+
+    if(!fill_deco)
+        return;
+
+    // Print on standard output what to input.
+    if(deco_input != deco_last_run) {
+        if(deco_input == 0) // Id
+            std::cout << "Input : X" << std::endl;
+        if(deco_input == 1) // Type
+            std::cout << "Input : Y" << std::endl;
+    }
+
+    if(deco_input == 2) {
+        fill_deco = false;
+        deco_input = -1;
+
+        editor_renderer_add_decoration();
+    }
+
+    if(deco_input != -1)
+        deco_inputs[deco_input]->update();
+
+    int idx{ 0 };
+    for(auto &i : deco_inputs) {
+        if(idx == deco_input)
+            i->set_active(true);
+        else
+            i->set_active(false);
+
+        idx++;
+    }
+
+    deco_last_run = deco_input;
 }
 
 void Game::editor_renderer_update_text()

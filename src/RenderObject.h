@@ -19,7 +19,7 @@ class Layout;
  * Used in the layout table.
  */
 enum class RenderType {
-    Map, Event, Game, Decoration, None
+    None, Map, Event, Decoration, Game
 };
 
 /*!
