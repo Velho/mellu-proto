@@ -1,6 +1,9 @@
 #include "Decoration.h"
 #include "Resources.h"
 
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
+
 namespace Proto {
 
 Decoration::~Decoration()

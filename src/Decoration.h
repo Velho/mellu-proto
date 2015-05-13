@@ -1,7 +1,7 @@
 #ifndef PROTO_DECO_H
 #define PROTO_DECO_H
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 namespace Proto {
 
@@ -33,6 +33,19 @@ public:
         set_position(pos);
         set_size(sz);
     }
+
+    Decoration(const Decoration &cp) :
+        decoration{ cp.decoration }, id{ cp.id }
+    { }
+
+    Decoration &operator=(const Decoration &cp)
+    {
+        decoration = cp.decoration;
+        id = cp.id;
+
+        return *this;
+    }
+
     ~Decoration();
 
     virtual void draw(sf::RenderTarget&, sf::RenderStates) const override;
