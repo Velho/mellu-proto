@@ -37,4 +37,4 @@ SFML
     Developed against SFML 2.1, newer versions hasnt been tested.
 
 Screenshot!
-![alt tag](https://raw.githubusercontent.com/Velho/mellu-proto/master/screenshot.PNG)
+![alt tag](https://raw.githubusercontent.com/Velho/mellu-proto/master/screenshot.png)
