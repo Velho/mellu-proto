@@ -1,10 +1,13 @@
 #ifndef PROTO_DROPPHYSICSCOMPONENT_H
 #define PROTO_DROPPHYSICSCOMPONENT_H
 
-#include "GameObject.h"
+#include "PhysicsComponent.h"
 
 #include <random>
 #include <iostream>
+
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 
 namespace Proto {
 
@@ -12,13 +15,7 @@ class DropInputComponent;
 
 class DropPhysicsComponent : public PhysicsComponent {
 public:
-    DropPhysicsComponent(DropInputComponent *in) :
-        input{ in }, drop_character{ generate_char() }
-    {
-        std::cout << "rnd : " << get_random_t(0, 26) << std::endl;
-        std::cout << "char : " << drop_character << std::endl;
-    }
-
+    DropPhysicsComponent(DropInputComponent*);
     ~DropPhysicsComponent() { }
 
     /*!

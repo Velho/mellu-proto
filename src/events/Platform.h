@@ -13,7 +13,7 @@ public:
 	PROTO_Platform_1();
 
 private:
-
+	const int max_movement{ 200 };
 };
 
 /*!

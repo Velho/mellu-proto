@@ -110,6 +110,11 @@ public:
 
     virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
+    void set_texture(sf::Texture *t)
+    {
+        shape.setTexture(t);
+    }
+
     void set_color(sf::Color c)
     {
         shape.setFillColor(c);

@@ -21,7 +21,8 @@ public:
     DropGraphicsComponent(DropPhysicsComponent *ph) :
         physics{ ph }, drop_shape{ 15 }, target_shape{ 15 }
     {
-        target_shape.setOutlineColor(sf::Color::White); // TODO Must depend on the background coloring.
+        // TODO Must depend on the background coloring.
+        target_shape.setOutlineColor(sf::Color::White); 
         target_shape.setFillColor(sf::Color::Transparent); // Transparent fill.
 
         init_text();

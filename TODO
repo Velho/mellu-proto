@@ -20,7 +20,10 @@ LOW PRIO
         => CALCULATE AGAINST CLOCK.
     - Move out Jumping, Falling, etc "general" code into 
         i.e. World class where it can be used for all other Components
-        which are affected by these rules. 
+        which are affected by these rules.
+    - Row structures are currently managed in runtime, but it would be awesome
+      to compute this stuff at compiletime using constexpr, variadic templates,
+      metaprogramming.
 DONE
     -> Map editing on runtime. (--edit flag is required)
     -> Player

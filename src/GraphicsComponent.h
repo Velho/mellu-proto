@@ -18,6 +18,8 @@ public:
     virtual ~GraphicsComponent() { }
     virtual void update(GameObject&) { };
     virtual void draw(sf::RenderTarget&, sf::RenderStates) const { };
+
+    virtual void set_texture(sf::Texture*) { };
 };
 
 }

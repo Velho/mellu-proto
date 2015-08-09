@@ -60,7 +60,7 @@ void Events::init_evts()
 		int id = eobj->get_evt_table_id();
 		auto event = (*evt_table)[id];
 		eobj->set_event(event);
-		std::cout << "set event : " << id << std::endl;
+		//std::cout << "set event : " << id << std::endl;
 	}
 }
 
@@ -89,6 +89,16 @@ void Events::update_evts()
 Droppin *Events::get_droppin()
 {
 	return droppin.get();
+}
+
+EventObject *Events::get_by_idx(std::size_t idx)
+{
+    for(auto &e : evt_objs) {
+        if(e->get_evt_id() == idx)
+            return e.get();
+    }
+
+    return nullptr;
 }
 
 }

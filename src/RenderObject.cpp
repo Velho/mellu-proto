@@ -7,50 +7,56 @@
 
 #include "Layout.h"
 
+#include "Resources.h"
+
+#include "AnimatedPlayer.h"
+
 namespace Proto {
 
 RenderObject::RenderObject() :
-    draw_object{ nullptr },
-    priority{ 0 },
-    type{ RenderType::None }
+    draw_object{ nullptr }, layout{ nullptr }, prio{ -1 }
 {
 }
 
 RenderObject::RenderObject(
-        const GameObject *g_obj,
-        const Layout *lay,
+        AnimatedPlayer *g_obj,
         int p) :
-    draw_object{ g_obj }, layout{ lay },
-    priority{ p }, type{ RenderType::Game }
+    draw_object{ g_obj }, layout{ nullptr }, prio{ p }
 {
 }
 
 RenderObject::RenderObject(
-        const EventObject *e_obj,
-        const Layout *lay,
-        int p) :
-    draw_object{ e_obj }, layout{ lay },
-    priority{ p }, type{ RenderType::Event }
+        EventObject *e_obj,
+        const Layout *lay) :
+    draw_object{ e_obj }, layout{ lay }, prio{ -1 }
 {
+    e_obj->set_texture(Resources::getInstance().getTex(lay->get_texture()));
 }
 
 RenderObject::RenderObject(
-        const MapObject *m_obj,
-        const Layout *lay,
-        int p) :
-    draw_object{ m_obj }, layout{ lay },
-    priority{ p }, type{ RenderType::Map }
+        MapObject *m_obj,
+        const Layout *lay) :
+    draw_object{ m_obj }, layout{ lay }, prio{ -1 }
 {
+    m_obj->set_texture(Resources::getInstance().getTex(lay->get_texture()));
 }
 
 RenderObject::RenderObject(
-        const Decoration *deco_obj,
-        const Layout *lay,
-        int p) :
-    draw_object{ deco_obj }, layout{ lay },
-    priority{ p }, type{ RenderType::Decoration }
+        Decoration *deco_obj,
+        const Layout *lay) :
+    draw_object{ deco_obj }, layout{ lay }, prio{ -1 }
 {
+    deco_obj->set_texture(Resources::getInstance().getTex(lay->get_texture()));
 }
+
+int RenderObject::get_priority() const
+{
+    if(prio != -1)
+        return prio;
+
+    return layout->get_priority();
+}
+RenderType RenderObject::get_type() const { return layout->get_render_type(); }
 
 }
 

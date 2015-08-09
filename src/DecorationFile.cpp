@@ -44,13 +44,14 @@ struct DecorationRow {
 std::vector<std::unique_ptr<Decoration>> DecorationFile::load()
 {
 	Database db(filename);
-    Query query(db, "SELECT deco_id, x, y, FROM decoration;");
+    Query query(db, "SELECT deco_id, x, y FROM decoration;");
 
     // Compiler *SHOULD* optimize this and return as rvalue..
     std::vector<std::unique_ptr<Decoration>> results;
 
     query.iterate([&results](Query::Row r) {
-        results.emplace_back(std::unique_ptr<Decoration>(new Decoration(DecorationRow(r).get_decoration())));
+        auto deco_row = DecorationRow(r).get_decoration();
+        results.emplace_back(std::unique_ptr<Decoration>(new Decoration(deco_row)));
     });
 
     return results;
@@ -65,7 +66,7 @@ void DecorationFile::save(Renderer &renderer)
 
 	int idx{ 1 };
 	for(auto &obj : renderer.deco_objs) {
-        sql << "INSERT INTO decoration(evt_id, x, y) VALUES(";
+        sql << "INSERT INTO decoration(deco_id, x, y) VALUES(";
 
         sql << obj->get_id() << ", ";
         sql << obj->get_position().x << ", ";

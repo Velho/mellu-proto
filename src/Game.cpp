@@ -20,18 +20,19 @@
 
 namespace Proto {
 
-Game::Game(boost::program_options::variables_map vars)
+Game::Game(/*boost::program_options::variables_map vars*/)
 {
     sf::ContextSettings settings;
     settings.antialiasingLevel  = 8;
 
     window.create(sf::VideoMode(800, 600), "Prototype", sf::Style::Default, settings);
 
-    parse_cmd(vars); // Parse command line options.
+    //parse_cmd(vars); // Parse command line options.
 
     window.setFramerateLimit(framelimit);
 
     viewport.setSize(sf::Vector2f(800, 600));
+
     window.setView(viewport); //! Does this need activation always when updated?
 
     level_info.select_map(Level::Maps::Proto);
@@ -43,6 +44,9 @@ Game::Game(boost::program_options::variables_map vars)
     input_edit->set_position(sf::Vector2f(20, 20));
     input_edit->set_active(true);
     */
+
+    //aloitusteksti.setFont(Resources::getInstance().getFont(Fonts::Arial)));
+    //aloitusteksti.setCharacterSize(24);
 
     if(editor)
         editor_init();
@@ -77,8 +81,10 @@ void Game::editor_input(sf::Event &event)
     if(edit_draw) {
         // Shift + E = Event Object => Type and ID must be set manually.
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) &&
-                sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-            event_object = true;
+                sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+            temp_obj_type = TempObjType::Event;
+            temp_obj.set_color(sf::Color::Red);
+        }
     }
 
     // Assign the start position. If obj.draw is false, its the first button press.
@@ -106,10 +112,10 @@ void Game::editor_input(sf::Event &event)
                 << temp_obj.get_size().y << ")" << std::endl;
 
             temp_obj.set_color(sf::Color::White);
-            editor_add_obj(); // Adds the object into containers.
+            editor_add_obj(); // Adds the object into corresponding container.
 
             edit_draw = false;
-            event_object = false;
+            temp_obj_type = TempObjType::Map; // Default temp type.
         }
     }
 
@@ -152,9 +158,9 @@ void Game::editor_input(sf::Event &event)
     }
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::F4)) {
-        if(!fill_deco) {
-            fill_deco = true;
-            deco_input = 0;
+        if(edit_draw) {
+            temp_obj_type = TempObjType::Deco;
+            temp_obj.set_color(sf::Color::Green);
         }
     }
 
@@ -193,17 +199,13 @@ void Game::update(sf::Time time)
     // Update editable_obj.shape size.
     if(edit_draw)
         temp_obj.set_size(edit_mouse - temp_obj.get_position());
-    // Update the color for eventobject.
-    if(event_object)
-        temp_obj.set_color(sf::Color::Red);
 
-    player->update(*world);
+    player->update(world.get());
 
     world->update();
 
     editor_renderer_update_text();
     editor_renderer_update_lay_inputs();
-    editor_renderer_update_deco_inputs();
 }
 
 ///! Draw the game.
@@ -214,8 +216,10 @@ void Game::draw()
     if(edit_draw == true)
         window.draw(temp_obj);
 
-    window.draw(*player);
+    //player->draw(window);
     world->draw(window);
+
+    renderer->draw(window);
 
     //input_edit->draw(window);
     editor_renderer_draw_text();
@@ -233,6 +237,7 @@ std::unique_ptr<Proto::GameObject> Game::create_player()
         new Proto::GameObject{ input, physics, graphics } };
 }
 
+/*
 void Game::parse_cmd(boost::program_options::variables_map &vars)
 {
     // We'll get edit mode and maps out of command line, lets parse.
@@ -257,29 +262,35 @@ void Game::parse_cmd(boost::program_options::variables_map &vars)
     //std::cout << "Map : " << level_info.get_current_map_str() << std::endl;
     std::cout << "Edit : " << editor << std::endl;
     std::cout << "Fps : " << framelimit << std::endl;
-}
+}*/
 
 void Game::reset_game()
 {
-	player = create_player();
+	player = std::unique_ptr<AnimatedPlayer>(new AnimatedPlayer(viewport));
 
 	// Currently the initial position of the player.
-    player->set_position(sf::Vector2f(200, 200));
-    player->set_size(sf::Vector2f(25, 50));
+    player->get_object()->set_position(sf::Vector2f(550, 200));
+    viewport.setCenter(sf::Vector2f(325, 255));
+    player->get_object()->set_size(sf::Vector2f(50, 120));
 
     // Create world.
     world = level_info.get_world();
 
     // Initialize renderer.
     renderer = std::unique_ptr<Renderer>(new Renderer(level_info, world.get()));
+    renderer->add_gobject(player.get());
 }
 
 void Game::reset_player()
 {
 	// Reset the players position.
-    player->set_position(sf::Vector2f(150, 225));
+    player->get_object()->set_position(sf::Vector2f(550, 225));
+    viewport.setCenter(sf::Vector2f(325, 255));
     // Annoying glitch when player is falling too fast, it falls straight through the map object...
-    static_cast<PlayerPhysicsComponent*>(player->get_physics())->reset();
+    static_cast<PlayerPhysicsComponent*>(player->get_object()->get_physics())->reset();
+
+    renderer->reset_renderer(world.get());
+    renderer->add_gobject(player.get());
 }
 
 void Game::editor_init()
@@ -290,16 +301,17 @@ void Game::editor_init()
 
 void Game::editor_add_obj()
 {
-    if(event_object)
+    if(temp_obj_type == TempObjType::Event)
         world->add_event_object(EventObject(temp_obj));
-    else
+    else if(temp_obj_type == TempObjType::Map)
         world->add_map_object(temp_obj);
+    else if(temp_obj_type == TempObjType::Deco)
+        renderer->add_decoration(Decoration(temp_obj));
 }
 
 void Game::editor_reset_temp()
 {
     edit_draw = false;
-    event_object = false;
 }
 
 void Game::editor_rotate_obj(sf::Event &event)
@@ -355,9 +367,6 @@ void Game::editor_renderer_init_inputs()
     // Layout specific
     Layout &ref_temp = temp_lay;
     int &current = active_input;
-    // Decoration specific
-    sf::Vector2f &ref_deco = temp_deco_pos;
-    int &deco_inp = deco_input;
 
     // Layout inputs.
     vec_inputs.emplace_back(std::unique_ptr<EditInput>(
@@ -421,33 +430,6 @@ void Game::editor_renderer_init_inputs()
                         std::cout << "Invalid argument!" << std::endl;
                 }
     )));
-
-    deco_inputs.emplace_back(std::unique_ptr<EditInput>(
-            new EditInput(sf::Vector2f(50, 50),
-                    [&ref_deco, &deco_inp, &stoi](std::string r) { // Retrieve X
-                        int x{ 0 };
-
-                        if(stoi(r, x)) {
-                            ref_deco.x = x;
-                            deco_inp++;
-                        } else
-                            std::cout << "Invalid argument!" << std::endl;
-                    }
-    )));
-
-    deco_inputs.emplace_back(std::unique_ptr<EditInput>(
-            new EditInput(sf::Vector2f(50, 50),
-                    [&ref_deco, &deco_inp, &stoi](std::string r) { // Retrieve Y.
-                        int y{ 0 };
-
-                        if(stoi(r, y)) {
-                            ref_deco.y = y;
-                            deco_inp++;
-                        } else
-                            std::cout << "Invalid argument!" << std::endl;
-                    }
-    )));
-
 }
 
 static int lay_last_run = -1;
@@ -488,6 +470,7 @@ void Game::editor_renderer_update_lay_inputs()
     for(auto &i : vec_inputs) {
         if(idx == active_input) {
             i->set_active(true);
+            i->set_position(sf::Vector2f(player->get_object()->get_position().x, 50));
         }
         else
             i->set_active(false);
@@ -498,53 +481,12 @@ void Game::editor_renderer_update_lay_inputs()
     lay_last_run = active_input;
 }
 
-static int deco_last_run = -1;
-
-void Game::editor_renderer_update_deco_inputs()
-{
-    // Misleading stuff..
-    // deco_input is the counter for active input.
-    // deco_inputs is the container for inputs.
-
-    if(!fill_deco)
-        return;
-
-    // Print on standard output what to input.
-    if(deco_input != deco_last_run) {
-        if(deco_input == 0) // Id
-            std::cout << "Input : X" << std::endl;
-        if(deco_input == 1) // Type
-            std::cout << "Input : Y" << std::endl;
-    }
-
-    if(deco_input == 2) {
-        fill_deco = false;
-        deco_input = -1;
-
-        editor_renderer_add_decoration();
-    }
-
-    if(deco_input != -1)
-        deco_inputs[deco_input]->update();
-
-    int idx{ 0 };
-    for(auto &i : deco_inputs) {
-        if(idx == deco_input)
-            i->set_active(true);
-        else
-            i->set_active(false);
-
-        idx++;
-    }
-
-    deco_last_run = deco_input;
-}
-
 void Game::editor_renderer_update_text()
 {
     for(auto &t : vec_texts) {
-        if(show_edit_texts)
+        if(show_edit_texts) {
             t->set_show(true);
+        }
         else
             t->set_show(false);
 

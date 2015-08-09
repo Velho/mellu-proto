@@ -8,7 +8,7 @@ PROTO_Platform_1::PROTO_Platform_1() :
 {
 	on_trigger.connect([](EventObject &obj)
 	{
-		std::cout << "Event Triggered : " << obj.get_id() << std::endl;
+		std::cout << "Event Triggered : " << obj.get_evt_table_id() << std::endl;
 		obj.get_event()->set_state(EventState::Progress);
 	});
 

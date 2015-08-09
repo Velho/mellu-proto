@@ -41,6 +41,9 @@ public:
 
     Droppin *get_droppin();
 
+    MapObject *get_mobj_by_idx(std::size_t);
+    EventObject *get_eobj_by_idx(std::size_t);
+
 private:
     std::unique_ptr<Map> current_map;
     std::unique_ptr<Events> current_evts;

@@ -17,7 +17,9 @@ void DropGraphicsComponent::update(GameObject &obj)
 
     drop_shape.setPosition(obj.get_position());
     target_shape.setPosition(physics->target_pos);
-    letter.setPosition(sf::Vector2f{ obj.get_position().x + font_x_offset, obj.get_position().y });
+    letter.setPosition(sf::Vector2f{ 
+            obj.get_position().x + font_x_offset,
+            obj.get_position().y });
 }
 
 void DropGraphicsComponent::draw(sf::RenderTarget &target, sf::RenderStates states) const
@@ -29,7 +31,7 @@ void DropGraphicsComponent::draw(sf::RenderTarget &target, sf::RenderStates stat
 
 void DropGraphicsComponent::init_text()
 {
-    letter.setFont(*Resources::getInstance().getFont(Resources::Fonts::Arial));
+    letter.setFont(*Resources::getInstance().getFont(Fonts::Arial));
 
     std::string ph_char{ &physics->drop_character };
 

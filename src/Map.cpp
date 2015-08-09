@@ -55,6 +55,16 @@ void Map::reload_map()
     }
 }
 
+MapObject *Map::get_by_idx(std::size_t idx)
+{
+    for(auto &obj : objects) {
+        if(obj->get_id() == idx)
+            return obj.get();
+    }
+
+    return nullptr;
+}
+
 void Map::print_info()
 {
     for(auto &obj : objects) {

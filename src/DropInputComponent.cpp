@@ -1,7 +1,7 @@
 #include "DropInputComponent.h"
+#include "GameObject.h"
 
-using Proto::DropInputComponent;
-using Proto::GameObject;
+namespace Proto {
 
 void DropInputComponent::update(GameObject &, sf::Event &event)
 {
@@ -17,4 +17,5 @@ bool DropInputComponent::is_key_in_range(sf::Keyboard::Key key)
         return true;
 
     return false;
+}
 }

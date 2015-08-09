@@ -12,10 +12,10 @@ void PlayerInputComponent::update(GameObject &obj, sf::Event &event)
     set_right(event);
 
     if(arrow_left)
-        current_keypress = KeyPress::Left;
+        current_keypress = KeyPress::Left; last_keypress = KeyPress::Left;
 
     if(arrow_right)
-        current_keypress = KeyPress::Right;
+        current_keypress = KeyPress::Right; last_keypress = KeyPress::Right;
 
     if(!is_arrow_l() && !is_arrow_r())
         current_keypress = KeyPress::None;

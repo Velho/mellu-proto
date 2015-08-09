@@ -76,6 +76,15 @@ set(DROPMECHANICCMP ${DROPPINSRC} #${EVENTSRC} ${DROPOBJSRC})
 
 set(AABB_SRC src/BoundingBox.h src/BoundingBox.cpp)
 
+# Animations & Spritesheets.
+set(SSHEET_SRC src/SpriteSheet.h src/SpriteSheet.cpp)
+set(ANIM src/Animation.h src/Animation.cpp)
+set(ANIMPLR_SRC src/AnimatedPlayer.h src/AnimatedPlayer.cpp)
+
+set(ANIM_SRC ${SSHEET_SRC} ${ANIM} ${ANIMPLR_SRC})
+
+set(ALOITUS_SRC src/AloitusRuutu.h src/AloitusRuutu.cpp)
+
 # Add events
 add_subdirectory(events)
 
@@ -97,5 +106,7 @@ set(SRC_LIST
     ${SRC_EVENTS}
     ${AABB_SRC}
     ${LAYOUT_SRC}
+    ${ANIM_SRC}
+    ${ALOITUS_SRC}
     PARENT_SCOPE)
 

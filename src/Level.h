@@ -43,7 +43,7 @@ public:
     void select_map(std::string);
 
     Maps get_current_map() const { return current_map; }
-    std::string get_current_map_str() { return data_dir + levels[current_map]; }
+    std::string get_current_map_str() const { return data_dir + levels.at(current_map); }
 
     /*!
      *\brief get_world
@@ -55,7 +55,7 @@ public:
     std::unique_ptr<World> get_world();
 
 private:
-    std::map<Maps, std::string> levels;
+    std::map<Maps, const std::string> levels;
     Maps current_map;
     const std::string data_dir;
 

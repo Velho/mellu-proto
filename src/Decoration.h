@@ -6,6 +6,7 @@
 namespace Proto {
 
 enum class Textures;
+class MapObject;
 
 /*!
  *\brief Decoration class
@@ -33,6 +34,8 @@ public:
         set_position(pos);
         set_size(sz);
     }
+
+    Decoration(const MapObject&);
 
     Decoration(const Decoration &cp) :
         decoration{ cp.decoration }, id{ cp.id }
@@ -89,6 +92,11 @@ public:
     int get_id() const { return id; }
 
     void set_id(int i) { id = i; }
+
+    void set_texture(sf::Texture *t)
+    {
+        decoration.setTexture(*t);
+    }
 
 private:
     sf::Sprite decoration;

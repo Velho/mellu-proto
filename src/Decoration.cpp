@@ -1,10 +1,17 @@
 #include "Decoration.h"
 #include "Resources.h"
 
+#include "MapObject.h"
+
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
 namespace Proto {
+
+Decoration::Decoration(const MapObject &mobj) : id{ 0 }
+{
+    set_position(mobj.get_position());
+}
 
 Decoration::~Decoration()
 {

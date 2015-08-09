@@ -67,7 +67,7 @@ void LayoutFile::save(Renderer &renderer)
     db.exec("DELETE FROM layout;");
 
     for(auto &lay : renderer.layout_objs) {
-        sql << "INSERT INTO layout(lay_id, obj_type, obj_id, texture, priority) VALUES";
+        sql << "INSERT INTO layout(lay_id, obj_type, obj_id, texture, priority) VALUES(";
 
         sql << index << ", "; // TODO HIGH : lay->get_id() ??
         sql << static_cast<int>(lay->get_render_type()) << ", ";

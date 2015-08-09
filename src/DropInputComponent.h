@@ -1,9 +1,12 @@
 #ifndef PROTO_DROPINPUTCOMPONENT_H
 #define PROTO_DROPINPUTCOMPONENT_H
 
-#include "GameObject.h"
+#include "InputComponent.h"
+#include <SFML/Window/Event.hpp>
 
 namespace Proto {
+
+class GameObject;
 
 /**
  * \brief The DropInputComponent class

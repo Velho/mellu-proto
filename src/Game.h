@@ -8,9 +8,10 @@
 #include "Layout.h"
 
 #include "Level.h"
+#include "AnimatedPlayer.h"
 
 // Let's get some command line options.
-#include <boost/program_options.hpp>
+//#include <boost/program_options.hpp>
 
 namespace Proto {
 
@@ -26,7 +27,7 @@ enum class Textures;
 
 class Game {
 public:
-    Game(boost::program_options::variables_map);
+    Game(/*boost::program_options::variables_map*/);
     ~Game();
     int run();
 
@@ -35,7 +36,7 @@ private:
     sf::Clock clock;
     sf::View viewport;
 
-    std::unique_ptr<GameObject> player;
+    std::unique_ptr<AnimatedPlayer> player;
 
     ///< Window size.
     const int WIN_WIDTH{ 800 };
@@ -51,15 +52,18 @@ private:
     MapObject temp_obj;
     sf::Vector2f edit_mouse;
     bool edit_draw{ false };
-    bool event_object{ false };
 
     bool editor{ false };
+
+    enum class TempObjType { None, Map, Event, Deco } temp_obj_type;
 
     ///
     // Used to print out information about objects.
     ///
     std::vector<std::unique_ptr<EditText>> vec_texts;
     bool show_edit_texts{ false };
+
+    sf::Text aloitusteksti;
 
     ///
     // Layout management
@@ -125,11 +129,10 @@ private:
     void editor_renderer_init_obj_info();
     void editor_renderer_init_inputs();
     void editor_renderer_update_lay_inputs();
-    void editor_renderer_update_deco_inputs();
     void editor_renderer_update_text();
     void editor_renderer_draw_text();
 
-    void parse_cmd(boost::program_options::variables_map&);
+    //void parse_cmd(boost::program_options::variables_map&);
     void reset_game();
     void reset_player();
 };

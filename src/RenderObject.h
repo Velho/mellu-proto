@@ -13,6 +13,8 @@ class Decoration;
 
 class Layout;
 
+class AnimatedPlayer;
+
 /*!
  *\brief RenderObject enum class
  * Enumerates different ObjectTypes.
@@ -46,33 +48,44 @@ public:
     /*!
      *\brief
      */
-    RenderObject(const GameObject*, const Layout*, int);
+    RenderObject(AnimatedPlayer*, int);
     /*!
      *\brief
      */
-    RenderObject(const MapObject*, const Layout*, int);
+    RenderObject(MapObject*, const Layout*);
     /*!
      *\brief
      */
-    RenderObject(const EventObject*, const Layout*, int);
+    RenderObject(EventObject*, const Layout*);
     /*!
      *\brief
      */
-    RenderObject(const Decoration*, const Layout*, int);
+    RenderObject(Decoration*, const Layout*);
+
+    RenderObject(const RenderObject &cp) :
+        draw_object{ cp.draw_object }, layout{ cp.layout }
+    { }
+
+    RenderObject &operator=(const RenderObject &cp)
+    {
+        draw_object = cp.draw_object;
+        layout = cp.layout;
+
+        return *this;
+    }
 
     const sf::Drawable &operator()(){return *draw_object;}
-    const sf::Drawable *get_drawable() const { return draw_object; }
+    sf::Drawable *get_drawable() const { return draw_object; }
 
     Layout const *get_layout() const { return layout; }
 
-    int get_priority() const { return priority; }
-    RenderType get_type() const { return type; }
+    int get_priority() const;
+    RenderType get_type() const;
 
 private:
-    const sf::Drawable *draw_object;
+    sf::Drawable *draw_object;
     const Layout *layout;
-    int priority;
-    RenderType type;
+    int prio;
 };
 
 }

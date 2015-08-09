@@ -1,7 +1,7 @@
 #include "PlayerPhysicsComponent.h"
 #include "World.h"
 
-#include "BoundingBox.h"
+//#include "BoundingBox.h"
 #include "PlayerGraphicsComponent.h"
 
 
@@ -58,7 +58,7 @@ void PlayerPhysicsComponent::update(GameObject &obj, World &world)
     add_velocity();
     set_state();
 
-    print_state(); // DEBUG
+    //print_state(); // DEBUG
 
     if(current_state == PlayerState::Jumping)
         do_jumping(obj);
@@ -98,6 +98,10 @@ void PlayerPhysicsComponent::set_state()
     // If not jumping or falling and velocity 0, we are standing.
     if(velocity.x == 0 && !is_falling_or_jumping())
         current_state = PlayerState::Standing;
+}
+
+void PlayerPhysicsComponent::set_standing()
+{
 }
 
 bool PlayerPhysicsComponent::check_state(PlayerState new_state)
@@ -284,6 +288,7 @@ bool PlayerPhysicsComponent::is_slope(MapObject &m_obj)
     return false;
 }
 
+/*
 void PlayerPhysicsComponent::apply_slope_collision(GameObject &g_obj, MapObject &m_obj)
 {
     if(!is_slope(m_obj)) // If MapObject is not slope, return.
@@ -305,12 +310,14 @@ void PlayerPhysicsComponent::apply_slope_collision(GameObject &g_obj, MapObject 
         }
     }
 }
-
+*/
+/*
 void PlayerPhysicsComponent::calculate_slope_velocity(GameObject &g_obj, BoundingBox &bb_box)
 {
     sf::FloatRect plr_rect{ sf::Vector2f(g_obj.get_position().x - WALK_ACCELERATION + 1, g_obj.get_position().y),
             sf::Vector2f(g_obj.get_size().x + WALK_ACCELERATION + 1, g_obj.get_size().y) };
 }
+*/
 
 void PlayerPhysicsComponent::do_jumping(GameObject &obj)
 {
@@ -347,9 +354,11 @@ void PlayerPhysicsComponent::add_velocity()
 {
     if (input_cmp->current_keypress == input::KeyPress::Right) {
         velocity.x = WALK_ACCELERATION;
+        input_cmp->last_keypress = input::KeyPress::Right;
     }
     if (input_cmp->current_keypress == input::KeyPress::Left) {
         velocity.x = -WALK_ACCELERATION;
+        input_cmp->last_keypress = input::KeyPress::Left;
     }
 
     // Do not modify velocity while falling or jumping or we get wrong state while doing so..

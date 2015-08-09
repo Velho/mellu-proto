@@ -25,8 +25,39 @@ enum class Fonts {
  * in layout table as integer.
  */
 enum class Textures {
-    None,
-    Testi
+    None,       // 0
+    Testi,      // 1
+    IdleLeft,   // 2
+    RunLeft,    // 3
+    RunRight,   // 4
+    Aita,       // 5
+    KavelyTaso1,// 6
+    KavelyTaso2,// 7
+    Nurtsi1,    // 8
+    Nurtsi2,    // 9
+    ParvekeTaso,// 10
+    ParvekeAita,// 11
+    Portaat,    // 12
+    Puu,        // 13
+    Reunamustuus,//14
+    Taivas,     // 15
+    Takatalo1,  // 16
+    Takatalo2,  // 17
+    Talo,       // 18
+    Talo1,      // 19
+    Talo2,      // 20
+    Talo3,      // 21
+    TaloDouble, // 22
+    TaloAidalla,// 23
+    Vesi,       // 24
+    IdleRight,  // 25
+    HyppyOikea, // 26
+    HyppyVasen, // 27
+    KavelyTaso3,// 28 <= 256x256
+    Talo4,      // 29 <= 256x256
+    Takatalo3,  // 30 <= 256x256
+    Takatalo4,  // 31 <= 256x256
+    NurtsiIso   // 32 <= 512x512
 };
 
 /*!
@@ -58,7 +89,7 @@ public:
 
     ///< Returns pointer to Font.
     sf::Font *getFont(Fonts);
-    sf::Texture *getTex(Textures);
+    sf::Texture *getTex(Textures) const;
 
 private:
     ///< Constructor available only for internal usage.

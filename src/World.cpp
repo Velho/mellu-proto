@@ -77,4 +77,14 @@ Droppin *World::get_droppin()
 	return current_evts->get_droppin();
 }
 
+MapObject *World::get_mobj_by_idx(std::size_t idx)
+{
+    return current_map->get_by_idx(idx);
+}
+
+EventObject *World::get_eobj_by_idx(std::size_t idx)
+{
+    return current_evts->get_by_idx(idx);
+}
+
 }

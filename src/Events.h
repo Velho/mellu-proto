@@ -38,6 +38,12 @@ public:
     std::vector<EventObject::EvtObjectPtr> &get_evt_objects() { return evt_objs; }
     Droppin *get_droppin(); ///< Returns ref to Droppin. Input is required.
 
+    /*!
+     *\brief
+     * Return pointer to EventObject by index.
+     */
+    EventObject *get_by_idx(std::size_t);
+
 private:
     friend class EventTable;
     std::unique_ptr<EventTable> evt_table;

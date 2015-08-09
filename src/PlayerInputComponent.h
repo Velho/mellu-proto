@@ -12,7 +12,7 @@ namespace Proto {
 class PlayerInputComponent : public InputComponent {
 public:
     PlayerInputComponent() :
-        current_keypress{ KeyPress::None }
+        current_keypress{ KeyPress::None }, last_keypress{ KeyPress::None }
     { }
     ~PlayerInputComponent() { }
 
@@ -31,6 +31,7 @@ private:
     enum class KeyPress { Left, Right, None };
 
     KeyPress current_keypress;
+    KeyPress last_keypress;
 
     void set_left(sf::Event&);
     void set_right(sf::Event&);

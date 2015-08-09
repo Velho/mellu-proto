@@ -9,11 +9,7 @@ namespace Proto {
 
 class PlayerGraphicsComponent : public GraphicsComponent {
 public:
-    PlayerGraphicsComponent(sf::View &v) : view{ v }
-    {
-        shape.setFillColor(sf::Color::Blue);
-        //shape.setSize(sf::Vector2f(25, 50));
-    }
+    PlayerGraphicsComponent(sf::View&);
 
     ~PlayerGraphicsComponent() { }
 
@@ -22,7 +18,14 @@ public:
 
     sf::FloatRect get_global_bounds() const { return shape.getGlobalBounds(); }
     sf::RectangleShape &get_shape() { return shape; }
+
+    virtual void set_texture(sf::Texture *t)
+    {
+        shape.setTexture(t);
+    }
+
 private:
+    friend class AnimatedPlayer;
     sf::RectangleShape shape;
     sf::View &view;
 

@@ -1,9 +1,16 @@
 #include "DropPhysicsComponent.h"
 #include "DropInputComponent.h"
 
-using Proto::GameObject;
-using Proto::DropPhysicsComponent;
-using Proto::World;
+#include "GameObject.h"
+
+namespace Proto {
+
+DropPhysicsComponent::DropPhysicsComponent(DropInputComponent *in) :
+        input{ in }, drop_character{ generate_char() }
+{
+    std::cout << "rnd : " << get_random_t(0, 26) << std::endl;
+    std::cout << "char : " << drop_character << std::endl;
+}
 
 void DropPhysicsComponent::update(GameObject &, World &)
 {
@@ -29,4 +36,6 @@ char DropPhysicsComponent::generate_char()
 char DropPhysicsComponent::key_to_char(sf::Keyboard::Key key)
 {
     return static_cast<char>('A' + key);
+}
+
 }

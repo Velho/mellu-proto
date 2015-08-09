@@ -13,7 +13,17 @@ namespace Proto {
 class PlayerInputComponent;
 class MapObject;
 
-class BoundingBox;
+//class BoundingBox;
+
+enum class PlayerState {
+    StandingLeft,
+    StandingRight,
+    Standing,
+    RunningLeft,
+    RunningRight,
+    Jumping,
+    Falling
+};
 
 /*!
  * \brief The PlayerPhysicsComponent class
@@ -33,14 +43,6 @@ public:
     }
     ~PlayerPhysicsComponent() {}
 
-    enum class PlayerState {
-        Standing,
-        RunningLeft,
-        RunningRight,
-        Jumping,
-        Falling
-    };
-
     //! Updates PlayerPhysicsComponents state every frame.
     virtual void update(GameObject&, World&) override;
 
@@ -48,6 +50,7 @@ public:
 
 private:
     friend class PlayerEventManager;
+    friend class AnimatedPlayer; // Player Animator Object
 
     PlayerState current_state;
     MapObject *fall_obj;
@@ -72,9 +75,10 @@ private:
     bool check_state(PlayerState);  ///< Checks if current_state is new_state, returns true if equals.
     bool is_falling_or_jumping();   ///< Returns true if current_state is PlayerState::Jumping or PlayerState::Falling.
     void add_velocity();            ///< Adds velocity according to input.
+    void set_standing();
 
     bool is_slope(MapObject&);      ///< Checks if the mapobject has rotation.
-    void calculate_slope_velocity(GameObject&, BoundingBox&);///< Calculate velocity in slopes.
+    //void calculate_slope_velocity(GameObject&, BoundingBox&);///< Calculate velocity in slopes.
 
     void apply_gravity(GameObject&, World&);        ///< Applies simulated gravity on state PlayerState::Falling.
     void apply_fall_collision(GameObject&, World&); ///< Calculate collision when PlayerState::Falling.
@@ -85,7 +89,7 @@ private:
     void apply_map_collision(GameObject&, World&);
     void apply_event_collision(GameObject&, World&);
 
-    void apply_slope_collision(GameObject&, MapObject&);
+    //void apply_slope_collision(GameObject&, MapObject&);
 
     void init_fall(); ///< Initializes fall variables; fall_speed, is_falling. Cannot be called if is_falling == true.
     void init_jump(); ///< Initializes

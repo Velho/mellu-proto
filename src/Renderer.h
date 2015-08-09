@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "RenderObject.h"
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace Proto {
 
@@ -17,6 +18,8 @@ class MapObject;
 
 class Layout;
 class Decoration;
+
+class AnimatedPlayer;
 
 /*!
  *\brief Renderer class
@@ -47,15 +50,35 @@ public:
      * is required by the SQL based database.
      */
     void add_layout(const Layout&);
+
     /*!
      *\brief
      * Adds new Decoration to renderer.
      */
     void add_decoration(const Decoration&);
 
+    /*!
+     * Used to add player for rendering purposes.
+     * TODO This was hack n slash to get stuff working
+     * as faaaast as possibru. FIX THIS PLOX for mankind.
+     */
+    void add_gobject(AnimatedPlayer*);
+    /*!
+     *\brief
+     * Draws all of the renderobjects.
+     */
+    void draw(sf::RenderTarget&);
+
+    void reset_renderer(World*);
+
 private:
     friend class DecorationFile;
     friend class LayoutFile;
+
+    World *world;
+    const Level &level;
+
+    bool reset{ false };
 
     std::vector<std::unique_ptr<RenderObject>> renderable_objs;
 
@@ -68,10 +91,15 @@ private:
     void init_world(World*);
     void init_layout();
 
+    void sort_renderables();
+
     void load_deco();
     void load_layout();
 
-    void apply_layouts(World*);
+    void save_deco();
+    void save_layout();
+
+    Decoration *get_deco_idx(std::size_t);
 
     void add_object(EventObject*);
     void add_object(GameObject*);

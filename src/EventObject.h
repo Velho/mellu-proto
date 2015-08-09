@@ -148,6 +148,11 @@ public:
      */
     int get_evt_id() const { return evt_id; }
 
+    void set_texture(const sf::Texture *t)
+    {
+        shape.setTexture(t);
+    }
+
 private:
     sf::RectangleShape shape;
     Event *event; ///< Event pointer is managed by the EventObject.

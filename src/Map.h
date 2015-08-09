@@ -41,6 +41,12 @@ public:
 
     void set_reload(bool r) { reload = r; }
 
+    /*!
+     *\brief
+     * Return pointer to MapObject by index.
+     */
+    MapObject *get_by_idx(std::size_t);
+
     friend void MapFile::save(Map&);
 private:
     std::vector<std::unique_ptr<MapObject>> objects;
